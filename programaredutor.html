@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programa Redutor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+  <style>
+     body {
+  background: linear-gradient(to bottom right, #e51e8f, #e35fda);
+  font-family: 'Vazirmatn', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+  overflow-x: hidden;
+  position: relative;
+  
+}
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 25px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 0 20px #e178f4;
+      color: white;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #c02190;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #a01875;
+    }
+    .comments-section {
+      margin-top: 30px;
+    }
+    .comment {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .stars {
+      color: gold;
+      margin-bottom: 5px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #c13a8f;
+    }
+    .card-video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      button {
+        font-size: 15px;
+      }
+    }
+    .logo {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
+
+
+
+.logo img {
+  max-height: 200px;
+  width: auto;
+}
+
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-button" title=" voltar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 8 8 12 12 16" />
+      <line x1="16" y1="12" x2="8" y2="12" />
+    </svg>
+  </a>
+  
+  <!-- لوگو در مرکز -->
+<div class="logo">
+  <img src="https://i.imgur.com/SXmVbv1.png" alt="Logo" />
+</div>
+</div>
+
+
+
+
+  <!-- Hamburger Icon -->
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  
+  <!-- Drop-down Menu -->
+  <div class="glass-menu" id="glassMenu">
+    <ul>
+      <li onclick="toggleSubMenu(this)">ÉSTETICA CORPORAL
+        <ul class="submenu">
+  
+          <li><a href="programadetox.html">Programa Detox</a></li>
+          <li><a href="programaredutor.html">Programa Redutor</a></li>
+  
+          <li><a href="programamodelador.html">Programa Modelador</a></li>
+        </ul>
+      </li>
+      <li onclick="toggleSubMenu(this)">Capilar
+        <ul class="submenu">
+  
+          <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
+          <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
+  
+        </ul>
+      </li>
+  
+      <li><a href="HIFU12.HTML">HIFU 12D</a></li>
+  
+      <li><a href="unhas.html">UNHAS</a></li>
+      <li><a href="bemestar.html">BEM-ESTAR</a></li>
+      <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
+  
+      <li><a href="voucher.html">Voucher</a></li>
+      <li><a href="contacto.html">CONTACTO</a></li>
+    </ul>
+  </div>
+  
+  
+  <script>
+    function toggleMenu() {
+      document.getElementById('glassMenu').classList.toggle('open');
+    }
+  
+    function toggleSubMenu(item) {
+      const submenu = item.querySelector('.submenu');
+      if (submenu) {
+        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+  </script>
+
+
+
+
+  <div class="container">
+    <h2>✨ Programa Redutor ✨</h2>
+    <video
+    src="https://i.imgur.com/lVP7xU9.mp4"
+    class="card-video"
+    controls
+    autoplay
+    loop
+    muted
+    playsinline
+    style="width: 100%; border-radius: 12px; margin-bottom: 20px;"
+  >
+    Seu navegador não suporta vídeo HTML5.
+  </video>
+
+    Reduza medidas e modele o seu corpo de forma eficaz!
+    Este programa foi desenvolvido para quem deseja reduzir gordura localizada, combater a celulite, melhorar a firmeza da pele e modelar o corpo, proporcionando uma silhueta mais definida e harmoniosa.
+    
+    <h2> ✅ O que inclui:</h2>
+    4 Sessões de Manta Térmica
+    
+    4 Sessões de Pressoterapia
+    
+    4 Sessões de Radiofrequência
+    
+    1 Massagem Modeladora
+    
+    <h2> 🔥 Valor Promocional: 180€</h2>
+    📍 Local: Rua Foros de Amora, n.º 12B – 2845-004 Amora
+    📞 Telefone/WhatsApp: 933 272 697
+    
+    <h2>ℹ️ Benefícios do Programa:</h2>
+    Redução de medidas
+    
+    Melhora da firmeza da pele
+    
+    Combate à gordura localizada
+    
+    Diminuição da celulite
+    
+    Estímulo à produção de colagénio e elastina
+    
+    Melhora da circulação e eliminação de toxinas
+    
+    Silhueta mais modelada
+    
+    <h2> 💆‍♀️ O que é cada tratamento?</h2>
+    Manta Térmica:
+    Utiliza calor para ativar o metabolismo, promover a queima de gordura e ajudar na eliminação de líquidos acumulados.
+    
+    <h2>  Pressoterapia:</h2>
+    Técnica de drenagem linfática mecânica que estimula a circulação e ajuda a eliminar líquidos e toxinas.
+    
+    <h2> Radiofrequência:</h2>
+    Tecnologia que aquece as camadas profundas da pele, ajudando a reduzir gordura localizada, combater a flacidez e melhorar a textura da pele.
+    
+    <h2> Massagem Modeladora:</h2>
+    Massagem vigorosa que auxilia na quebra de nódulos de gordura, melhora a circulação e ajuda na modelação corporal.
+    
+    <h2> 📜 Regulamento do Combo:</h2>
+    Validade:
+    O pacote tem validade de 90 dias a partir da data da compra. Sessões não realizadas dentro deste prazo serão consideradas expiradas.
+    
+    <h2>Agendamento:</h2>
+    
+    As sessões devem ser agendadas com antecedência.
+    
+    O cancelamento ou remarcação deverá ser comunicado com pelo menos 24 horas de antecedência.
+    
+    A falta sem aviso no prazo estipulado resultará na perda da sessão.
+    
+    <h2> Forma de pagamento:</h2>
+    O valor promocional é pago integralmente no momento da compra e não é reembolsável.
+    
+    <h2> Transferência:</h2>
+    O pacote é pessoal e intransferível.
+    
+    <h2>Contraindicações:</h2>
+    Este programa não é recomendado para:
+    
+    Gestantes
+    
+    Pessoas com insuficiência cardíaca ou renal
+    
+    Portadores de marcapasso (para tratamentos com radiofrequência)
+    
+    Pessoas com inflamações ou infecções ativas
+    
+    Pacientes oncológicos (exceto com liberação médica)
+    
+    <h2>Recomendações:</h2>
+    Para melhores resultados, recomenda-se:
+    
+    Alimentação equilibrada
+    
+    Hidratação adequada
+    
+    Prática regular de atividade física
+    
+    
+   
+
+    <div class="button-group">
+      <button onclick="goToPageWithParams('reserve.html','Programa Redutor')">Reservar Agora</button>
+      <h2> 🎟️ VOUCHER BEAUTYTECH – COMBO Corpo Perfeito
+💎 Programa Redutor Especial – 💎A beleza que você sente, agora em forma de presente. Dê um voucher e espalhe cuidado</h2>
+
+      <button onclick="goToPageWithParams('voucher.html','Programa Redutor')">Comprar Voucher VIP</button>
+    </div>
+
+    <div class="comments-section">
+      <h3>Comentários dos Clientes</h3>
+
+      <div class="comment">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>Foi uma experiência maravilhosa, senti muita paz e clareza.</p>
+      </div>
+
+      <div class="comment">
+        <div class="stars">⭐⭐⭐⭐</div>
+        <p>Respostas precisas e com boa energia. Obrigada!</p>
+      </div>
+
+      <form id="commentForm">
+        <label for="stars">Sua Avaliação:</label>
+        <select id="stars" name="stars" required>
+          <option value="5">⭐⭐⭐⭐⭐ - Excelente</option>
+          <option value="4">⭐⭐⭐⭐ - Muito Bom</option>
+          <option value="3">⭐⭐⭐ - Regular</option>
+          <option value="2">⭐⭐ - Ruim</option>
+          <option value="1">⭐ - Muito Ruim</option>
+        </select>
+
+        <label for="comment">Seu Comentário:</label>
+        <textarea id="comment" rows="3" placeholder="Escreva seu comentário..." required></textarea>
+
+        <button type="submit">Enviar Comentário</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+     function goToPageWithParams(page, servico) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get("ref");
+
+  const newParams = new URLSearchParams();
+  newParams.set("service", servico);
+  if (ref) newParams.set("ref", ref);
+
+  window.location.href = `${page}?${newParams.toString()}`;
+}
+    document.getElementById("commentForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const stars = document.getElementById("stars").value;
+      const commentText = document.getElementById("comment").value;
+
+      const newComment = document.createElement("div");
+      newComment.classList.add("comment");
+      newComment.innerHTML = `
+        <div class="stars">${"⭐".repeat(stars)}</div>
+        <p>${commentText}</p>
+      `;
+      document.querySelector(".comments-section").insertBefore(newComment, document.getElementById("commentForm"));
+
+      this.reset();
+    });
+  </script>
+</body>
+</html>

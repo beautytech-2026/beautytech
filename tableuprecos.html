@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preços - Salão de Beleza</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #d71a7c, #db2f85);
+      margin: 0;
+      padding: 20px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: rgba(255 255 255 / 0.1);
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .logo {
+      margin-bottom: 30px;
+    }
+    .logo img {
+      width: 120px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(255 255 255 / 0.7);
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+    .logo img:hover {
+      transform: scale(1.1);
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2.4rem;
+      color: #ffd6f0;
+      text-shadow: 0 0 8px #ff9fe8;
+    }
+
+    .price-image {
+      position: relative;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 6px 25px rgba(255 255 255 / 0.4);
+      cursor: default;
+    }
+    .price-image img {
+      width: 100%;
+      display: block;
+      border-radius: 20px;
+      transition: transform 0.3s ease;
+    }
+    .price-image:hover img {
+      transform: scale(1.05);
+    }
+    .price-text {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(0,0,0,0.6);
+      padding: 8px 15px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #fff;
+      text-shadow: 0 0 4px #000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo">
+      <img src="https://i.imgur.com/SXmVbv1.png" alt="Logo do Salão de Beleza" />
+    </div>
+
+    <h1>Tabela de Preços</h1>
+
+    <div class="price-image">
+      <img src="https://i.imgur.com/15wrz1I.jpeg" alt="Serviço 1" />
+      <div class="price-text"></div>
+    </div>
+
+    <div class="price-image">
+      <img src="https://i.imgur.com/3JCdbuj.jpeg" alt="Serviço 2" />
+      <div class="price-text"></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

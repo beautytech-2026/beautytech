@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+ 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeautyTech - Galeria de Serviços</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Vazirmatn', sans-serif;
+  background: linear-gradient(to bottom right, #ea166a, #f544a2);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.magic-heading {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 5em;
+  color: #ea166a;
+  margin-bottom: 30px;
+  text-shadow: 0 0 13px #fff9fc;
+}
+
+.magic-h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #efe4ed;
+  text-align: center;
+  animation: fadeZoomGlow 5s ease-in-out infinite;
+  user-select: none;
+  margin: 40px 0;
+}
+
+@keyframes fadeZoomGlow {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    text-shadow: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1e6, 0 0 10px #e0a2de, 0 0 14px #cf94c5;
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1ee, 0 0 10px #c556a9, 0 0 14px #de89d9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+    text-shadow: none;
+  }
+}
+
+.header-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 40px;
+}
+
+.logo {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.logo img {
+  max-height: 400px;
+  width: auto;
+}
+
+.slider-wrapper {
+  position: relative;
+  width: 320px;
+  max-width: 400px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #e178f4;
+  margin-left: 300px;
+  margin-right: 300px;
+}
+
+.slider-horizontal {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.slide img,
+.slide video {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.slide-btn.prev { left: 15px; }
+.slide-btn.next { right: 15px; }
+.slide-btn:hover { background: #d81e6f; }
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 40px;
+  transition: transform 0.3s ease;
+  color: #fff;
+}
+
+.card:hover { transform: scale(1.03); }
+.card img { width: 100%; height: 350px; object-fit: cover; }
+.card h3 { margin: 15px 0 10px; color: #ffccf9; }
+.card p { margin: 0 18px 12px; font-size: 18px; }
+
+.card button {
+  padding: 10px 20px;
+  background-color: #ea166a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.card button:hover { background-color: #b5137f; }
+.card-slider-horizontal {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 40px 20px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+
+.card-slider-horizontal:active {
+  cursor: grabbing;
+}
+
+.card-track-horizontal {
+  display: flex;
+  gap: 20px;
+  animation: slideLeft 20s linear infinite;
+  animation-play-state: running; /* حالت پیشفرض */
+}
+
+.card-slider-horizontal .card {
+  min-width: 280px;
+  max-width: 300px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .slider-wrapper {
+    width: 90%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .slide img, .slide video {
+    height: 300px;
+    width: 100%;
+  }
+
+  .logo img {
+    max-height: 300px;
+  }
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-slider {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.card-slider img,
+.card-slider video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.card-slider img.active,
+.card-slider video.active {
+  opacity: 1;
+  position: relative;
+}
+
+.side-panel {
+      position: fixed;
+      top: 25%;
+      left: 0;
+      width: 200px;
+      background-color: #fff;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      font-family: sans-serif;
+    }
+
+    .side-panel img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .side-panel h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .side-panel p {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .side-panel button {
+      background-color: #da3fa6;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .side-panel button:hover {
+      background-color: #d67b98;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      backdrop-filter: blur(3px);
+      transition: background 0.3s ease;
+      z-index: 1001;
+    }
+
+    .close-button:hover {
+      background: #da3fa6(201, 87, 182, 0.8);
+      color: white;
+    }
+    @media (max-width: 600px) {
+  .side-panel {
+    top: auto;
+    bottom: 20px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-width: 90%;
+    border-radius: 15px;
+    padding: 15px;
+  }
+
+  .side-panel h3 {
+    font-size: 16px;
+  }
+
+  .side-panel p {
+    font-size: 13px;
+  }
+
+  .close-button {
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+  }
+
+  .side-panel button#panelButton {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+.card-video {
+  width: 120%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  max-width: 400px;
+  height: auto;
+  display: block;
+}
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+</style>
+</head>
+<body>
+  <a href="index.html" class="back-button" title=" voltar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 8 8 12 12 16" />
+      <line x1="16" y1="12" x2="8" y2="12" />
+    </svg>
+  </a>
+  
+    <!-- لوگو در مرکز -->
+    <div class="logo">
+        <img src="https://i.imgur.com/SXmVbv1.png" alt="Logo" />
+      </div>
+    </div>
+    <h2 class="magic-h2">scolha um serviço para reservar seu horário</h2>
+
+    <div class="side-panel" id="sidePanel">
+      <button id="closePanel" class="close-button">×</button>
+    
+      <img src="" alt="Service Image" id="panelImage">
+      <h3 id="panelTitle"></h3>
+      <p id="panelText"></p>
+      <button id="panelButton">Saber Mais</button>
+    </div>
+    
+     <!-- Hamburger Icon -->
+<div class="hamburger" onclick="toggleMenu()">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<!-- Drop-down Menu -->
+<div class="glass-menu" id="glassMenu">
+  <ul>
+    <li onclick="toggleSubMenu(this)">ÉSTETICA CORPORAL
+      <ul class="submenu">
+
+        <li><a href="programadetox.html">Programa Detox</a></li>
+        <li><a href="programaredutor.html">Programa Redutor</a></li>
+
+        <li><a href="programamodelador.html">Programa Modelador</a></li>
+      </ul>
+    </li>
+    <li onclick="toggleSubMenu(this)">Capilar
+      <ul class="submenu">
+
+        <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
+        <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
+
+      </ul>
+    </li>
+
+    
+
+    <li><a href="unhas.html">UNHAS</a></li>
+    <li><a href="bemestar.html">BEM-ESTAR</a></li>
+    <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
+    
+
+    <li><a href="voucher.html">Voucher</a></li>
+    <li><a href="contacto.html">CONTACTO</a></li>
+  </ul>
+</div>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById('glassMenu').classList.toggle('open');
+      }
+    
+      function toggleSubMenu(item) {
+        const submenu = item.querySelector('.submenu');
+        if (submenu) {
+          submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+        }
+      }
+    </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const services = [
+        {
+            image: "https://i.imgur.com/cPJupt4.png",
+            title: "campanha de verao",
+            text: "Ofertas especiais. Dê um voucher e espalhe cuidado.",
+            link: "voucher.html",
+            param: "voucher"
+          } ,
+        
+        {
+            image: "https://i.imgur.com/qfZ7fhP.jpeg",
+            title: "Bem-Estar",
+            text: "Relaxamento e massagem",
+            link: "bemestar.html",
+            param: "Bem-Estar"
+          },
+          {
+            image: "https://i.imgur.com/N9KPuTQ.jpeg",
+            title: "serviços de unhas",
+            text: "manicure e pedicure",
+            link: "unhas.html",
+            param: "unhas"
+          },
+          {
+            image: "https://i.imgur.com/9lGnRki.jpeg",
+            title: "HIFU 12D",
+            text: "Rejuvenescimento facial, melhora da textura da pele, redução das rugas.",
+            link: "HIFU12.HTML",
+            param: "HIFU 12D"
+          },
+          
+        ];
+    
+        let current = 0;
+        const img = document.getElementById("panelImage");
+        const title = document.getElementById("panelTitle");
+        const text = document.getElementById("panelText");
+        const button = document.getElementById("panelButton");
+    
+        function updatePanel(index) {
+          const service = services[index];
+          img.src = service.image;
+          title.textContent = service.title;
+          text.textContent = service.text;
+          button.onclick = () => {
+            const url = `${service.link}?service=${encodeURIComponent(service.param)}`;
+            window.location.href = url;
+          };
+        }
+    
+        updatePanel(current);
+        setInterval(() => {
+          current = (current + 1) % services.length;
+          updatePanel(current);
+        }, 5000);
+    
+        const closeBtn = document.getElementById("closePanel");
+        closeBtn.addEventListener("click", () => {
+          document.getElementById("sidePanel").style.display = "none";
+        });
+      });
+    
+    
+    
+      </script>
+      
+      <header>
+        <h2 class="magic-h2">HIFU 12D</h2>
+    </header>
+      
+      <main>
+        <header>
+            <h2 class="magic-h2">COMBO UNHAS</h2>
+        </header>
+        <section class="services">
+          <div class="card">
+            <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>ROSTO</h3>
+              <p>de 168€ para</p>
+              <h2 class="magic-h2"> 120 €</h2>
+              <button onclick="goToPageWithParams('reserve.html','ROSTO')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','ROSTO')">Comprar Voucher</button>
+            </div>
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>ROSTO + PAPADA</h3>
+              <p>de 210 € para</p>
+              <h2 class="magic-h2"> 180€</h2>
+              <button onclick="goToPageWithParams('reserve.html','ROSTO + PAPADA')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','ROSTO + PAPADA')">Comprar Voucher</button>
+            </div>
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>PAPADA</h3>
+              <p>de 98 € para</p>
+              <h2 class="magic-h2"> 90€</h2>
+              <button onclick="goToPageWithParams('reserve.html','PAPADA')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','PAPADA')">Comprar Voucher</button>
+            </div>
+    
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>PPESCOÇO</h3>
+              <p>de 98 € para</p>
+              <h2 class="magic-h2"> 90€</h2>
+              <button onclick="goToPageWithParams('reserve.html','PESCOÇO')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','PESCOÇO')">Comprar Voucher</button>
+            </div>
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              
+                <h3>PAPADA + PESCOÇO</h3>
+              <p>de 280 € para</p>
+              <h2 class="magic-h2"> 230€</h2>
+              <button onclick="goToPageWithParams('reserve.html','ROSTO COMPLETO')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','ROSTO COMPLETO')">Comprar Voucher</button>
+            </div>
+    
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>COLO/PEITO</h3>
+              <p>de 98 € para</p>
+              <h2 class="magic-h2"> 90€</h2>
+              <button onclick="goToPageWithParams('reserve.html','COLO/PEITO')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','COLO/PEITO')">Comprar Voucher</button>
+            </div>
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>BRAÇOS</h3>
+              <p>de 210 € para</p>
+              <h2 class="magic-h2"> 190€</h2>
+              <button onclick="goToPageWithParams('reserve.html','BRAÇOS')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','BRAÇOS')">Comprar Voucher</button>
+            </div>
+    
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>BARRIGA</h3>
+              <p>de 240 € para</p>
+              <h2 class="magic-h2"> 230€</h2>
+              <button onclick="goToPageWithParams('reserve.html','BARRIGA')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','BARRIGA')">Comprar Voucher</button>
+            </div>
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>FLANCOS</h3>
+              <p>de 240 € para</p>
+              <h2 class="magic-h2"> 230€</h2>
+              <button onclick="goToPageWithParams('reserve.html','FLANCOS')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','FLANCOS')">Comprar Voucher</button>
+            </div>
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>FLANCOS + BARRIGA</h3>
+              <p>de 210 € para</p>
+              <h2 class="magic-h2"> 190€</h2>
+              <button onclick="goToPageWithParams('reserve.html','FLANCOS + BARRIGA')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','FLANCOS + BARRIGA')">Comprar Voucher</button>
+            </div>
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>COSTAS</h3>
+              <p>de 140 € para</p>
+              <h2 class="magic-h2"> 130€</h2>
+              <button onclick="goToPageWithParams('reserve.html','COSTAS')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','COSTAS')">Comprar Voucher</button>
+            </div>
+    
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>GLÚTEOS</h3>
+              <p>de 240 € para</p>
+              <h2 class="magic-h2"> 230€</h2>
+              <button onclick="goToPageWithParams('reserve.html','GLÚTEOS')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','GLÚTEOS')">Comprar Voucher</button>
+            </div>
+    
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>JOELHOS</h3>
+              <p>de 98 € para</p>
+              <h2 class="magic-h2"> 90€</h2>
+              <button onclick="goToPageWithParams('reserve.html','JOELHOS')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','JOELHOS')">Comprar Voucher</button>
+            </div>
+    
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>COXAS</h3>
+              <p>de 240 € para</p>
+              <h2 class="magic-h2"> 230€</h2>
+              <button onclick="goToPageWithParams('reserve.html','COXAS')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','COXAS')">Comprar Voucher</button>
+            </div>
+    
+    
+            <div class="card">
+              <div class="card-slider">
+              <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+            </div>
+              <h3>PERNA</h3>
+              <p>de 340 € para</p>
+              <h2 class="magic-h2"> 330€</h2>
+              <button onclick="goToPageWithParams('reserve.html','PERNA')">Reservar</button>
+              <h3>ou</h3>
+              <button onclick="goToPageWithParams('voucher.html','PERNA')">Comprar Voucher</button>
+            </div>
+    
+     </div>
+        </div>
+      </main>
+    </section>
+      <script>
+        function goToPageWithParams(page, servico) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get("ref");
+    
+      const newParams = new URLSearchParams();
+      newParams.set("service", servico);
+      if (ref) newParams.set("ref", ref);
+    
+      window.location.href = `${page}?${newParams.toString()}`;
+    }
+    </script>
+    
+    </body>
+    </html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Reserva de Horário</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+  <style>
+    body {
+  background: linear-gradient(to bottom right, #dd0583, #8e2de2);
+  font-family: 'Vazirmatn', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 0 20px #e178f4;
+      color: white;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input, button, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 15px;
+    }
+    input, select {
+      background: rgba(255, 255, 255, 0.2);
+      color: #c13a8f;
+    }
+    button {
+      background: #c02190;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .slot-button {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 5px 5px 10px 0;
+      background: #fff;
+      color: #ae6de8;
+      cursor: pointer;
+      border: none;
+    }
+    .slot-button.selected {
+      background: #d81e6f;
+      color: white;
+    }
+    .logo {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
+
+
+
+.logo img {
+  max-height: 200px;
+  width: auto;
+}
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+  </style>
+</head>
+<!-- ... همون head و CSS -->
+
+<body>
+
+  <a href="index.html" class="back-button" title=" voltar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 8 8 12 12 16" />
+      <line x1="16" y1="12" x2="8" y2="12" />
+    </svg>
+  </a>
+
+  
+  <!-- لوگو در مرکز -->
+ <div class="logo">
+  <img src="https://i.imgur.com/SXmVbv1.png" alt="Logo" />
+</div>
+</div>
+ 
+
+
+  <!-- Hamburger Icon -->
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  
+  <!-- Drop-down Menu -->
+  <div class="glass-menu" id="glassMenu">
+    <ul>
+      <li onclick="toggleSubMenu(this)">ÉSTETICA CORPORAL
+        <ul class="submenu">
+  
+          <li><a href="programadetox.html">Programa Detox</a></li>
+          <li><a href="programaredutor.html">Programa Redutor</a></li>
+  
+          <li><a href="programamodelador.html">Programa Modelador</a></li>
+        </ul>
+      </li>
+      <li onclick="toggleSubMenu(this)">Capilar
+        <ul class="submenu">
+  
+          <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
+          <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
+  
+        </ul>
+      </li>
+  
+      <li><a href="HIFU12.HTML">HIFU 12D</a></li>
+  
+      <li><a href="unhas.html">UNHAS</a></li>
+      <li><a href="bemestar.html">BEM-ESTAR</a></li>
+      
+      <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
+      <li><a href="voucher.html">Voucher</a></li>
+      <li><a href="contacto.html">CONTACTO</a></li>
+    </ul>
+  </div>
+  
+  
+  <script>
+    function toggleMenu() {
+      document.getElementById('glassMenu').classList.toggle('open');
+    }
+  
+    function toggleSubMenu(item) {
+      const submenu = item.querySelector('.submenu');
+      if (submenu) {
+        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+  </script>
+
+
+
+
+    <div class="container">
+      <h2>Reserva de Horário</h2>
+  
+      <!-- مرحله انتخاب مشتری قدیمی یا جدید با radio -->
+      <div id="step-client">
+        <label>Você é cliente atual?</label><br>
+        <label><input type="radio" name="clientType" value="old"> Sim</label>
+        <label><input type="radio" name="clientType" value="new"> Não</label>
+        <button id="clientTypeBtn" disabled>Continuar</button>
+      </div>
+  
+      <div id="step-code" style="display:none">
+        <label for="clientCode">Código do Cliente:</label>
+        <input type="text" id="clientCode">
+        <button onclick="validateCode()">Validar Código</button>
+        <p id="codeMessage" style="color: #ff6666;"></p>
+      </div>
+  
+      <form id="newClientForm" style="display:none">
+        <label>Nome:</label><input type="text" id="name" required>
+        <label>Email:</label><input type="email" id="email" required>
+        <label>Telefone:</label><input type="text" id="phone" required>
+        <label>Qual e o serviço que mais usa</label>
+        <select id="nationality">
+          
+          <option>unhas</option>
+          <option>cabelo</option>
+          <option>estética corporal </option>
+          <option>estética facial</option>
+          <option>Outro</option>
+        </select>
+        <label>Data de Nascimento:</label><input type="date" id="birth" required>
+        <input type="hidden" id="vipCode" name="vipCode">
+
+       
+        <button type="button" onclick="showCalendar()">Próximo</button>
+      </form>
+  
+      <div id="calendarStep" style="display:none">
+        <label for="voucher">voucher code (se tem):</label>
+<input type="text" id="voucherCode" name="voucherCode" />
+        <label>Escolha a data:</label>
+        <input type="text" id="datepicker" readonly>
+        <div id="slots"></div>
+        <button id="confirmButton">Confirmar ou Pagar</button>
+        <p id="message" style="color: #ff6666;"></p>
+      </div>
+    </div>
+  <!-- پیام موفقیت یا خطا برای کد مشتری قدیمی -->
+<div id="codeValidationResult" style="display:none; margin-top: 20px; padding: 15px; border-radius: 10px; background: rgba(255,255,255,0.2); color: white; text-align: center;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script>
+      const service = new URLSearchParams(window.location.search).get("service") || "";
+      const refer = new URLSearchParams(window.location.search).get("refer") || "";
+  
+      const webhookValidate = "https://hook.eu2.make.com/mgz53fgt82dhtfc4wnaiubjy7j5ajcjv";
+      const webhookAvailable = "https://hook.eu2.make.com/sw48l9g8shmdh766arjpngluo7pk0ja6";
+      const webhookReserveNewClient = "https://hook.eu2.make.com/lgeq95xbn4oyzg52fi9ambyccww1hgim";
+      const webhookReserveOldClient = webhookReserveNewClient; // اگر یکی هست که ایرادی نداره
+  
+      const allHours = [
+        "09:00", "10:00", "11:00", "12:00",
+        "13:00", "14:00", "15:00", "16:00", "17:00"
+      ];
+  
+      let isOldClient = false;
+      let clientInfo = {};
+      let selectedSlot = { date: null, hour: null };
+      let pikadayInstance = null;
+  
+      // مدیریت انتخاب radio برای مشتری
+      const clientTypeRadios = document.querySelectorAll('input[name="clientType"]');
+      const clientTypeBtn = document.getElementById("clientTypeBtn");
+  
+      clientTypeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          clientTypeBtn.disabled = false;
+        });
+      });
+  
+      clientTypeBtn.addEventListener('click', () => {
+  const selected = document.querySelector('input[name="clientType"]:checked').value;
+  isOldClient = selected === "old";
+  document.getElementById('step-client').style.display = 'none';
+
+  const randomCode = "vip_" + Math.floor(100000 + Math.random() * 900000);
+  document.getElementById("vipCode").value = randomCode;
+
+  if (isOldClient) {
+    document.getElementById('step-code').style.display = 'block';
+  } else {
+    document.getElementById('newClientForm').style.display = 'block';
+  }
+});
+
+      async function validateCode() {
+        const code = document.getElementById('clientCode').value.trim();
+        if (!code) {
+          document.getElementById('codeMessage').textContent = "Por favor, insira o código.";
+          return;
+        }
+        document.getElementById('codeMessage').textContent = "Validando...";
+        try {
+          const res = await fetch(webhookValidate, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code })
+          });
+          const result = await res.json();
+          if (result.success) {
+            clientInfo = result.client || {};
+            clientInfo.code = code; // حتما کد رو ذخیره کن
+            document.getElementById('step-code').style.display = 'none';
+            document.getElementById('calendarStep').style.display = 'block';
+            initCalendar();
+          } else {
+            document.getElementById('codeMessage').textContent = 'Código inválido.';
+          }
+        } catch (e) {
+          document.getElementById('codeMessage').textContent = 'Erro ao validar código.';
+          console.error(e);
+        }
+      }
+  
+      function showCalendar() {
+        // اعتبارسنجی فرم مشتری جدید
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const birth = document.getElementById('birth').value.trim();
+        
+        if (!name || !email || !phone || !birth) {
+          alert("Por favor, preencha todos os campos.");
+          return;
+        }
+        document.getElementById('newClientForm').style.display = 'none';
+        document.getElementById('calendarStep').style.display = 'block';
+        initCalendar();
+      }
+  
+      function initCalendar() {
+        if (pikadayInstance) return; // جلوگیری از ساخت چندباره
+        pikadayInstance = new Pikaday({
+          field: document.getElementById('datepicker'),
+          format: 'DD/MM/YYYY',
+          onSelect(date) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+            selectedSlot.date = formattedDate;
+            fetchAvailableSlots(formattedDate);
+          }
+        });
+      }
+  
+      function renderTimeSlots(unavailable = []) {
+        const container = document.getElementById("slots");
+        container.innerHTML = "";
+  
+        allHours.forEach(hour => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.classList.add("slot-button");
+          btn.textContent = hour;
+  
+          if (unavailable.includes(hour)) {
+            btn.disabled = true;
+            btn.title = "این ساعت قبلاً رزرو شده است.";
+            btn.style.opacity = 0.5;
+          } else {
+            btn.addEventListener("click", () => {
+              selectedSlot.hour = hour;
+              document.querySelectorAll(".slot-button").forEach(b => b.classList.remove("selected"));
+              btn.classList.add("selected");
+            });
+          }
+  
+          container.appendChild(btn);
+        });
+      }
+  
+      async function fetchAvailableSlots(date) {
+        if (!date) return;
+        try {
+          const res = await fetch(webhookAvailable, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ date, service, refer, voucherCode})
+          });
+          const data = await res.json();
+          // انتظار داریم data.slots یا data.unavailableHours باشد
+          const unavailable = data.unavailableHours || [];
+          renderTimeSlots(unavailable);
+        } catch (e) {
+          console.error("Erro ao buscar horários disponíveis", e);
+          renderTimeSlots();
+        }
+      }
+  
+      document.getElementById("confirmButton").addEventListener("click", async () => {
+        if (!selectedSlot.date || !selectedSlot.hour) {
+          document.getElementById("message").textContent = "Por favor, selecione data e hora.";
+          return;
+        }
+        document.getElementById("message").textContent = "Enviando reserva...";
+        const voucherCode = document.getElementById('voucherCode').value.trim();
+        let payload = {
+          service,
+          refer,
+          date: selectedSlot.date,
+          hour: selectedSlot.hour,
+          voucherCode,
+        };
+  
+        if (isOldClient) {
+          payload.clientInfo = clientInfo;
+          // مطمئن شو clientInfo.code وجود دارد
+          if (!payload.clientInfo.code) payload.clientInfo.code = document.getElementById('clientCode').value.trim();
+  
+          try {
+            const res = await fetch(webhookReserveOldClient, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.paymentUrl) {
+              window.location.href = data.paymentUrl;
+            } else {
+      // نیازی به پرداخت نیست → پیام موفقیت در همان فرم نشان داده شود
+      document.getElementById("calendarStep").innerHTML = `
+        <div style="padding: 30px; text-align: center;">
+          <h3 style="color: #00ffcc;">✅ Reserva confirmada com sucesso!</h3>
+          <p style="margin-top: 10px;">Seu horário foi reservado para <strong>${selectedSlot.date}</strong> às <strong>${selectedSlot.hour}</strong>.</p>
+          <p>Você receberá um e-mail com os detalhes em breve.</p>
+        </div>
+      `;
+    }
+          } catch (e) {
+            console.error(e);
+            document.getElementById("message").textContent = "Erro de rede ao reservar.";
+          }
+        } else {
+          // مشتری جدید
+          const name = document.getElementById('name').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const phone = document.getElementById('phone').value.trim();
+          const nationality = document.getElementById('nationality').value;
+          const birth = document.getElementById('birth').value;
+          const code = document.getElementById("vipCode").value.trim()
+          payload.clientInfo = { name, email, phone, nationality, birth, code};
+  
+          try {
+            const res = await fetch(webhookReserveNewClient, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.paymentUrl) {
+              window.location.href = data.paymentUrl;
+            } else {
+      // نیازی به پرداخت نیست → پیام موفقیت در همان فرم نشان داده شود
+      document.getElementById("calendarStep").innerHTML = `
+        <div style="padding: 30px; text-align: center;">
+          <h3 style="color: #00ffcc;">✅ Reserva confirmada com sucesso!</h3>
+          <p style="margin-top: 10px;">Seu horário foi reservado para <strong>${selectedSlot.date}</strong> às <strong>${selectedSlot.hour}</strong>.</p>
+          <p>Você receberá um e-mail com os detalhes em breve.</p>
+        </div>
+      `;
+    }
+  } catch (e) {
+            console.error(e);
+            document.getElementById("message").textContent = "Erro de rede ao reservar.";
+          }
+        }
+      });
+    </script>
+  </body>
+  
+</html>

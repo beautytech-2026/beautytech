@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contato - Salão de Beleza</title>
+  
+  <!-- فونت فارسی حذف شد چون پرتغالی است -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #dd0583, #8e2de2);
+      margin: 0;
+      padding: 20px;
+      color: #fff;
+      direction: ltr;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: rgba(255 255 255 / 0.1);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .logo {
+      margin-bottom: 30px;
+    }
+    .logo img {
+      width: 120px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(255 255 255 / 0.7);
+      transition: transform 0.3s ease;
+    }
+    .logo img:hover {
+      transform: scale(1.1);
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2.8rem;
+      color: #ffd6f0;
+      text-shadow: 0 0 8px #ff9fe8;
+    }
+
+    .info {
+      font-size: 20px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #ffe4f7;
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      align-items: center;
+    }
+    .info span {
+      color: #ff90c2;
+      min-width: 90px;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    /* آیکون‌ها */
+    .info i {
+      color: #ff90c2;
+      min-width: 30px;
+      font-size: 24px;
+    }
+
+    a.facebook-link {
+      display: inline-block;
+      color: #e7a1da;
+      font-weight: bold;
+      font-size: 20px;
+      margin: 20px 0;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+      vertical-align: middle;
+    }
+    a.facebook-link:hover {
+      border-color: #3b5998;
+    }
+
+    .map-container {
+      margin-top: 30px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      height: 280px; /* کوچکتر */
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px 25px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .info {
+        font-size: 16px;
+        justify-content: center;
+      }
+      a.facebook-link {
+        font-size: 18px;
+      }
+      .logo img {
+        width: 90px;
+      }
+      .map-container {
+        height: 200px;
+      }
+    }
+    .back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+ 
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+  </style>
+</head>
+
+  <body>
+
+
+    <a href="index.html" class="back-button" title=" voltar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 8 8 12 12 16" />
+        <line x1="16" y1="12" x2="8" y2="12" />
+      </svg>
+    </a>
+
+<!-- Hamburger Icon -->
+<div class="hamburger" onclick="toggleMenu()">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<!-- Drop-down Menu -->
+<div class="glass-menu" id="glassMenu">
+  <ul>
+    <li onclick="toggleSubMenu(this)">ÉSTETICA CORPORAL
+      <ul class="submenu">
+
+        <li><a href="programadetox.html">Programa Detox</a></li>
+        <li><a href="programaredutor.html">Programa Redutor</a></li>
+
+        <li><a href="programamodelador.html">Programa Modelador</a></li>
+      </ul>
+    </li>
+    <li onclick="toggleSubMenu(this)">Capilar
+      <ul class="submenu">
+
+        <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
+        <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
+
+      </ul>
+    </li>
+
+    <li><a href="HIFU12.HTML">HIFU 12D</a></li>
+    <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
+
+    <li><a href="unhas.html">UNHAS</a></li>
+    
+    
+
+    <li><a href="voucher.html">Voucher</a></li>
+    <li><a href="contacto.html">CONTACTO</a></li>
+  </ul>
+</div>
+
+
+  <div class="container">
+    <div class="logo">
+      <img src="https://i.imgur.com/SXmVbv1.png" alt="Logo do Salão de Beleza" />
+    </div>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('glassMenu').classList.toggle('open');
+  }
+
+  function toggleSubMenu(item) {
+    const submenu = item.querySelector('.submenu');
+    if (submenu) {
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+    }
+  }
+</script>
+
+
+    <h1>Contato</h1>
+
+    <div class="info">
+      <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+      <span>Endereço:</span>
+      
+Rua Foros de Amora n12B, Seixal
+    </div>
+
+    <div class="info">
+      <i class="fas fa-phone" aria-hidden="true"></i>
+      <span>Telefone:</span>
+      933 272 697
+    </div>
+
+    <a href="https://www.facebook.com/share/1CMMfiwn72/?mibextid=wwXIfr" target="_blank" class="facebook-link" rel="noopener">
+      <i class="fab fa-facebook-square"></i> Nossa página no Facebook
+    </a>
+
+    <div class="map-container" title="Localização no Google Maps">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3111.366275903142!2d-9.1160113!3d38.6202156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19345f94884a0f%3A0xb048a9bd5be7496a!2sRua%20Foros%20de%20Amora%2012B%2C%202840%2D220%20Amora%2C%20Portugal!5e0!3m2!1spt-PT!2spt!4v1720210000000!5m2!1spt-PT!2spt" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    
+  </div>
+
+</body>
+</html>

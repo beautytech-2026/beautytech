@@ -1,0 +1,1279 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#e91e63" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+
+  <meta charset="UTF-8">
+ 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeautyTech - Galeria de Serviços</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Vazirmatn', sans-serif;
+  background: linear-gradient(to bottom right, #d61381, #b3109b);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.magic-heading {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 5em;
+  color: #d61381, #b3109b;
+  margin-bottom: 30px;
+  text-shadow: 0 0 13px #fff9fc;
+}
+
+.magic-h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #efe4ed;
+  text-align: center;
+  animation: fadeZoomGlow 5s ease-in-out infinite;
+  user-select: none;
+  margin: 40px 0;
+}
+
+@keyframes fadeZoomGlow {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    text-shadow: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1e6, 0 0 10px #e0a2de, 0 0 14px #cf94c5;
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1ee, 0 0 10px #c556a9, 0 0 14px #de89d9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+    text-shadow: none;
+  }
+}
+
+.header-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 40px;
+}
+
+.logo {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.logo img {
+  max-height: 400px;
+  width: auto;
+}
+
+.slider-wrapper {
+  position: relative;
+  width: 320px;
+  max-width: 400px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #e178f4;
+  margin-left: 300px;
+  margin-right: 300px;
+}
+
+.slider-horizontal {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.slide img,
+.slide video {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  max-width: 400px;
+}
+
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.slide-btn.prev { left: 15px; }
+.slide-btn.next { right: 15px; }
+.slide-btn:hover { background: #d81e6f; }
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 40px;
+  transition: transform 0.3s ease;
+  color: #fff;
+  max-width: 450px;
+}
+
+.card:hover { transform: scale(1.03); }
+.card img { width: 100%; height: 350px; object-fit: cover; }
+.card h3 { margin: 15px 0 10px; color: #ffccf9; }
+.card p { margin: 0 18px 12px; font-size: 18px; }
+
+.card button {
+  padding: 10px 20px;
+  background-color: #ea166a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.card button:hover { background-color: #b5137f; }
+.card-slider-horizontal {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 40px 20px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+
+.card-slider-horizontal:active {
+  cursor: grabbing;
+}
+
+.card-track-horizontal {
+  display: flex;
+  gap: 20px;
+  animation: slideLeft 20s linear infinite;
+  animation-play-state: running; /* حالت پیشفرض */
+}
+
+.card-slider-horizontal .card {
+  min-width: 280px;
+  max-width: 300px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+@media screen and (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .slider-wrapper {
+    width: 90%;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 300px;
+  }
+
+  .slide img, .slide video {
+    height: 400px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .logo img {
+    max-height: 300px;
+  }
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-slider {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 1rem;
+  max-width: 400px;
+}
+
+.card-slider img,
+.card-slider video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  max-width: 400px;
+}
+
+.card-slider img.active,
+.card-slider video.active {
+  opacity: 1;
+  position: relative;
+}
+
+.side-panel {
+      position: fixed;
+      top: 25%;
+      left: 0;
+      width: 200px;
+      background-color: #fff;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      font-family: sans-serif;
+    }
+
+    .side-panel img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .side-panel h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .side-panel p {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .side-panel button {
+      background-color: #da3fa6;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .side-panel button:hover {
+      background-color: #d67b98;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      backdrop-filter: blur(3px);
+      transition: background 0.3s ease;
+      z-index: 1001;
+    }
+
+    .close-button:hover {
+      background: #da3fa6(201, 87, 182, 0.8);
+      color: white;
+    }
+
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+@media (max-width: 600px) {
+  .side-panel {
+    top: auto;
+    bottom: 20px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-width: 90%;
+    border-radius: 15px;
+    padding: 15px;
+  }
+
+  .side-panel h3 {
+    font-size: 16px;
+  }
+
+  .side-panel p {
+    font-size: 13px;
+  }
+
+  .close-button {
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+  }
+
+  .side-panel button#panelButton {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+.card-video {
+  width: 120%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  max-width: 400px;
+  height: auto;
+  display: block;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+   
+   
+
+
+      <!-- لوگو در مرکز -->
+      <div class="logo">
+        <img src="https://i.imgur.com/SXmVbv1.png" alt="Logo" />
+      </div>
+    </div>
+    <h2 class="magic-h2">Escolha um serviço para reservar seu horário</h2>
+
+    
+    <div class="header-container">
+      <!-- اسلایدر در سمت چپ -->
+      <div class="slider-wrapper">
+        <div class="slider-horizontal">
+          <div class="slide">
+          
+              <video class="card-video" src="https://i.imgur.com/lE8jQPk.mp4" playsinline muted autoplay loop></video>
+        </div>
+
+          <div class="slide">
+            <img src="https://i.imgur.com/70pIuIT.jpeg" alt="تصویر 2">
+          </div>
+
+          <div class="slide">
+            <img src="https://i.imgur.com/Kp55S3H.png" alt="تصویر 3">
+          </div>
+          <div class="slide">
+            
+            <video class="card-video" src="https://i.imgur.com/a4yiS9N.mp4" playsinline muted autoplay loop></video>
+          </div>
+        </div>
+        <button class="slide-btn prev">&#10094;</button>
+        <button class="slide-btn next">&#10095;</button>
+      </div>
+  </header>
+
+  <div class="side-panel" id="sidePanel">
+    <button id="closePanel" class="close-button">×</button>
+  
+    <img src="" alt="Service Image" id="panelImage">
+    <h3 id="panelTitle"></h3>
+    <p id="panelText"></p>
+    <button id="panelButton">Saber Mais</button>
+  </div>
+  
+
+  <!-- Hamburger Icon -->
+<div class="hamburger" onclick="toggleMenu()">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<!-- Drop-down Menu -->
+<div class="glass-menu" id="glassMenu">
+  <ul>
+    <li onclick="toggleSubMenu(this)">ÉSTETICA CORPORAL
+      <ul class="submenu">
+
+        <li><a href="programadetox.html">Programa Detox</a></li>
+        <li><a href="programaredutor.html">Programa Redutor</a></li>
+
+        <li><a href="programamodelador.html">Programa Modelador</a></li>
+      </ul>
+    </li>
+    <li onclick="toggleSubMenu(this)">Capilar
+      <ul class="submenu">
+
+        <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
+        <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
+
+      </ul>
+    </li>
+
+    <li><a href="HIFU12.HTML">HIFU 12D</a></li>
+    <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
+
+    <li><a href="unhas.html">UNHAS</a></li>
+    <li><a href="bemestar.html">BEM-ESTAR</a></li>
+    
+
+    <li><a href="voucher.html">Voucher</a></li>
+    <li><a href="tableuprecos.html">Tabela de Preços</a></li>
+    <li><a href="contacto.html">CONTACTO</a></li>
+  </ul>
+</div>
+
+
+<script>
+  function toggleMenu() {
+    document.getElementById('glassMenu').classList.toggle('open');
+  }
+
+  function toggleSubMenu(item) {
+    const submenu = item.querySelector('.submenu');
+    if (submenu) {
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+    }
+  }
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const services = [
+    {
+        image: "https://i.imgur.com/cPJupt4.png",
+        title: "campanha de verao",
+        text: "Ofertas especiais. Dê um voucher e espalhe cuidado.",
+        link: "voucher.html",
+        param: "voucher"
+      } ,
+    
+    {
+        image: "https://i.imgur.com/qfZ7fhP.jpeg",
+        title: "Bem-Estar",
+        text: "Relaxamento e massagem",
+        link: "bemestar.html",
+        param: "Bem-Estar"
+      },
+      {
+        image: "https://i.imgur.com/N9KPuTQ.jpeg",
+        title: "serviços de unhas",
+        text: "manicure e pedicure",
+        link: "unhas.html",
+        param: "unhas"
+      },
+      {
+        image: "https://i.imgur.com/9lGnRki.jpeg",
+        title: "HIFU 12D",
+        text: "Rejuvenescimento facial, melhora da textura da pele, redução das rugas.",
+        link: "HIFU12.HTML",
+        param: "HIFU 12D"
+      },
+      
+    ];
+
+    let current = 0;
+    const img = document.getElementById("panelImage");
+    const title = document.getElementById("panelTitle");
+    const text = document.getElementById("panelText");
+    const button = document.getElementById("panelButton");
+
+    function updatePanel(index) {
+      const service = services[index];
+      img.src = service.image;
+      title.textContent = service.title;
+      text.textContent = service.text;
+      button.onclick = () => {
+        const url = `${service.link}?service=${encodeURIComponent(service.param)}`;
+        window.location.href = url;
+      };
+    }
+
+    updatePanel(current);
+    setInterval(() => {
+      current = (current + 1) % services.length;
+      updatePanel(current);
+    }, 5000);
+
+    const closeBtn = document.getElementById("closePanel");
+    closeBtn.addEventListener("click", () => {
+      document.getElementById("sidePanel").style.display = "none";
+    });
+  });
+
+
+
+  </script>
+  
+</body>
+
+<script>
+  const slider = document.querySelector('.slider-horizontal');
+  const slides = document.querySelectorAll('.slider-horizontal .slide');
+  const next = document.querySelector('.next');
+  const prev = document.querySelector('.prev');
+  let index = 0;
+
+  function updateSlider() {
+    slider.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  function autoSlide() {
+    index = (index + 1) % slides.length;
+    updateSlider();
+  }
+
+  let interval = setInterval(autoSlide, 5000);
+
+  next.addEventListener('click', () => {
+    clearInterval(interval);
+    index = (index + 1) % slides.length;
+    updateSlider();
+    interval = setInterval(autoSlide, 5000);
+  });
+
+  prev.addEventListener('click', () => {
+    clearInterval(interval);
+    index = (index - 1 + slides.length) % slides.length;
+    updateSlider();
+    interval = setInterval(autoSlide, 5000);
+  });
+</script>
+
+<!-- اسلایدر پایان -->
+
+  
+
+<main>
+  <h2 class="magic-h2">SERVIÇOS DE CABELO</h2>
+  <div class="card-slider-horizontal">
+    <div class="card-track-horizontal">
+
+     
+  
+      <div class="card">
+        <div class="card-slider">
+          <img src="https://i.imgur.com/KHms0NU.jpeg" class="active" />
+          
+          
+        </div>  
+        <h3>Corte + Brushing</h3>
+        <p>Apartir de 25 euros</p>
+        <button onclick="goToPageWithParams('reserve.html','Corte + Brushing')">Reservar</button>
+        <h3>ou</h3>
+        <button onclick="goToPageWithParams('voucher.html','Corte + Brushing')">Comprar Voucher</button>
+      </div>
+    
+      
+      <div class="card">
+        <div class="card-slider">
+        <img src="https://i.imgur.com/r2G3jrz.jpeg" alt="Progressiva">
+      </div>
+        <h3> Reconstruçao Capilar</h3>
+        <p>ver mais details sobre serviços</p>
+        
+        <button onclick="goToPageWithParams('Recontruçãocapilar.html','Reconstruçao Capilar')">ver serviços</button>
+      </div>
+
+
+      <div class="card">
+        <div class="card-slider">
+        <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+      </div>
+        <h3>Coloração + Brushing</h3>
+        <p>A partir de 35 euros</p>
+        <button onclick="goToPageWithParams('reserve.html','Coloração + Brushing')">Reservar</button>
+        <h3>ou</h3>
+        <button onclick="goToPageWithParams('voucher.html','Coloração + Brushing')">Comprar Voucher</button>
+      </div>
+
+      
+      
+      <div class="card">
+        <div class="card-slider">
+          <img src="https://i.imgur.com/KHms0NU.jpeg" class="active" />
+         
+          
+        </div>  
+        <h3>Corte + Brushing</h3>
+        <p>Apartir de 25 euros</p>
+        <button onclick="goToPageWithParams('reserve.html','Corte + Brushing')">Reservar</button>
+        <h3>ou</h3>
+        <button onclick="goToPageWithParams('voucher.html','Corte + Brushing')">Comprar Voucher</button>
+      </div>
+    
+      
+      
+      <div class="card">
+        <div class="card-slider">
+        <img src="https://i.imgur.com/r2G3jrz.jpeg" alt="Progressiva">
+      </div>
+        <h3> Reconstruçao Capilar</h3>
+        <p>ver mais details sobre serviços</p>
+        
+        <button onclick="goToPageWithParams('Recontruçãocapilar.html','Reconstruçao Capilar')">ver serviços</button>
+      </div>
+
+
+      <div class="card">
+        <div class="card-slider">
+        <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+      </div>
+        <h3>Coloração + Brushing</h3>
+        <p>A partir de 35 euros</p>
+        <button onclick="goToPageWithParams('reserve.html','Coloração + Brushing')">Reservar</button>
+        <h3>ou</h3>
+        <button onclick="goToPageWithParams('voucher.html','Coloração + Brushing')">Comprar Voucher</button>
+      </div>
+
+      
+      <!-- کارت‌های بیشتر... -->
+    </div>
+    </div>
+  </main>
+
+
+ 
+
+
+
+  <header>
+    <h2 class="magic-h2">ESTÉTICA CORPORAL</h2>
+</header>
+  <section class="services">
+    
+    <div class="card">
+      <div class="card-slider">
+        <img src="https://i.imgur.com/6Q91MUN.jpeg" class="active" alt="Slide 1">
+        <video src="https://i.imgur.com/a4yiS9N.mp4" class="card-video" playsinline muted autoplay loop></video>
+     </div>
+
+      <h2>Programa Modelador</h2>
+      <h3>combo corpo perfeito</h3>
+      <h2 class="magic-h2"> agora apenas    180€</h2>
+      <button onclick="goToPageWithParams('programamodelador.html','Programa Modelador')">saber mais</button>
+    </div>
+
+
+    <div class="card">
+      <div class="card-slider">
+        <img src="https://i.imgur.com/BvQ7h9Y.jpeg" alt="Programa Redutor">
+        <video src="https://i.imgur.com/lVP7xU9.mp4" class="card-video" playsinline muted autoplay loop></video>
+
+      </div>
+        <h2>Programa Redutor</h2>
+        <h3>combo corpo perfeito</h3>
+        
+        <h2 class="magic-h2"> agora apenas    180€</h2>
+        <button onclick="goToPageWithParams('programaredutor.html','Programa Redutor')">saber mais</button>
+      </div>
+    
+
+      <div class="card">
+        <div class="card-slider">
+        <img src="https://i.imgur.com/dV1yCPy.jpeg" alt="Programa Detox">
+        <video src="https://i.imgur.com/KV2pbdj.mp4" class="card-video" playsinline muted autoplay loop></video>
+      </div>
+        <h2>Programa Detox</h2>
+        <h3>combo corpo perfeito</h3>
+        <h2 class="magic-h2"> agora apenas    180€</h2>
+        <button onclick="goToPageWithParams('programadetox.html','Programa Detox')">saber mais</button>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <header>
+        <h2 class="magic-h2">COMBO de BEAUTYTECH</h2>
+    </header>
+    <section class="services">
+      <div class="card">
+        <div class="card-slider">
+          <video src="https://i.imgur.com/DKk49mp.mp4" class="card-video" playsinline muted autoplay loop></video>
+        
+      </div>
+        <h2>MANICURE E PEDICURE</h2>
+        <h3>GEL E GELINHO</h3>
+        <h2 class="magic-h2"> oferta espeçial</h2>
+        <button onclick="goToPageWithParams('unhas.html','MANICURE E PEDICURE')">saber mais</button>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-slider">
+      
+        <img src="https://files.catbox.moe/qh8pw8.jpeg" alt="Programa Detox">
+      <img src="https://files.catbox.moe/mwfz21.jpg" alt="Programa Detox">
+    </div>
+      <h2>BEM-ESTAR</h2>
+      <h3>MASSAGEM </h3>
+      <h2 class="magic-h2"> oferta espeçial</h2>
+      <button onclick="goToPageWithParams('bemestar.html','BEM-ESTAR')">saber mais</button>
+    </div>
+  </div>
+
+
+
+
+    <div class="card">
+        <div class="card-slider">
+        <img src="https://files.catbox.moe/32ht5h.jpg" alt="Programa Detox">
+
+        <img src="https://i.imgur.com/XwOljLz.jpeg" alt="Programa Detox">
+       
+      </div>
+        <h2>TRATAMENTO CAPILAR</h2>
+        <h3>
+          capilar
+        </h3>
+        <h2 class="magic-h2"> apenas   180€</h2>
+        <button onclick="goToPageWithParams('tratamentocapilar.html','combo manicure em gel')">saber mais</button>
+      </div>
+    </div>
+
+
+
+    <div class="card">
+      <div class="card-slider">
+      <img src="https://i.imgur.com/RgzjEHE.jpeg" alt="Programa Detox">
+
+      <img src="https://i.imgur.com/o7SvHUG.png" alt="Programa Detox">
+     
+    </div>
+      <h2>Limpeza pele</h2>
+      <h3>
+       profunda com extração
+      </h3>
+      <h2 class="magic-h2"> preço especial</h2>
+      <button onclick="goToPageWithParams('limpezapele.html','combo manicure em gel')">saber mais</button>
+    </div>
+  </div>
+  </section>
+
+
+
+  <div style="
+  background: linear-gradient(to bottom right, #ea2876, #ea166a);
+  font-family: 'Vazirmatn', sans-serif;
+  max-width: 440px;
+  padding: 30px;
+  color: rgb(245, 222, 240);
+  border-radius: 16px;
+  box-shadow: 0 0 20px #c30166;
+  backdrop-filter: blur(10px);
+  margin: 30px auto;
+">
+  <img src="https://i.imgur.com/uzss8l5.jpeg" alt="logo" style="max-width: 120px; display: block; margin: 0 auto 20px;">
+  
+  <p style="text-align: center; margin-top: 20px;">
+    Junte-se a nós e comece a ganhar com suas indicações!🎉
+  </p>
+ 
+  <div style="
+    background: #ea166a;
+    color:#ea166a;
+    padding: 16px 0;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 720;
+    letter-spacing: 2px;
+  ">
+    <button onclick="goToPageWithParams('link.html','Progressiva')" 
+      style="
+        background: #ea166a;
+        color: white;
+        border: none;
+        padding: 14px 40px;
+        border-radius: 12px;
+        font-size: 24px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(192, 33, 144, 0.6);
+        transition: background-color 0.3s ease;
+      "
+      onmouseover="this.style.backgroundColor='#ea166a'" 
+      onmouseout="this.style.backgroundColor='#c02190'">
+      Quero participar
+    </button>
+  </div>
+
+  <p style="text-align: center; margin-top: 20px;">
+    Pela primeira vez, estamos convidando você para fazer parte do nosso programa de parceria.<br>
+    Compartilhe seu link exclusivo e ganhe uma comissão a cada nova compra realizada por seus indicados.<br>
+    É simples, mágico e feito para você que acredita no poder da conexão! ✨💖
+  </p>
+</div>
+
+
+  <script>
+    function goToPageWithParams(page, servico) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get("ref");
+
+  const newParams = new URLSearchParams();
+  newParams.set("service", servico);
+  if (ref) newParams.set("ref", ref);
+
+  window.location.href = `${page}?${newParams.toString()}`;
+}
+
+  </script>
+<!-- 🌟 Chatbot Popup Português -->
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    font-family: 'Vazirmatn', sans-serif;
+  }
+
+  .chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: linear-gradient(135deg, #d79bff, #c46af2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+  }
+
+  .chatbot-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .chat-popup {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
+    width: 340px;
+    height: 470px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    z-index: 9998;
+    overflow: hidden;
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .chat-header {
+    background: linear-gradient(135deg, #fb92f4, #e00d9a);
+    color: white;
+    padding: 14px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+  }
+
+  .chat-messages {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    font-size: 14px;
+  }
+
+  .chat-input {
+    display: flex;
+    border-top: 1px solid #eee;
+  }
+
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    font-size: 14px;
+  }
+
+  .chat-input button {
+    background: #d79bff;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .user-msg {
+    text-align: right;
+    margin: 6px 0;
+    color: #fbf0f0;
+    background: #ee7df6;
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 85%;
+    align-self: flex-end;
+  }
+
+  .bot-msg {
+    text-align: left;
+    margin: 6px 0;
+    color: #fff7f7;
+    background: #f421bf;
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 85%;
+    align-self: flex-start;
+  }
+</style>
+
+<!-- Botão -->
+<button class="chatbot-btn" onclick="toggleChat()">💬</button>
+
+<!-- Janela do Chat -->
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-header">Converse com nossa consultora </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+</div>
+
+<script>
+  function toggleChat() {
+    const popup = document.getElementById("chatPopup");
+    popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+  }
+
+  function sendMessage() {
+  const input = document.getElementById("userInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  appendMessage("user", msg);
+  input.value = "";
+
+  fetch("https://hook.eu2.make.com/xwk8rimhg7bc9v7iqroc3ca5aut7s1rc", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  })
+  .then(async res => {
+    try {
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        appendMessage("bot", sanitizeText(data.reply || "✅ Recebido mas sem resposta."));
+      } else {
+        const text = await res.text();
+        appendMessage("bot", sanitizeText(text));
+      }
+    } catch (e) {
+      appendMessage("bot", "❗ Erro ao ler a resposta do servidor.");
+    }
+  })
+  .catch(() => {
+    appendMessage("bot", "❗ Erro ao conectar com o servidor.");
+  });
+}
+
+function appendMessage(sender, text) {
+  const messages = document.getElementById("chatMessages");
+  const msgDiv = document.createElement("div");
+  msgDiv.className = sender === "user" ? "user-msg" : "bot-msg";
+  msgDiv.innerHTML = text.replace(/\n/g, "<br>");  // نمایش صحیح خطوط
+  messages.appendChild(msgDiv);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function sanitizeText(text) {
+  return text
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "<br>")
+    .replace(/\\n/g, "<br>"); // اگر به شکل رشته \n بود
+}
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  const swiper = new Swiper(".card-slider", {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 2
+      },
+      1024: {
+        slidesPerView: 3
+      }
+    }
+  });
+  const track = document.querySelector('.card-track-horizontal');
+
+track.addEventListener('touchstart', () => {
+  track.style.animationPlayState = 'paused';
+});
+
+track.addEventListener('touchend', () => {
+  track.style.animationPlayState = 'running';
+});
+</script>
+<script>
+  const sliders = document.querySelectorAll(".card-slider");
+
+sliders.forEach((slider) => {
+  const items = slider.querySelectorAll("img, video");
+  let current = 0;
+
+  // اگر آیتم فعال ویدیو بود، اون رو پخش کن
+  const activate = (index) => {
+    items.forEach((item) => {
+      item.classList.remove("active");
+      if (item.tagName === "VIDEO") item.pause();
+    });
+    items[index].classList.add("active");
+    if (items[index].tagName === "VIDEO") items[index].play();
+  };
+
+  activate(current);
+  setInterval(() => {
+    current = (current + 1) % items.length;
+    activate(current);
+  }, 4000); // هر ۴ ثانیه تعویض
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const track = document.querySelector(".card-track-horizontal");
+    let isUserInteracting = false;
+    let scrollSpeed = 0.5;
+    let autoScrollPaused = false;
+    let pauseTimeout;
+
+    // تابع اسکرول خودکار
+    function autoScroll() {
+      if (!autoScrollPaused && !isUserInteracting) {
+        track.scrollLeft += scrollSpeed;
+
+        // وقتی به انتها رسید، برگرد اول
+        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 1) {
+          track.scrollLeft = 0;
+        }
+      }
+      requestAnimationFrame(autoScroll);
+    }
+
+    autoScroll(); // شروع انیمیشن
+
+    // توقف خودکار اسکرول وقتی کاربر تعامل کرد
+    function pauseAutoScroll() {
+      autoScrollPaused = true;
+      clearTimeout(pauseTimeout);
+      pauseTimeout = setTimeout(() => {
+        autoScrollPaused = false;
+      }, 8000); // ۸ ثانیه بعد دوباره حرکت کنه
+    }
+
+    // کاربر در حال تعامله (لمس یا موس)
+    track.addEventListener("mousedown", () => {
+      isUserInteracting = true;
+      pauseAutoScroll();
+    });
+
+    track.addEventListener("mouseup", () => {
+      isUserInteracting = false;
+    });
+
+    track.addEventListener("touchstart", () => {
+      isUserInteracting = true;
+      pauseAutoScroll();
+    });
+
+    track.addEventListener("touchend", () => {
+      isUserInteracting = false;
+    });
+
+    track.addEventListener("scroll", () => {
+      pauseAutoScroll();
+    });
+
+    // وقتی موس میاد روی کارتها، تعامل حساب می‌شه
+    track.addEventListener("mouseenter", () => {
+      isUserInteracting = true;
+      pauseAutoScroll();
+    });
+
+    track.addEventListener("mouseleave", () => {
+      isUserInteracting = false;
+    });
+  });
+</script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(function () {
+        console.log('Service Worker Registered');
+      });
+  }
+</script>
+
+
+</body>
+</html>
