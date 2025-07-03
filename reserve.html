@@ -526,20 +526,7 @@
           const nationality = document.getElementById('nationality').value;
           const birth = document.getElementById('birth').value;
           const code = document.getElementById("vipCode").value.trim()
-          const payload = {
-          name,
-          email,
-          phone,
-          birth,
-          nationality,
-          vipCode,
-          service,
-          date: selectedSlot.date,
-          hour: selectedSlot.hour,
-          ref,
-          voucherCode: vouchCode
-        };
-
+          payload.clientInfo = { name, email, phone, nationality, birth, code, ref};
   
           try {
             const res = await fetch(webhookReserveNewClient, {
