@@ -1273,12 +1273,13 @@ sliders.forEach((slider) => {
 
 <script>
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(function () {
-        console.log('Service Worker Registered');
-      });
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      console.log('ServiceWorker registered');
+    }).catch(function(error) {
+      console.log('ServiceWorker registration failed:', error);
+    });
   }
-</script>
+  </script>
 
 
 </body>
