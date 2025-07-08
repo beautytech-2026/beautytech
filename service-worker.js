@@ -3,7 +3,7 @@ self.addEventListener('install', function (e) {
       caches.open('beautytech-store').then(function (cache) {
         return cache.addAll([
           '/',
-          '/index.html',
+          '/index2.html',
           '/manifest.json',
           '/icon-192.png',
           '/icon-512.png'
