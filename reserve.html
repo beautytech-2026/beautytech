@@ -343,8 +343,8 @@
       const webhookReserveOldClient = webhookReserveNewClient; // اگر یکی هست که ایرادی نداره
   
       const allHours = [
-        "09:00", "10:00", "11:00", "12:00",
-        "13:00", "14:00", "15:00", "16:00", "17:00"
+        "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+        "13:00", , "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
       ];
   
       let isOldClient = false;
@@ -465,22 +465,31 @@
       }
   
       async function fetchAvailableSlots(date) {
-        if (!date) return;
-        try {
-          const res = await fetch(webhookAvailable, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ date, service, refer, voucherCode})
-          });
-          const data = await res.json();
-          // انتظار داریم data.slots یا data.unavailableHours باشد
-          const unavailable = data.unavailableHours || [];
-          renderTimeSlots(unavailable);
-        } catch (e) {
-          console.error("Erro ao buscar horários disponíveis", e);
-          renderTimeSlots();
-        }
-      }
+  if (!date) return;
+  try {
+    const res = await fetch(webhookAvailable, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date, service, ref })
+    });
+    const data = await res.json();
+
+    // اینجا رشته رو به آرایه تبدیل می‌کنیم
+    let unavailable = [];
+    if (data.unavailableHours && data.unavailableHours.length > 0) {
+      unavailable = data.unavailableHours[0] // رشته داخل آرایه
+        .split(",") // جدا کردن با ویرگول
+        .map(hour => hour.trim()) // حذف فاصله‌های اضافی
+        .filter(hour => hour !== ""); // حذف رشته‌های خالی
+    }
+
+    renderTimeSlots(unavailable);
+  } catch (e) {
+    console.error("Erro ao buscar horários disponíveis", e);
+    renderTimeSlots();
+  }
+}
+
   
       document.getElementById("confirmButton").addEventListener("click", async () => {
         if (!selectedSlot.date || !selectedSlot.hour) {
