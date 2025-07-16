@@ -9,6 +9,7 @@
     * {
       box-sizing: border-box;
       direction: ltr;
+      
       font-family: 'Vazirmatn', sans-serif;
     }
 
@@ -25,16 +26,18 @@
   
 }
 
+
     .product-container {
       max-width: 1000px;
       width: 95%;
-      background: rgba(255, 255, 255, 0.728);
+      background: rgba(255, 252, 252, 0.783);
       backdrop-filter: blur(15px);
       border-radius: 20px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
       display: flex;
       flex-wrap: wrap;
       overflow: hidden;
+      
     }
 
     .product-image {
@@ -58,7 +61,7 @@
     .product-details h1 {
       margin-top: 0;
       font-size: 28px;
-      color: #e91e63;
+      color: #d71389;
     }
 
     .product-details p {
@@ -123,6 +126,7 @@
   max-height: 200px;
   width: auto;
 }
+
 .back-button {
   position: fixed;
   top: 20px;
@@ -148,6 +152,7 @@
   height: 24px;
 }
 
+ 
 /* Hamburger button */
 .hamburger {
   position: fixed;
@@ -229,6 +234,7 @@
     right: 15px;
   }
 }
+
   </style>
 </head>
 <body>
@@ -239,7 +245,6 @@
       <line x1="16" y1="12" x2="8" y2="12" />
     </svg>
   </a>
-
   
 <!-- لوگو در مرکز -->
 <div class="logo">
@@ -247,85 +252,83 @@
 </div>
 </div>
 
+<!-- Hamburger Icon -->
+<div class="hamburger" onclick="toggleMenu()">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<!-- Drop-down Menu -->
+<div class="glass-menu" id="glassMenu">
+  <ul>
+    <li onclick="toggleSubMenu(this)">ÉSTETICA CORPORAL
+      <ul class="submenu">
+
+        <li><a href="programadetox.html">Programa Detox</a></li>
+        <li><a href="programaredutor.html">Programa Redutor</a></li>
+
+        <li><a href="programamodelador.html">Programa Modelador</a></li>
+      </ul>
+    </li>
+    <li onclick="toggleSubMenu(this)">CAPILAR
+      <ul class="submenu">
+
+        <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
+        <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
+
+      </ul>
+    </li>
+
+    <li><a href="HIFU12.HTML">HIFU 12D</a></li>
+    <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
+
+    <li><a href="unhas.html">UNHAS</a></li>
+    
+    
+
+    <li><a href="voucher.html">VOUCHER</a></li>
+    <li><a href="contacto.html">CONTACTO</a></li>
+  </ul>
+</div>
 
 
+<script>
+  function toggleMenu() {
+    document.getElementById('glassMenu').classList.toggle('open');
+  }
 
-  <!-- Hamburger Icon -->
-  <div class="hamburger" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-  
-  <!-- Drop-down Menu -->
-  <div class="glass-menu" id="glassMenu">
-    <ul>
-      <li onclick="toggleSubMenu(this)">ÉSTETICA CORPORAL
-        <ul class="submenu">
-  
-          <li><a href="programadetox.html">Programa Detox</a></li>
-          <li><a href="programaredutor.html">Programa Redutor</a></li>
-  
-          <li><a href="programamodelador.html">Programa Modelador</a></li>
-        </ul>
-      </li>
-      <li onclick="toggleSubMenu(this)">CAPILAR
-        <ul class="submenu">
-  
-          <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
-          <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
-  
-        </ul>
-      </li>
-      <li><a href="depilacaoalaser.html">DEPILAÇÃO A LASER</a></li>
-      <li><a href="HIFU12.HTML">HIFU 12D</a></li>
-  
-      <li><a href="unhas.html">UNHAS</a></li>
-      <li><a href="bemestar.html">BEM-ESTAR</a></li>
-      
-      <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
-      <li><a href="voucher.html">VOUCHER</a></li>
-      <li><a href="contacto.html">CONTACTO</a></li>
-    </ul>
-  </div>
-  
-  
-  <script>
-    function toggleMenu() {
-      document.getElementById('glassMenu').classList.toggle('open');
+  function toggleSubMenu(item) {
+    const submenu = item.querySelector('.submenu');
+    if (submenu) {
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
     }
-  
-    function toggleSubMenu(item) {
-      const submenu = item.querySelector('.submenu');
-      if (submenu) {
-        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-      }
-    }
-  </script>
-
-
-
+  }
+</script>
 
   <div class="product-container">
     <div class="product-details">
-      <h1>tratamento capilar</h1>
-   
-     <p> O microneedling capilar é um tratamento estético que utiliza microagulhas para estimular o couro cabeludo e promover o crescimento capilar. É especialmente indicado para pessoas que sofrem com queda de cabelo, afinamento dos fios ou condições como a alopecia androgenética
-        Normalmente, são recomendadas de 4 a 8 sessões, com intervalos mensais ou quinzenais, dependendo do caso
-        A utilização do capacete a laser ajuda a estimular a atividade celular, que é vital à absorção da energia da luz necessária para melhorar e promover o crescimento do cabelo, ao mesmo tempo que aumenta a sua densidade</p>
-      
+      <h1>✨ Depilação a Laser com Tecnologia de Ponta ✨</h1>
+     <h1>
+        Na BeautyTech, unimos tecnologia avançada e cuidados especializados para oferecer a você uma experiência única de depilação a laser.
         
+        </h1>
+     <p> 🔹 Livre-se dos pelos indesejados de forma segura, rápida e indolor
+        🔹 Resultados visíveis desde as primeiras sessões
+        🔹 Equipamentos de última geração para todos os tipos de pele
+        🔹 Equipe treinada para garantir o máximo conforto
+        <h1> 📅 Reserve agora o seu horário ou 🎁 presenteie seus amigos com um voucher BeautyTech!</h1>
+        <p> 🌟 Diga adeus aos métodos antigos e descubra o poder da tecnologia BeautyTech</p>
       
+        <div class="price">50€</div>
       
-      
-      <div class="price">de 200€</div>
-      <h1>para 180€</h1>
-      <button class="buy-button" onclick="goToPageWithParams('reserve.html','Tratamento Capilar')">Reservar</button> 
-      <button class="buy-button" onclick="goToPageWithParams('voucher.html','Tratamento Capilar')">oferecer uma voucher</button> 
-
+      <button class="buy-button" onclick="goToPageWithParams('reserve.html','Depilação a laser')">RESERVAR</button> 
+ 
+      <h1></h1>
+      <button class="buy-button" onclick="goToPageWithParams('voucher.html','Depilação a laser')">OFERCER UM VOUCHER</button> 
     </div>
     <div class="product-image">
-      <img src="https://i.imgur.com/2GJ3kkH.jpeg" alt="رژ لب صورتی">
+      <img src="https://i.imgur.com/A4IaRfO.jpeg" alt="رژ لب صورتی">
     </div>
   </div>
 
