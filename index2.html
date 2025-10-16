@@ -467,6 +467,32 @@ header {
   display: block;
 }
 
+
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
   </style>
 </head>
 <body>
@@ -477,10 +503,18 @@ header {
 
       <!-- لوگو در مرکز -->
       <div class="logo">
-        <img src="https://i.imgur.com/SXmVbv1.png" alt="Logo" />
+        <img src="images/icon.png" alt="Logo" />
       </div>
     </div>
     
+    <a href="index.html" class="back-button" title=" voltar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 8 8 12 12 16" />
+        <line x1="16" y1="12" x2="8" y2="12" />
+      </svg>
+    </a>
+
     <h2 class="magic-h2">Escolha um serviço para reservar seu horário</h2>
 
     
@@ -693,7 +727,7 @@ header {
   
       <div class="card">
         <div class="card-slider">
-          <img src="https://i.imgur.com/KHms0NU.jpeg" class="active" />
+          <img src="images/2.jpg" class="active" />
           
           
         </div>  
@@ -707,7 +741,7 @@ header {
       
       <div class="card">
         <div class="card-slider">
-        <img src="https://i.imgur.com/r2G3jrz.jpeg" alt="Progressiva">
+        <img src="images/3.jpg" alt="Progressiva">
       </div>
         <h3> Reconstruçao Capilar</h3>
         <p>ver mais details sobre serviços</p>
@@ -718,7 +752,7 @@ header {
 
       <div class="card">
         <div class="card-slider">
-        <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+        <img src="images/1.jpg" alt="Coloração + Brushing">
       </div>
         <h3>Coloração + Brushing</h3>
         <p>A partir de 35 euros</p>
@@ -731,7 +765,7 @@ header {
       
       <div class="card">
         <div class="card-slider">
-          <img src="https://i.imgur.com/KHms0NU.jpeg" class="active" />
+          <img src="images/2.jpg" class="active" />
          
           
         </div>  
@@ -746,7 +780,7 @@ header {
       
       <div class="card">
         <div class="card-slider">
-        <img src="https://i.imgur.com/r2G3jrz.jpeg" alt="Progressiva">
+        <img src="images/3.jpg" alt="Progressiva">
       </div>
         <h3> Reconstruçao Capilar</h3>
         <p>ver mais details sobre serviços</p>
@@ -757,7 +791,7 @@ header {
 
       <div class="card">
         <div class="card-slider">
-        <img src="https://i.imgur.com/h8h5v2C.jpeg" alt="Coloração + Brushing">
+        <img src="images/1.jpg" alt="Coloração + Brushing">
       </div>
         <h3>Coloração + Brushing</h3>
         <p>A partir de 35 euros</p>
@@ -921,7 +955,7 @@ header {
   backdrop-filter: blur(10px);
   margin: 30px auto;
 ">
-  <img src="https://i.imgur.com/uzss8l5.jpeg" alt="logo" style="max-width: 120px; display: block; margin: 0 auto 20px;">
+  <img src="images/icon.png" alt="logo" style="max-width: 120px; display: block; margin: 0 auto 20px;">
   
   <p style="text-align: center; margin-top: 20px;">
     Junte-se a nós e comece a ganhar com suas indicações!🎉

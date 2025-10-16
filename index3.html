@@ -1,0 +1,1222 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#e91e63" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<link rel="apple-touch-icon" href="icon-192.png" />
+
+  <meta charset="UTF-8">
+ 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeautyTech braga retail </title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+  margin: 0;
+  font-family: 'Vazirmatn', sans-serif;
+  background: linear-gradient(to bottom right, #d61381, #b3109b);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.magic-heading {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 5em;
+  color: #d61381, #b3109b;
+  margin-bottom: 30px;
+  text-shadow: 0 0 13px #fff9fc;
+}
+
+.magic-h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #efe4ed;
+  text-align: center;
+  animation: fadeZoomGlow 5s ease-in-out infinite;
+  user-select: none;
+  margin: 40px 0;
+}
+
+@keyframes fadeZoomGlow {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    text-shadow: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1e6, 0 0 10px #e0a2de, 0 0 14px #cf94c5;
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1ee, 0 0 10px #c556a9, 0 0 14px #de89d9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+    text-shadow: none;
+  }
+}
+
+.header-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 40px;
+}
+
+.logo {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.logo img {
+  max-height: 400px;
+  width: auto;
+}
+
+.slider-wrapper {
+  position: relative;
+  width: 320px;
+  max-width: 400px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #e178f4;
+  margin-left: 300px;
+  margin-right: 300px;
+}
+
+.slider-horizontal {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.slide img,
+.slide video {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  max-width: 400px;
+}
+
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.slide-btn.prev { left: 15px; }
+.slide-btn.next { right: 15px; }
+.slide-btn:hover { background: #d81e6f; }
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+/* چیدمان کلی کارت‌ها */
+.cards-container {
+ 
+  display: flex;
+  flex-wrap: wrap; /* کارت‌ها در چند ردیف می‌چینند */
+  justify-content: center; /* وسط‌چین شدن */
+  gap: 25px; /* فاصله‌ی بین کارت‌ها */
+  padding: 40px 0;
+  background: rgba(255, 255, 255, 0.05);
+
+}
+
+/* استایل کارت */
+/* استایل کارت */
+.card {
+  width: 260px;
+  min-height: 380px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.25);
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+/* حالت hover با نئون صورتی */
+.card:hover {
+  box-shadow: 0 0 25px rgba(255, 105, 180, 0.8),
+              0 0 60px rgba(255, 20, 147, 0.4);
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(255, 105, 180, 0.6);
+}
+
+/* تصویر یا ویدیو بالای کارت */
+.card-slider img,
+.card-slider video {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 2px solid rgba(255, 105, 180, 0.4);
+}
+
+/* تیترها */
+.card h2 {
+  font-size: 1.3rem;
+  color: #f4e0ec;
+  margin-top: 10px;
+}
+
+.card h3 {
+  font-size: 1rem;
+  color: #ddd;
+  font-weight: 400;
+}
+
+/* تیتر جادویی (ویژه) */
+.magic-h2 {
+  color: #ffb6e6;
+  text-shadow: 0 0 8px #ff80d5, 0 0 18px #ff1493;
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+/* دکمه در کارت */
+.card button {
+  margin: 12px 0 20px;
+  padding: 10px 22px;
+  background: rgba(255, 182, 193, 0.2);
+  border: 1px solid rgba(255, 105, 180, 0.5);
+  border-radius: 25px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.card button:hover {
+  background: rgba(255, 105, 180, 0.5);
+  box-shadow: 0 0 10px #ff69b4, 0 0 25px #ff1493;
+  transform: scale(1.05);
+}
+
+  .logo img {
+    max-height: 300px;
+  }
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-slider {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 1rem;
+  max-width: 400px;
+  max-height: 200px;
+}
+
+.card-slider img,
+.card-slider video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  max-width: 600px;
+  
+}
+
+.card-slider img.active,
+.card-slider video.active {
+  opacity: 1;
+  position: relative;
+}
+
+.side-panel {
+      position: fixed;
+      top: 25%;
+      left: 0;
+      width: 200px;
+      background-color: #fff;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      font-family: sans-serif;
+    }
+
+    .side-panel img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .side-panel h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .side-panel p {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .side-panel button {
+      background-color: #da3fa6;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .side-panel button:hover {
+      background-color: #d67b98;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      backdrop-filter: blur(3px);
+      transition: background 0.3s ease;
+      z-index: 1001;
+    }
+
+    .close-button:hover {
+      background: #da3fa6(201, 87, 182, 0.8);
+      color: white;
+    }
+
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+@media (max-width: 600px) {
+  .side-panel {
+    top: auto;
+    bottom: 20px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-width: 90%;
+    border-radius: 15px;
+    padding: 15px;
+  }
+
+  .side-panel h3 {
+    font-size: 16px;
+  }
+
+  .side-panel p {
+    font-size: 13px;
+  }
+
+  .close-button {
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+  }
+
+  .side-panel button#panelButton {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+.card-video {
+  width: 120%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  max-width: 400px;
+  height: auto;
+  display: block;
+}
+
+
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+
+.magic-h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #efe4ed;
+  text-align: center;
+  animation: fadeZoomGlow 5s ease-in-out infinite;
+  user-select: none;
+  margin: 40px 0;
+}
+
+
+
+
+
+
+  /* 🌿 دکمه شناور واتساپ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  background: #25d366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 9999;
+  transition: all 0.3s ease;
+  animation: pulseWhats 2s infinite ease-in-out;
+}
+
+.whatsapp-float img {
+  width: 36px;
+  height: 36px;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px #25d366;
+}
+
+/* ✨ انیمیشن پالس */
+@keyframes pulseWhats {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+
+
+
+  </style>
+</head>
+<body>
+    <!-- 🌿 دکمه واتساپ -->
+<a href="https://wa.me/351931670667" target="_blank" class="whatsapp-float" title="Fale conosco no WhatsApp">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+</a>
+
+  <header>
+   
+   
+
+
+      <!-- لوگو در مرکز -->
+      <div class="logo">
+        <img src="images/icon.png" alt="Logo" />
+      </div>
+    </div>
+    
+
+    <a href="index.html" class="back-button" title=" voltar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 8 8 12 12 16" />
+        <line x1="16" y1="12" x2="8" y2="12" />
+      </svg>
+    </a>
+
+    <h2 class="magic-h2">Escolha um serviço para reservar seu horário</h2>
+
+    
+   
+        <button class="slide-btn prev">&#10094;</button>
+        <button class="slide-btn next">&#10095;</button>
+      </div>
+  </header>
+
+  <div class="side-panel" id="sidePanel">
+    <button id="closePanel" class="close-button">×</button>
+  
+    <img src="" alt="Service Image" id="panelImage">
+    <h3 id="panelTitle"></h3>
+    <p id="panelText"></p>
+    <button id="panelButton">Saber Mais</button>
+  </div>
+  
+
+  <!-- Hamburger Icon -->
+<div class="hamburger" onclick="toggleMenu()">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<!-- Drop-down Menu -->
+<div class="glass-menu" id="glassMenu">
+  <ul>
+   
+    <li><a href="perfectbodytech.html">PPERFECT BODY TECH</a></li>
+        <li><a href="perfectfacetech.html">PERFECT FACE TECH</a></li>
+
+        <li><a href=".html">FACE DESIGN TECH</a></li>
+    <li><a href="contacto.html">CONTACTOS</a></li>
+    <li><a href="contacto.html">CATALOGO</a></li>
+  </ul>
+</div>
+
+
+<script>
+  function toggleMenu() {
+    document.getElementById('glassMenu').classList.toggle('open');
+  }
+
+  function toggleSubMenu(item) {
+    const submenu = item.querySelector('.submenu');
+    if (submenu) {
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+    }
+  }
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const services = [
+   
+    
+    {
+        image: "images/massagem1.jpeg",
+        title: "Bem-Estar",
+        text: "Relaxamento e massagem",
+        link: "bemestarbraga.html",
+        param: "Bem-Estar"
+      },
+   
+      {
+        image: "images/hifu1.png",
+        title: "HIFU 12D",
+        text: "Rejuvenescimento facial, melhora da textura da pele, redução das rugas.",
+        link: "hifu12braga.html",
+        param: "HIFU 12D"
+      },
+      
+    ];
+
+    let current = 0;
+    const img = document.getElementById("panelImage");
+    const title = document.getElementById("panelTitle");
+    const text = document.getElementById("panelText");
+    const button = document.getElementById("panelButton");
+
+    function updatePanel(index) {
+      const service = services[index];
+      img.src = service.image;
+      title.textContent = service.title;
+      text.textContent = service.text;
+      button.onclick = () => {
+        const url = `${service.link}?service=${encodeURIComponent(service.param)}`;
+        window.location.href = url;
+      };
+    }
+
+    updatePanel(current);
+    setInterval(() => {
+      current = (current + 1) % services.length;
+      updatePanel(current);
+    }, 5000);
+
+    const closeBtn = document.getElementById("closePanel");
+    closeBtn.addEventListener("click", () => {
+      document.getElementById("sidePanel").style.display = "none";
+    });
+  });
+
+
+
+  </script>
+  
+</body>
+
+<script>
+  const slider = document.querySelector('.slider-horizontal');
+  const slides = document.querySelectorAll('.slider-horizontal .slide');
+  const next = document.querySelector('.next');
+  const prev = document.querySelector('.prev');
+  let index = 0;
+
+  function updateSlider() {
+    slider.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  function autoSlide() {
+    index = (index + 1) % slides.length;
+    updateSlider();
+  }
+
+  let interval = setInterval(autoSlide, 5000);
+
+  next.addEventListener('click', () => {
+    clearInterval(interval);
+    index = (index + 1) % slides.length;
+    updateSlider();
+    interval = setInterval(autoSlide, 5000);
+  });
+
+  prev.addEventListener('click', () => {
+    clearInterval(interval);
+    index = (index - 1 + slides.length) % slides.length;
+    updateSlider();
+    interval = setInterval(autoSlide, 5000);
+  });
+</script>
+
+<!-- اسلایدر پایان -->
+
+  
+<div class="sectionGallery">
+  <div class="sectionCircle" onclick="goToPage('perfectfacetech.html')">
+    <img src="images/Untitled design (4).png" alt="FACIAL">
+    <div class="sectionName">PERFECT FACE TECH</div>
+  </div>
+
+  <div class="sectionCircle" onclick="goToPage('perfectbodytech.html')">
+    <img src="images/Untitled design (6).png" alt="BODY TECH">
+    <div class="sectionName">PERFECT BODY TECH</div>
+  </div>
+
+  <div class="sectionCircle" onclick="goToPage('facedesigntech.html')">
+    <img src="images/Untitled design (2).png" alt="MASSAGEM">
+    <div class="sectionName">FACE DESIGN TECH</div>
+  </div>
+</div>
+
+<script>
+function goToPage(page) {
+  window.location.href = page;
+}
+</script>
+
+<style>
+  /* 🎨 گالری دایره‌ها */
+  .sectionGallery {
+    display: flex;
+    justify-content: center;  /* وسط‌چین */
+    align-items: flex-start;
+    flex-wrap: wrap;           /* اجازه بده اگه جا نشد بره خط بعد */
+    gap: 40px;                 /* فاصله بین دایره‌ها */
+    margin: 40px auto;
+    width: 100%;
+    max-width: 1200px;         /* حداکثر عرض */
+    text-align: center;
+  }
+  
+  /* 🔵 هر دایره */
+  .sectionCircle {
+    width: 150px;              /* عرض ثابت برای هم‌ردیفی */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .sectionCircle:hover {
+    transform: scale(1.08);
+  }
+  
+  /* 🖼 تصویر دایره‌ای */
+  .sectionCircle img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.8);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    object-fit: cover;
+    background: #fff;
+  }
+  
+  /* ✨ نام زیر دایره */
+  .sectionName {
+    margin-top: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  /* 📱 واکنش‌گرا برای موبایل */
+  @media (max-width: 768px) {
+    .sectionGallery {
+      gap: 25px;
+    }
+    .sectionCircle {
+      width: 120px;
+    }
+    .sectionCircle img {
+      width: 110px;
+      height: 110px;
+    }
+  }
+  </style>
+  
+
+
+
+
+
+
+
+
+
+  <header>
+
+
+
+  <div style="
+  background: linear-gradient(to bottom right, #ea2876, #ea166a);
+  font-family: 'Vazirmatn', sans-serif;
+  max-width: 440px;
+  padding: 30px;
+  color: rgb(245, 222, 240);
+  border-radius: 16px;
+  box-shadow: 0 0 20px #c30166;
+  backdrop-filter: blur(10px);
+  margin: 30px auto;
+">
+  <img src="images/icon.png" alt="logo" style="max-width: 120px; display: block; margin: 0 auto 20px;">
+  
+  <p style="text-align: center; margin-top: 20px;">
+    Junte-se a nós e comece a ganhar com suas indicações!🎉
+  </p>
+ 
+  <div style="
+    background: #ea166a;
+    color:#ea166a;
+    padding: 16px 0;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 720;
+    letter-spacing: 2px;
+  ">
+    <button onclick="goToPageWithParams('link.html','Progressiva')" 
+      style="
+        background: #ea166a;
+        color: white;
+        border: none;
+        padding: 14px 40px;
+        border-radius: 12px;
+        font-size: 24px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(192, 33, 144, 0.6);
+        transition: background-color 0.3s ease;
+      "
+      onmouseover="this.style.backgroundColor='#ea166a'" 
+      onmouseout="this.style.backgroundColor='#c02190'">
+      Quero participar
+    </button>
+  </div>
+
+  <p style="text-align: center; margin-top: 20px;">
+    Pela primeira vez, estamos convidando você para fazer parte do nosso programa de parceria.<br>
+    Compartilhe seu link exclusivo e ganhe uma comissão a cada nova compra realizada por seus indicados.<br>
+    É simples, mágico e feito para você que acredita no poder da conexão! ✨💖
+  </p>
+</div>
+</header>
+
+  <script>
+    function goToPageWithParams(page, servico) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get("ref");
+
+  const newParams = new URLSearchParams();
+  newParams.set("service", servico);
+  if (ref) newParams.set("ref", ref);
+
+  window.location.href = `${page}?${newParams.toString()}`;
+}
+
+  </script>
+<!-- 🌟 Chatbot Popup Português -->
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    font-family: 'Vazirmatn', sans-serif;
+  }
+
+  .chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: linear-gradient(135deg, #d79bff, #c46af2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+  }
+
+  .chatbot-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .chat-popup {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    bottom: 90px;
+    left: 20px;
+    width: 340px;
+    height: 470px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    z-index: 9998;
+    overflow: hidden;
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .chat-header {
+    background: linear-gradient(135deg, #fb92f4, #e00d9a);
+    color: white;
+    padding: 14px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+  }
+
+  .chat-messages {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    font-size: 14px;
+  }
+
+  .chat-input {
+    display: flex;
+    border-top: 1px solid #eee;
+  }
+
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    font-size: 14px;
+  }
+
+  .chat-input button {
+    background: #d79bff;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .user-msg {
+    text-align: right;
+    margin: 6px 0;
+    color: #fbf0f0;
+    background: #ee7df6;
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 85%;
+    align-self: flex-end;
+  }
+
+  .bot-msg {
+    text-align: left;
+    margin: 6px 0;
+    color: #fff7f7;
+    background: #f421bf;
+    padding: 8px 12px;
+    border-radius: 12px;
+    max-width: 85%;
+    align-self: flex-start;
+  }
+</style>
+
+<!-- Botão -->
+<button class="chatbot-btn" onclick="toggleChat()">💬</button>
+
+<!-- Janela do Chat -->
+<div class="chat-popup" id="chatPopup">
+  <div class="chat-header">Converse com nossa consultora </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+</div>
+
+<script>
+  function toggleChat() {
+    const popup = document.getElementById("chatPopup");
+    popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+  }
+
+  function sendMessage() {
+  const input = document.getElementById("userInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  appendMessage("user", msg);
+  input.value = "";
+
+  fetch("https://hook.eu2.make.com/xwk8rimhg7bc9v7iqroc3ca5aut7s1rc", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  })
+  .then(async res => {
+    try {
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await res.json();
+        appendMessage("bot", sanitizeText(data.reply || "✅ Recebido mas sem resposta."));
+      } else {
+        const text = await res.text();
+        appendMessage("bot", sanitizeText(text));
+      }
+    } catch (e) {
+      appendMessage("bot", "❗ Erro ao ler a resposta do servidor.");
+    }
+  })
+  .catch(() => {
+    appendMessage("bot", "❗ Erro ao conectar com o servidor.");
+  });
+}
+
+function appendMessage(sender, text) {
+  const messages = document.getElementById("chatMessages");
+  const msgDiv = document.createElement("div");
+  msgDiv.className = sender === "user" ? "user-msg" : "bot-msg";
+  msgDiv.innerHTML = text.replace(/\n/g, "<br>");  // نمایش صحیح خطوط
+  messages.appendChild(msgDiv);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function sanitizeText(text) {
+  return text
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "<br>")
+    .replace(/\\n/g, "<br>"); // اگر به شکل رشته \n بود
+}
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+  const swiper = new Swiper(".card-slider", {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 2
+      },
+      1024: {
+        slidesPerView: 3
+      }
+    }
+  });
+  const track = document.querySelector('.card-track-horizontal');
+
+track.addEventListener('touchstart', () => {
+  track.style.animationPlayState = 'paused';
+});
+
+track.addEventListener('touchend', () => {
+  track.style.animationPlayState = 'running';
+});
+</script>
+<script>
+  const sliders = document.querySelectorAll(".card-slider");
+
+sliders.forEach((slider) => {
+  const items = slider.querySelectorAll("img, video");
+  let current = 0;
+
+  // اگر آیتم فعال ویدیو بود، اون رو پخش کن
+  const activate = (index) => {
+    items.forEach((item) => {
+      item.classList.remove("active");
+      if (item.tagName === "VIDEO") item.pause();
+    });
+    items[index].classList.add("active");
+    if (items[index].tagName === "VIDEO") items[index].play();
+  };
+
+  activate(current);
+  setInterval(() => {
+    current = (current + 1) % items.length;
+    activate(current);
+  }, 4000); // هر ۴ ثانیه تعویض
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const track = document.querySelector(".card-track-horizontal");
+    let isUserInteracting = false;
+    let scrollSpeed = 0.5;
+    let autoScrollPaused = false;
+    let pauseTimeout;
+
+    // تابع اسکرول خودکار
+    function autoScroll() {
+      if (!autoScrollPaused && !isUserInteracting) {
+        track.scrollLeft += scrollSpeed;
+
+        // وقتی به انتها رسید، برگرد اول
+        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 1) {
+          track.scrollLeft = 0;
+        }
+      }
+      requestAnimationFrame(autoScroll);
+    }
+
+    autoScroll(); // شروع انیمیشن
+
+    // توقف خودکار اسکرول وقتی کاربر تعامل کرد
+    function pauseAutoScroll() {
+      autoScrollPaused = true;
+      clearTimeout(pauseTimeout);
+      pauseTimeout = setTimeout(() => {
+        autoScrollPaused = false;
+      }, 8000); // ۸ ثانیه بعد دوباره حرکت کنه
+    }
+
+    // کاربر در حال تعامله (لمس یا موس)
+    track.addEventListener("mousedown", () => {
+      isUserInteracting = true;
+      pauseAutoScroll();
+    });
+
+    track.addEventListener("mouseup", () => {
+      isUserInteracting = false;
+    });
+
+    track.addEventListener("touchstart", () => {
+      isUserInteracting = true;
+      pauseAutoScroll();
+    });
+
+    track.addEventListener("touchend", () => {
+      isUserInteracting = false;
+    });
+
+    track.addEventListener("scroll", () => {
+      pauseAutoScroll();
+    });
+
+    // وقتی موس میاد روی کارتها، تعامل حساب می‌شه
+    track.addEventListener("mouseenter", () => {
+      isUserInteracting = true;
+      pauseAutoScroll();
+    });
+
+    track.addEventListener("mouseleave", () => {
+      isUserInteracting = false;
+    });
+  });
+</script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for (let registration of registrations) {
+        registration.unregister(); // Unregister old SW
+      }
+    }).then(function() {
+      navigator.serviceWorker.register('/sw.js?v=2'); // Register new SW with version
+    });
+  }
+  </script>
+  
+
+
+</body>
+</html>
