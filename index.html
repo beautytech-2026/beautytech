@@ -530,7 +530,7 @@ header {
     
     <img src="images/Screenshot_2025-10-16_at_18.44.43-removebg-preview.png" alt="Logo Mágico" class="magic-img">
 
-    </header>
+    
     <div class="neon-button-container">
       <button class="neon-pink-btn" onclick="goToPage('index2.html')">BEAUTYTECH AMORA</button>
       <button class="neon-pink-btn" onclick="goToPage('index3.html')">BEAUTYTECH BRAGA RETAIL</button>
@@ -542,35 +542,39 @@ header {
       }
       </script>
 
-<!-- Drop-down Menu -->
-<div class="glass-menu" id="glassMenu">
-  <ul>
-   
-        <li><a href="programadetox.html">CONTACTOS</a></li>
-        <li><a href="programaredutor.html">CATALOGO</a></li>
 
-   
-   
-
+  <!-- Hamburger Icon -->
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
   
-
-  </ul>
-</div>
-
-
-<script>
-  function toggleMenu() {
-    document.getElementById('glassMenu').classList.toggle('open');
-  }
-
-  function toggleSubMenu(item) {
-    const submenu = item.querySelector('.submenu');
-    if (submenu) {
-      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+  <!-- Drop-down Menu -->
+  <div class="glass-menu" id="glassMenu">
+    <ul>
+     
+   
+    
+      <li><a href="contacto.html">CONTACTOS</a></li>
+      <li><a href="ROLL-UP BRAGA RETAIL 1X206.pdf">CATALOGO DE BRAGA RETAIL</a></li>
+      <li><a href="new.pdf">CATALOGO DE AMORA</a></li>
+    </ul>
+  </div>
+  
+  </header>
+  <script>
+    function toggleMenu() {
+      document.getElementById('glassMenu').classList.toggle('open');
     }
-  }
-</script>
-
+  
+    function toggleSubMenu(item) {
+      const submenu = item.querySelector('.submenu');
+      if (submenu) {
+        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+  </script>
 
 
 </body>
