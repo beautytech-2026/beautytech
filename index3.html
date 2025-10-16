@@ -96,55 +96,6 @@ header {
   width: auto;
 }
 
-.slider-wrapper {
-  position: relative;
-  width: 320px;
-  max-width: 400px;
-  overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #e178f4;
-  margin-left: 300px;
-  margin-right: 300px;
-}
-
-.slider-horizontal {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.slide {
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 400px;
-}
-
-.slide img,
-.slide video {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 20px;
-  max-width: 400px;
-}
-
-.slide-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  border: none;
-  color: #fff;
-  font-size: 26px;
-  padding: 12px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 2;
-}
-
-.slide-btn.prev { left: 15px; }
-.slide-btn.next { right: 15px; }
-.slide-btn:hover { background: #d81e6f; }
-
 .services {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -152,65 +103,6 @@ header {
   padding: 40px;
 }
 
-/* چیدمان کلی کارت‌ها */
-.cards-container {
- 
-  display: flex;
-  flex-wrap: wrap; /* کارت‌ها در چند ردیف می‌چینند */
-  justify-content: center; /* وسط‌چین شدن */
-  gap: 25px; /* فاصله‌ی بین کارت‌ها */
-  padding: 40px 0;
-  background: rgba(255, 255, 255, 0.05);
-
-}
-
-/* استایل کارت */
-/* استایل کارت */
-.card {
-  width: 260px;
-  min-height: 380px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(255, 105, 180, 0.25);
-  transition: all 0.3s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-
-/* حالت hover با نئون صورتی */
-.card:hover {
-  box-shadow: 0 0 25px rgba(255, 105, 180, 0.8),
-              0 0 60px rgba(255, 20, 147, 0.4);
-  transform: translateY(-6px) scale(1.03);
-  border-color: rgba(255, 105, 180, 0.6);
-}
-
-/* تصویر یا ویدیو بالای کارت */
-.card-slider img,
-.card-slider video {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-bottom: 2px solid rgba(255, 105, 180, 0.4);
-}
-
-/* تیترها */
-.card h2 {
-  font-size: 1.3rem;
-  color: #f4e0ec;
-  margin-top: 10px;
-}
-
-.card h3 {
-  font-size: 1rem;
-  color: #ddd;
-  font-weight: 400;
-}
 
 /* تیتر جادویی (ویژه) */
 .magic-h2 {
@@ -220,63 +112,10 @@ header {
   margin: 10px 0;
 }
 
-/* دکمه در کارت */
-.card button {
-  margin: 12px 0 20px;
-  padding: 10px 22px;
-  background: rgba(255, 182, 193, 0.2);
-  border: 1px solid rgba(255, 105, 180, 0.5);
-  border-radius: 25px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
-
-.card button:hover {
-  background: rgba(255, 105, 180, 0.5);
-  box-shadow: 0 0 10px #ff69b4, 0 0 25px #ff1493;
-  transform: scale(1.05);
-}
-
   .logo img {
     max-height: 300px;
   }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
-}
-
-.card-slider {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  display: flex;
-  overflow: hidden;
-  border-radius: 1rem;
-  max-width: 400px;
-  max-height: 200px;
-}
-
-.card-slider img,
-.card-slider video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  opacity: 0;
-  transition: opacity 0.6s ease-in-out;
-  max-width: 600px;
-  
-}
-
-.card-slider img.active,
-.card-slider video.active {
-  opacity: 1;
-  position: relative;
-}
 
 .side-panel {
       position: fixed;
@@ -499,17 +338,36 @@ header {
   height: 24px;
 }
 
+/* عکس با همون افکت */
+.magic-img {
+      width: 300px; /* می‌تونی هر سایزی خواستی بذاری */
+      animation: fadeZoomGlow 5s ease-in-out infinite;
+      user-select: none;
+      filter: drop-shadow(0 0 20px #ffb6ff);
+    }
 
-.magic-h2 {
-  font-family: 'Raleway', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #efe4ed;
-  text-align: center;
-  animation: fadeZoomGlow 5s ease-in-out infinite;
-  user-select: none;
-  margin: 40px 0;
-}
+    /* همون انیمیشنی که روی h2 بود */
+    @keyframes fadeZoomGlow {
+      0% {
+        opacity: 0.7;
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #ffb6ff);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 30px #f5d6f5);
+      }
+      100% {
+        opacity: 0.7;
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #ffb6ff);
+      }
+    }
+
+
+
+
 
 
 
@@ -519,8 +377,8 @@ header {
   /* 🌿 دکمه شناور واتساپ */
 .whatsapp-float {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: 100px;
+  right: 20px;
   width: 60px;
   height: 60px;
   background: #25d366;
@@ -535,8 +393,8 @@ header {
 }
 
 .whatsapp-float img {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
 }
 
 .whatsapp-float:hover {
@@ -582,12 +440,8 @@ header {
       </svg>
     </a>
 
-    <h2 class="magic-h2">A TUA BELEZA INSPIRA</h2>
+    <img src="images/Screenshot_2025-10-16_at_18.44.43-removebg-preview.png" alt="Logo Mágico" class="magic-img">
 
-    
-   
-        <button class="slide-btn prev">&#10094;</button>
-        <button class="slide-btn next">&#10095;</button>
       </div>
   </header>
 

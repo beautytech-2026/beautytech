@@ -34,47 +34,33 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.magic-heading {
-  font-family: 'Cinzel Decorative', cursive;
-  font-size: 5em;
-  color: #d61381, #b3109b;
-  margin-bottom: 30px;
-  text-shadow: 0 0 13px #fff9fc;
-}
+ /* عکس با همون افکت */
+ .magic-img {
+      width: 300px; /* می‌تونی هر سایزی خواستی بذاری */
+      animation: fadeZoomGlow 5s ease-in-out infinite;
+      user-select: none;
+      filter: drop-shadow(0 0 20px #ffb6ff);
+    }
 
-.magic-h2 {
-  font-family: 'Raleway', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #efe4ed;
-  text-align: center;
-  animation: fadeZoomGlow 5s ease-in-out infinite;
-  user-select: none;
-  margin: 40px 0;
-}
+    /* همون انیمیشنی که روی h2 بود */
+    @keyframes fadeZoomGlow {
+      0% {
+        opacity: 0.7;
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #ffb6ff);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 30px #ffc6ff);
+      }
+      100% {
+        opacity: 0.7;
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #ffb6ff);
+      }
+    }
 
-@keyframes fadeZoomGlow {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.9);
-    text-shadow: none;
-  }
-  30% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    text-shadow: 0 0 6px #f2a1e6, 0 0 10px #e0a2de, 0 0 14px #cf94c5;
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    text-shadow: 0 0 6px #f2a1ee, 0 0 10px #c556a9, 0 0 14px #de89d9;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-30px) scale(0.9);
-    text-shadow: none;
-  }
-}
 
 .header-container {
   display: flex;
@@ -533,7 +519,7 @@ header {
 </a>
 
  
-   
+<header>
 
 
       <!-- لوگو در مرکز -->
@@ -542,9 +528,9 @@ header {
       </div>
     </div>
     
-    <h2 class="magic-h2">A TUA BELEZA INSPIRA</h2>
+    <img src="images/Screenshot_2025-10-16_at_18.44.43-removebg-preview.png" alt="Logo Mágico" class="magic-img">
 
-    
+    </header>
     <div class="neon-button-container">
       <button class="neon-pink-btn" onclick="goToPage('index2.html')">BEAUTYTECH AMORA</button>
       <button class="neon-pink-btn" onclick="goToPage('index3.html')">BEAUTYTECH BRAGA RETAIL</button>
@@ -820,8 +806,8 @@ header {
   /* 🌿 دکمه شناور واتساپ */
 .whatsapp-float {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: 100px;
+  RIGHT: 20px;
   width: 60px;
   height: 60px;
   background: #25d366;
