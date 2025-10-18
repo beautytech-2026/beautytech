@@ -331,7 +331,7 @@
       const service = new URLSearchParams(window.location.search).get("service") || "";
       const ref = new URLSearchParams(window.location.search).get("ref") || "";
       const webhookValidate = "https://hook.eu2.make.com/zuqc1rgie7toaw9rll92p3mdgfsv1bld";
-      const webhookAvailable = "https://hook.eu2.make.com/sw48l9g8shmdh766arjpngluo7pk0ja6";
+      const webhookAvailable = "https://hook.eu2.make.com/l7ns23v63g27prryvriwikp7bh1j75vu";
       const webhookReserveNewClient = "https://hook.eu2.make.com/2i4jvjo24m07632lbwbduvulrpy760w3";
       const webhookReserveOldClient = webhookReserveNewClient; // اگر یکی هست که ایرادی نداره
   
@@ -416,20 +416,28 @@
       }
   
       function initCalendar() {
-        if (pikadayInstance) return; // جلوگیری از ساخت چندباره
-        pikadayInstance = new Pikaday({
-          field: document.getElementById('datepicker'),
-          format: 'DD/MM/YYYY',
-          onSelect(date) {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            const formattedDate = `${year}-${month}-${day}`;
-            selectedSlot.date = formattedDate;
-            fetchAvailableSlots(formattedDate);
-          }
-        });
-      }
+  if (pikadayInstance) return; // جلوگیری از ساخت چندباره
+  
+  // محاسبه‌ی تاریخ مجاز از دو روز بعد
+  const today = new Date();
+  const minSelectableDate = new Date(today);
+  minSelectableDate.setDate(today.getDate() + 3); // ← امروز + 3 = از 17ام قابل رزرو (14 + 3 = 17)
+  
+  pikadayInstance = new Pikaday({
+    field: document.getElementById('datepicker'),
+    format: 'DD/MM/YYYY',
+    minDate: minSelectableDate, // ✅ اضافه شد
+    onSelect(date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      selectedSlot.date = formattedDate;
+      fetchAvailableSlots(formattedDate);
+    }
+  });
+}
+
   
       function renderTimeSlots(unavailable = []) {
         const container = document.getElementById("slots");
@@ -457,23 +465,39 @@
         });
       }
   
-      async function fetchAvailableSlots(date) {
+
+      const serviceToMachine = {
+  "HIFU 12D FACIAL": "HIFU",
+  "HIFU12 CORPORAL": "HIFU",
+  "HIFU 12 Corporal": "HIFU",
+  "Lipo Cavitação": "LIPO",
+  "Radiofrequência Facial": "RADIO",
+  "Massagem Desportiva": "MANUAL",
+  "Drenagem Linfática": "MANUAL",
+  // ... هر سرویس دیگه‌ای که داری
+};
+
+
+
+async function fetchAvailableSlots(date) {
   if (!date) return;
   try {
+    const machine = serviceToMachine[service] || service; // نوع دستگاه بر اساس سرویس
+
     const res = await fetch(webhookAvailable, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ date, service, ref })
+      body: JSON.stringify({ date, service, machine, ref })
     });
+
     const data = await res.json();
 
-    // اینجا رشته رو به آرایه تبدیل می‌کنیم
     let unavailable = [];
     if (data.unavailableHours && data.unavailableHours.length > 0) {
-      unavailable = data.unavailableHours[0] // رشته داخل آرایه
-        .split(",") // جدا کردن با ویرگول
-        .map(hour => hour.trim()) // حذف فاصله‌های اضافی
-        .filter(hour => hour !== ""); // حذف رشته‌های خالی
+      unavailable = data.unavailableHours[0]
+        .split(",")
+        .map(hour => hour.trim())
+        .filter(hour => hour !== "");
     }
 
     renderTimeSlots(unavailable);
@@ -482,6 +506,7 @@
     renderTimeSlots();
   }
 }
+
 
   
 
@@ -493,12 +518,30 @@ document.getElementById("confirmButton").addEventListener("click", async () => {
 
   document.getElementById("message").textContent = "Enviando reserva...";
 
+
+  // 👇 این قسمت اضافه شده
   
+  const serviceToMachine = {
+  "HIFU 12D FACIAL": "HIFU",
+  "HIFU12 CORPORAL": "HIFU",
+  
+  "Lipo Cavitação": "LIPO",
+  "Radiofrequência Facial": "RADIO",
+  "Massagem Desportiva": "MANUAL",
+  "Drenagem Linfática": "MANUAL",
+  // ... هر سرویس دیگه‌ای که داری
+};
+
+  const machine = serviceToMachine[service] || service; // اگر تو جدول بالا نبود، خودش فرستاده میشه
+
+
+
   let payload = {
     service,
     ref,
     date: selectedSlot.date,
     hour: selectedSlot.hour,
+    machine,
     
   };
 
