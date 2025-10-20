@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reserva (SPA) • BeautyTech</title>
+
+  <!-- Pikaday CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+
+  <style>
+    :root{
+      --bg1:#dd0583; --bg2:#8e2de2; --card:rgba(255,255,255,0.08);
+      --accent:#c02190; --muted:#c13a8f;
+      --glass: rgba(255,255,255,0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:28px;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:#fff;
+    }
+
+    .card{
+      width:100%;
+      max-width:900px;
+      background:var(--card);
+      border-radius:14px;
+      padding:22px;
+      backdrop-filter: blur(10px);
+      box-shadow:0 8px 36px rgba(0,0,0,0.25);
+    }
+
+    h1{margin:0 0 8px 0; font-size:20px; text-align:center}
+    p.lead{margin:6px 0 18px 0; text-align:center; color:rgba(255,255,255,0.9)}
+
+    /* Steps progress */
+    .steps{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      margin-bottom:18px;
+    }
+    .step{
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.03);
+      font-size:13px;
+      color:rgba(255,255,255,0.9);
+    }
+    .step.active{
+      background:linear-gradient(90deg,#ff7ad9,#b46cff);
+      transform:scale(1.03);
+      box-shadow:0 6px 18px rgba(255,122,217,0.18);
+    }
+
+    /* columns */
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:18px;
+    }
+    @media(max-width:980px){ .layout{grid-template-columns:1fr} }
+
+    /* left area (flow) */
+    .flow-section{ padding:12px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); }
+    label{display:block;margin:8px 0 6px;font-weight:600}
+    input[type="text"], input[type="email"], input[type="date"], select{
+      width:100%; padding:10px; border-radius:8px; border:none; background:rgba(255,255,255,0.06); color:var(--muted);
+    }
+    .small-btn{
+      display:inline-block; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; background:var(--accent); color:#fff; font-weight:700;
+    }
+
+    .muted{color:#ffdff4; font-size:13px}
+
+    /* service selection */
+    .categories{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+    .cat{
+      padding:8px 12px; border-radius:12px; cursor:pointer; background:rgba(255,255,255,0.03); font-weight:700; font-size:13px;
+    }
+    .cat.active{background:linear-gradient(90deg,#ffd6f6,#ffc0ff); color:#5c0a46; box-shadow:0 6px 18px rgba(255,150,220,0.12);}
+
+    .services-list{max-height:300px; overflow:auto; padding:8px; border-radius:10px; background:rgba(0,0,0,0.12);}
+    .service-row{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 8px; border-bottom:1px solid rgba(255,255,255,0.03)}
+    .service-row:last-child{border-bottom:none}
+    .service-name{font-weight:600}
+    .service-price{color:#ffd6f6; min-width:88px; text-align:right}
+    .add-btn{background:linear-gradient(45deg,#ff99ff,#ff66cc); border:none; color:#fff; padding:8px 10px; border-radius:10px; cursor:pointer}
+
+    /* right panel (summary) */
+    .summary{ padding:12px; border-radius:10px; background:rgba(0,0,0,0.12); min-height:200px }
+    .summary h4{margin:0 0 8px 0}
+    .selected-list{list-style:none;padding:0;margin:6px 0 0 0; max-height:320px; overflow:auto}
+    .selected-list li{display:flex;justify-content:space-between;align-items:center;padding:8px 6px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:8px}
+    .remove-small{background:#333;color:#fff;border:none;padding:6px 8px;border-radius:8px; cursor:pointer}
+
+    /* calendar */
+    #datepicker{cursor:pointer}
+    .slots{margin-top:10px}
+    .slot-button{display:inline-block;padding:8px 10px;border-radius:8px;border:none;margin:6px 6px 0 0;background:#fff;color:#8c57c6; cursor:pointer}
+    .slot-button.selected{background:linear-gradient(90deg,#ff7ad9,#b46cff);color:#fff; box-shadow:0 6px 14px rgba(180,108,255,0.12)}
+
+    /* footer */
+    .actions{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:12px}
+    .btn-primary{background:linear-gradient(90deg,#ff4cde,#a66bff); color:#fff; padding:10px 18px;border-radius:10px;border:none;font-weight:700; cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:10px;color:#fff;cursor:pointer}
+
+    .note{font-size:13px;color:#f0d3ea;margin-top:10px;text-align:center}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+
+  <div class="card" role="main">
+    <h1>Reserva • BeautyTech</h1>
+    <p class="lead">Escolha cliente → serviços → data/hora → confirmar. Tudo sem recarregar a página.</p>
+
+    <div class="steps" aria-hidden>
+      <div class="step active" id="stepLabel-1">1. Cliente</div>
+      <div class="step" id="stepLabel-2">2. Serviços</div>
+      <div class="step" id="stepLabel-3">3. Data & Hora</div>
+      <div class="step" id="stepLabel-4">4. Confirmar</div>
+    </div>
+
+    <div class="layout">
+      <!-- LEFT: flow -->
+      <div class="flow-section">
+
+        <!-- STEP 1: client -->
+        <div id="step-1" class="step-block">
+          <label>É cliente atual?</label>
+          <div style="display:flex;gap:12px;align-items:center">
+            <label style="display:flex;align-items:center;gap:6px"><input type="radio" name="clientType" value="old"> Sim</label>
+            <label style="display:flex;align-items:center;gap:6px"><input type="radio" name="clientType" value="new"> Não</label>
+            <button class="small-btn" id="clientNextBtn" disabled>Continuar</button>
+          </div>
+
+          <!-- old client code -->
+          <div id="oldCodeBox" class="hidden" style="margin-top:12px">
+            <label for="clientCode">Código do cliente</label>
+            <input id="clientCode" type="text" placeholder="Insira o código..." />
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="small-btn" id="validateCodeBtn">Validar Código</button>
+              <button class="btn-ghost" id="backToClientType1">Voltar</button>
+            </div>
+            <p id="codeMsg" class="muted" style="margin-top:8px"></p>
+          </div>
+
+          <!-- new client form -->
+          <form id="newClientBox" class="hidden" onsubmit="return false" style="margin-top:12px">
+            <label>Nome</label><input id="name" type="text" required placeholder="Nome completo">
+            <label>Email</label><input id="email" type="email" required placeholder="email@exemplo">
+            <label>Telefone</label><input id="phone" type="text" required placeholder="+351 ...">
+            <label>Serviço que mais usa</label>
+            <select id="favService">
+              <option>unhas</option><option>cabelo</option><option>estética corporal</option><option>estética facial</option><option>outro</option>
+            </select>
+            <label>Data de nascimento</label><input id="birth" type="date" required>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button class="small-btn" id="newClientNext">Próximo</button>
+              <button class="btn-ghost" id="backToClientType2">Voltar</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- STEP 2: services -->
+        <div id="step-2" class="step-block hidden">
+          <label>Escolha uma categoria</label>
+          <div class="categories" id="categories">
+            <!-- categories injected by JS -->
+          </div>
+
+          <div class="services-list" id="servicesList">
+            <p class="muted">Selecione uma categoria para ver serviços...</p>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+            <div class="muted">Itens adicionados: <span id="countSelected">0</span></div>
+            <div>
+              <button class="btn-ghost" id="backToStep1From2">Voltar</button>
+              <button class="btn-primary" id="toCalendarBtn">Escolher data</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: calendar -->
+        <div id="step-3" class="step-block hidden">
+          <label>Voucher (opcional)</label><input id="voucher" type="text" placeholder="Código voucher">
+          <label>Escolha data</label><input id="datepicker" readonly placeholder="Clique para selecionar a data">
+          <div class="slots" id="slots"></div>
+
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn-ghost" id="backToStep2">Voltar</button>
+            <button class="btn-primary" id="confirmBtn">Confirmar & Enviar</button>
+          </div>
+
+          <p id="calendarMsg" class="muted" style="margin-top:8px"></p>
+        </div>
+
+        <!-- STEP 4: confirmation -->
+        <div id="step-4" class="step-block hidden">
+          <h3 style="margin-top:0">Resumo e Envio</h3>
+          <p id="finalMsg" class="muted"></p>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn-ghost" id="backToStep3">Voltar</button>
+            <button class="btn-primary" id="finishBtn">Voltar ao Início</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: summary panel -->
+      <aside class="summary" aria-label="Resumo">
+        <h4>Resumo da Reserva</h4>
+
+        <div style="margin-top:8px">
+          <strong>Cliente:</strong>
+          <div id="summaryClient" class="muted">—</div>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Serviços selecionados</strong>
+          <ul id="selectedList" class="selected-list"></ul>
+          <div id="totalWrap" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+            <div class="muted">Total estimado:</div>
+            <div id="totalPrice" style="font-weight:800">0€</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <small class="muted">Nota: Alguns serviços dizem "A partir de" — preço final pode variar em loja.</small>
+        </div>
+
+      </aside>
+    </div>
+
+    <p class="note">Será debitado 3€ no ato da reserva; esse valor é descontado na loja após pagamento final.</p>
+  </div>
+
+  <!-- Pikaday JS -->
+  <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+
+  <script>
+  (function(){
+    /* ---------- config (webhooks) ---------- */
+    const WEBHOOK_VALIDATE = "https://hook.eu2.make.com/mgz53fgt82dhtfc4wnaiubjy7j5ajcjv"; // validação código
+    const WEBHOOK_AVAILABLE = "https://hook.eu2.make.com/sw48l9g8shmdh766arjpngluo7pk0ja6"; // retorna horas indisponíveis como ['09:00,11:00']
+    const WEBHOOK_RESERVE_NEW = "https://hook.eu2.make.com/lgeq95xbn4oyzg52fi9ambyccww1hgim";
+    const WEBHOOK_RESERVE_OLD = WEBHOOK_RESERVE_NEW;
+
+    /* ---------- data: categories + services ---------- */
+    const SERVICES = {
+      FACE_DESIGN_TECH: [
+        {name:"Embelezamento Facial e Design Personalizado", price:"(sob consulta)"},
+        {name:"Preenchimento Labial, Hy Aluron Pen", price:"120€"},
+        {name:"Micropigmentação Labial", price:"100€"},
+        {name:"Técnica Híbrida de Sobrancelhas", price:"100€"},
+        {name:"Lash & Brow Lamination", price:"35€"},
+        {name:"Extensão de Pestanas", price:"25€"},
+        {name:"Design de Sobrancelhas & Henna", price:"15€"}
+      ],
+      PERFECT_FACE_TECH: [
+        {name:"HIFU 12D — Rosto Completo", price:"150€"},
+        {name:"HIFU 12D — Rosto + Papada", price:"250€"},
+        {name:"HIFU 12D — Papada", price:"70€"},
+        {name:"HIFU 12D — Pescoço", price:"70€"},
+        {name:"HIFU 12D — Rosto + Papada + Pescoço", price:"280€"},
+        {name:"Limpeza de pele", price:"25€"},
+        {name:"Aplicação de fios de seda", price:"35€"},
+        {name:"Booster com Dermapen (a partir de)", price:"A partir de 50€"},
+        {name:"Intradermoterapia pressurizada (a partir de)", price:"A partir de 50€"},
+        {name:"Preenchimento rugas Hyaluron Pen (a partir de)", price:"A partir de 100€"}
+      ],
+      PERFECT_BODY_TECH: [
+        {name:"Massagem Modeladora e Redutora", price:"35€"},
+        {name:"Massagem Turbinada", price:"40€"},
+        {name:"Drenagem Linfática Manual", price:"40€"},
+        {name:"HIFU 12D — Barriga + Flancos", price:"380€"},
+        {name:"HIFU 12D — Glúteos", price:"200€"}
+      ],
+      PERFECT_NAILS_TECH: [
+        {name:"Unhas de Gel Tamanho S (c/ cutilagem)", price:"27€"},
+        {name:"Unhas de Gel Tamanho M (c/ cutilagem)", price:"32€"},
+        {name:"Unhas de Gel Tamanho L (c/ cutilagem)", price:"35€"},
+        {name:"Unhas de Fibras (c/ cutilagem)", price:"42€"},
+        {name:"Acrygel (c/ cutilagem)", price:"30€"},
+        {name:"Blindagem (c/ cutilagem)", price:"18€"},
+        {name:"Gelhinho Mão (c/ cutilagem)", price:"12€"},
+        {name:"Gelhinho Pé (full)", price:"22€"},
+        {name:"Manutenção Unhas (a partir de)", price:"17€"},
+        {name:"Nail Art (2€)", price:"2€"}
+      ],
+      PERFECT_HAIR_TECH: [
+        {name:"Só lavagem de cabelo", price:"4€"},
+        {name:"Shampoo especial", price:"3€"},
+        {name:"Condicionador especial", price:"2.5€"},
+        {name:"Máscara Argan", price:"6.5€"},
+        {name:"Corte simples", price:"10€"},
+        {name:"Coloração - curto", price:"25€"},
+        {name:"Coloração - médio", price:"30€"},
+        {name:"Coloração - longo", price:"35€"},
+        {name:"Alisamento / Progressiva - longo", price:"150€"}
+      ]
+    };
+
+    /* ---------- hours (default) ---------- */
+    const ALL_HOURS = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30"];
+
+    /* ---------- app state ---------- */
+    let isOldClient = false;
+    let clientData = {}; // if old client validated -> fill
+    let selectedCategoryKey = null;
+    let selectedServices = []; // {name,price,category}
+    let selectedDate = null;
+    let selectedHour = null;
+    let pikaday = null;
+
+    /* ---------- DOM references ---------- */
+    const clientNextBtn = document.getElementById('clientNextBtn');
+    const radiosClient = document.querySelectorAll('input[name="clientType"]');
+    const oldCodeBox = document.getElementById('oldCodeBox');
+    const newClientBox = document.getElementById('newClientBox');
+    const validateCodeBtn = document.getElementById('validateCodeBtn');
+    const clientCodeInput = document.getElementById('clientCode');
+    const codeMsg = document.getElementById('codeMsg');
+
+    const newClientNext = document.getElementById('newClientNext');
+    const backToClientType1 = document.getElementById('backToClientType1');
+    const backToClientType2 = document.getElementById('backToClientType2');
+
+    const categoriesWrap = document.getElementById('categories');
+    const servicesList = document.getElementById('servicesList');
+    const selectedListEl = document.getElementById('selectedList');
+    const countSelected = document.getElementById('countSelected');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const summaryClient = document.getElementById('summaryClient');
+
+    const backToStep1From2 = document.getElementById('backToStep1From2');
+    const toCalendarBtn = document.getElementById('toCalendarBtn');
+    const backToStep2 = document.getElementById('backToStep2');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    const datepickerEl = document.getElementById('datepicker');
+    const slotsWrap = document.getElementById('slots');
+    const voucherEl = document.getElementById('voucher');
+    const calendarMsg = document.getElementById('calendarMsg');
+    if (typeof selectedServices === 'undefined') window.selectedServices = [];
+
+    const stepBlocks = {
+      1: document.getElementById('step-1'),
+      2: document.getElementById('step-2'),
+      3: document.getElementById('step-3'),
+      4: document.getElementById('step-4')
+    };
+    const stepLabels = {
+      1: document.getElementById('stepLabel-1'),
+      2: document.getElementById('stepLabel-2'),
+      3: document.getElementById('stepLabel-3'),
+      4: document.getElementById('stepLabel-4')
+    };
+
+    /* ---------- UI helpers ---------- */
+    function showStep(n){
+      Object.values(stepBlocks).forEach(el => el.classList.add('hidden'));
+      stepBlocks[n].classList.remove('hidden');
+      // labels active
+      Object.values(stepLabels).forEach(l=>l.classList.remove('active'));
+      stepLabels[n].classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function setSummaryClientText(){
+      if(isOldClient && clientData.name){
+        summaryClient.textContent = `${clientData.name} (Cliente) — código: ${clientData.code || '—'}`;
+      } else {
+        const name = document.getElementById('name')?.value || 'Cliente novo';
+        const phone = document.getElementById('phone')?.value || '';
+        summaryClient.textContent = `${name} ${phone? '• '+phone: ''}`;
+      }
+    }
+
+    function formatPrice(p){
+      if(!p) return '';
+      if(p.includes('A partir') || p.includes('(a partir') || p.includes('sob') || p.includes('(')) return p;
+      return p;
+    }
+
+    function calcTotal(){
+      // sum numeric prices only where possible
+      let total = 0;
+      selectedServices.forEach(s=>{
+        if(!s.price) return;
+        // extract digits
+        const m = s.price.match(/(\d+([.,]\d+)?)/);
+        if(m){
+          const val = Number(String(m[1]).replace(',', '.'));
+          if(!isNaN(val)) total += val;
+        }
+      });
+      totalPriceEl.textContent = total ? total.toFixed(2).replace('.',',') + '€' : '0€';
+    }
+
+    /* ---------- populate categories UI ---------- */
+    function initCategories(){
+      const keys = Object.keys(SERVICES);
+      categoriesWrap.innerHTML = '';
+      keys.forEach(k=>{
+        const div = document.createElement('div');
+        div.className = 'cat';
+        div.textContent = k.replace(/_/g,' ').replace('PERFECT ','PERFECT ');
+        div.dataset.key = k;
+        div.addEventListener('click', ()=>{
+          document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
+          div.classList.add('active');
+          selectedCategoryKey = k;
+          renderServicesForCategory(k);
+        });
+        categoriesWrap.appendChild(div);
+      });
+    }
+
+    /* ---------- render services for category ---------- */
+    function renderServicesForCategory(key){
+      servicesList.innerHTML = '';
+      const list = SERVICES[key]||[];
+      if(!list.length){ servicesList.innerHTML = '<p class="muted">Sem serviços nesta categoria.</p>'; return; }
+      list.forEach((svc, idx)=>{
+        const row = document.createElement('div');
+        row.className = 'service-row';
+        const left = document.createElement('div');
+        left.style.display='flex'; left.style.flexDirection='column';
+        const nameEl = document.createElement('div'); nameEl.className='service-name'; nameEl.textContent = svc.name;
+        const catEl = document.createElement('div'); catEl.className='muted'; catEl.style.fontSize='12px'; catEl.textContent = key.replace(/_/g,' ');
+        left.appendChild(nameEl); left.appendChild(catEl);
+
+        const right = document.createElement('div'); right.style.display='flex'; right.style.alignItems='center';
+        const price = document.createElement('div'); price.className='service-price'; price.textContent = svc.price || '';
+        const btn = document.createElement('button'); btn.className='add-btn'; btn.textContent='+';
+        btn.addEventListener('click', ()=> addService(key, svc));
+        right.appendChild(price); right.appendChild(btn);
+
+        row.appendChild(left); row.appendChild(right);
+        servicesList.appendChild(row);
+      });
+    }
+
+    /* ---------- add / remove services ---------- */
+    function addService(category, svc){
+      // avoid duplicates (same name)
+      if(selectedServices.some(s=>s.name === svc.name)){ flashServiceRow(svc.name); return; }
+      selectedServices.push({category, name:svc.name, price:svc.price});
+      renderSelectedList();
+    }
+
+    function removeServiceAt(idx){
+      selectedServices.splice(idx, 1);
+      renderSelectedList();
+    }
+
+    function renderSelectedList(){
+      selectedListEl.innerHTML = '';
+      selectedServices.forEach((s, idx)=>{
+        const li = document.createElement('li');
+        const left = document.createElement('div'); left.style.maxWidth='70%';
+        left.innerHTML = `<strong>${s.name}</strong><div style="font-size:12px;color:#ffdff4">${s.category.replace(/_/g,' ')}</div>`;
+        const right = document.createElement('div'); right.style.display='flex'; right.style.alignItems='center';
+        const price = document.createElement('div'); price.style.marginRight='10px'; price.style.fontWeight='700'; price.style.color='#ffd6f6'; price.textContent = s.price || '';
+        const rem = document.createElement('button'); rem.className='remove-small'; rem.textContent='Remover';
+        rem.addEventListener('click', ()=> removeServiceAt(idx));
+        right.appendChild(price); right.appendChild(rem);
+
+        li.appendChild(left); li.appendChild(right);
+        selectedListEl.appendChild(li);
+      });
+      countSelected.textContent = selectedServices.length;
+      calcTotal();
+    }
+
+    function flashServiceRow(name){
+      // temporary visual feedback (search row)
+      const rows = Array.from(document.querySelectorAll('.service-row'));
+      const row = rows.find(r => r.textContent.includes(name));
+      if(!row) return;
+      row.style.boxShadow = 'inset 0 0 0 2px rgba(255,255,255,0.06)';
+      setTimeout(()=> row.style.boxShadow='', 360);
+    }
+
+    /* ---------- client radio logic ---------- */
+    radiosClient.forEach(r=>{
+      r.addEventListener('change', ()=> clientNextBtn.disabled = false);
+    });
+
+    clientNextBtn.addEventListener('click', ()=>{
+      const val = document.querySelector('input[name="clientType"]:checked')?.value;
+      if(!val) return;
+      isOldClient = val === 'old';
+      if(isOldClient){
+        oldCodeBox.classList.remove('hidden');
+        newClientBox.classList.add('hidden');
+      } else {
+        newClientBox.classList.remove('hidden');
+        oldCodeBox.classList.add('hidden');
+      }
+    });
+
+    backToClientType1.addEventListener('click', ()=>{
+      oldCodeBox.classList.add('hidden');
+      document.querySelector('input[name="clientType"]:checked').checked = false;
+      clientNextBtn.disabled = true;
+    });
+    backToClientType2.addEventListener('click', ()=>{
+      newClientBox.classList.add('hidden');
+      document.querySelector('input[name="clientType"]:checked').checked = false;
+      clientNextBtn.disabled = true;
+    });
+
+    validateCodeBtn.addEventListener('click', async ()=>{
+      const code = clientCodeInput.value.trim();
+      if(!code){ codeMsg.textContent = 'Insira o código.'; return; }
+      codeMsg.textContent = 'Validando...';
+      try {
+        const res = await fetch(WEBHOOK_VALIDATE, {method:'POST',headers:{'Content-Type':'application/json'}, body:JSON.stringify({code})});
+        const data = await res.json();
+        if(data && data.success){
+          clientData = data.client || {};
+          clientData.code = code;
+          codeMsg.textContent = 'Código válido. Pode continuar.';
+          // mark summary
+          setSummaryClientText();
+          // go to services step
+          showStep(2);
+        } else {
+          codeMsg.textContent = 'Código inválido.';
+        }
+      } catch(e){
+        console.error(e);
+        codeMsg.textContent = 'Erro de rede ao validar.';
+      }
+    });
+
+    // new client next
+    newClientNext.addEventListener('click', ()=>{
+      // simple validation
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const birth = document.getElementById('birth').value;
+      if(!name || !email || !phone || !birth){ alert('Preencha todos os campos.'); return; }
+      clientData = { name, email, phone, birth, favService: document.getElementById('favService').value, code: 'vip_'+Math.floor(100000+Math.random()*900000) };
+      setSummaryClientText();
+      showStep(2);
+    });
+
+    /* ---------- step 2 navigation ---------- */
+    backToStep1From2.addEventListener('click', ()=> showStep(1));
+    toCalendarBtn.addEventListener('click', ()=>{
+      if(selectedServices.length === 0){ if(!confirm('Nenhum serviço selecionado. Deseja continuar?')) return; }
+      showStep(3);
+      initCalendarOnce();
+    });
+
+     /* ---------- helper: render time slot buttons ---------- */
+  function renderTimeSlots(unavailable = []){
+    // unavailable: array of "HH:MM"
+    slotsWrap.innerHTML = '';
+    selectedHour = null;
+
+    ALL_HOURS.forEach(h => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot-button';
+      btn.textContent = h;
+
+      if (unavailable.includes(h)) {
+        btn.disabled = true;
+        btn.title = 'Indisponível';
+        btn.style.opacity = 0.45;
+      } else {
+        btn.addEventListener('click', () => {
+          // deselect others
+          slotsWrap.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedHour = h;
+        });
+      }
+      slotsWrap.appendChild(btn);
+    });
+  }
+
+  /* ---------- normalize webhook response into array of unavailable hours ---------- */
+  function normalizeUnavailable(data){
+    let unavailable = [];
+    if (!data) return unavailable;
+
+    if (Array.isArray(data.unavailableHours)) {
+      unavailable = data.unavailableHours.map(x => String(x).trim()).filter(Boolean);
+    } else if (typeof data.unavailableHours === 'string') {
+      unavailable = data.unavailableHours.split(',').map(x => x.trim()).filter(Boolean);
+    } else if (Array.isArray(data.unavailable)) {
+      unavailable = data.unavailable.map(x => String(x).trim()).filter(Boolean);
+    } else if (typeof data.hours === 'string') {
+      unavailable = data.hours.split(',').map(x => x.trim()).filter(Boolean);
+    } else if (Array.isArray(data)) {
+      unavailable = data.map(x => String(x).trim()).filter(Boolean);
+    } else if (typeof data === 'string') {
+      unavailable = data.split(',').map(x => x.trim()).filter(Boolean);
+    } else {
+      // try to find a string field
+      for (const k of Object.keys(data)) {
+        const v = data[k];
+        if (typeof v === 'string' && v.includes(':')) {
+          unavailable = v.split(',').map(x=>x.trim()).filter(Boolean);
+          break;
+        } else if (Array.isArray(v) && String(v[0]).includes(':')) {
+          unavailable = v.map(x=>String(x).trim()).filter(Boolean);
+          break;
+        }
+      }
+    }
+    return unavailable;
+  }
+
+  /* ---------- fetch unavailable slots from webhook (sends date + selectedServices) ---------- */
+  async function fetchAvailableSlots(date){
+    if (!date) return;
+    calendarMsg.textContent = 'Verificando horários disponíveis...';
+    slotsWrap.innerHTML = ''; // limpar visualmente
+
+    // prepare services summary to send (only names + category)
+    const servicesPayload = (window.selectedServices || []).map(s => ({ name: s.name, category: s.category, price: s.price }));
+
+    try {
+      const res = await fetch(WEBHOOK_AVAILABLE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date, services: selectedServices, })
+      });
+
+      if (!res.ok) {
+        console.warn('Webhook returned non-OK', res.status);
+        calendarMsg.textContent = 'Erro ao consultar horários (status ' + res.status + ').';
+        // fallback: render all hours enabled so user can still choose (ou podrías desactivar todos)
+        renderTimeSlots([]);
+        return;
+      }
+
+      const data = await res.json();
+      const unavailable = normalizeUnavailable(data);
+      renderTimeSlots(unavailable);
+      calendarMsg.textContent = '';
+    } catch (err) {
+      console.error('Erro ao buscar horários disponíveis', err);
+      calendarMsg.textContent = 'Erro de conexão — verifique CORS / webhook.';
+      // fallback: enable all hours so user can still select
+      renderTimeSlots([]);
+    }
+  }
+
+  /* ---------- Pikaday init (call fetchAvailableSlots with services + date) ---------- */
+  let pikadayInstance = null;
+  function initCalendarOnce(){
+    if (pikadayInstance) return;
+    if (!datepickerEl) return;
+    pikadayInstance = new Pikaday({
+      field: datepickerEl,
+      format: 'YYYY-MM-DD',
+      minDate: new Date(),
+      onSelect: function(date){
+        // date is a JS Date
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth()+1).padStart(2,'0');
+        const dd = String(date.getDate()).padStart(2,'0');
+        selectedDate = `${yyyy}-${mm}-${dd}`;
+        // clear prior selection
+        selectedHour = null;
+        // send date + currently selected services to webhook to get unavailable hours
+        fetchAvailableSlots(selectedDate);
+      }
+    });
+  }
+  // expose for other scripts if needed
+  window.initCalendarOnce = initCalendarOnce;
+  // auto-init if datepicker exists (you can call initCalendarOnce() later from your flow)
+  initCalendarOnce();
+
+
+    /* ---------- confirm & send ---------- */
+    confirmBtn.addEventListener('click', async ()=>{
+      if(!selectedDate || !selectedHour){ alert('Por favor selecione data e hora.'); return; }
+      // prepare payload
+      const payload = {
+        client: clientData,
+        services: selectedServices,
+        date: selectedDate,
+        hour: selectedHour,
+        voucher: voucherEl.value.trim(),
+        ref: (new URLSearchParams(window.location.search)).get('ref') || null
+      };
+
+      // choose webhook
+      const webhook = isOldClient ? WEBHOOK_RESERVE_OLD : WEBHOOK_RESERVE_NEW;
+      // show simple loading
+      calendarMsg.textContent = 'Enviando reserva...';
+      try {
+        const res = await fetch(webhook, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        // handle response (paymentUrl or success)
+        if(data && data.paymentUrl){
+          // redirect to payment
+          window.location.href = data.paymentUrl;
+        } else {
+          // success message
+          showStep(4);
+          document.getElementById('finalMsg').textContent = `✅ Reserva confirmada para ${selectedDate} às ${selectedHour}. Você receberá confirmação por e-mail/SMS.`;
+          calendarMsg.textContent = '';
+        }
+      } catch(e){
+        console.error(e);
+        calendarMsg.textContent = 'Erro ao enviar reserva. Tente novamente mais tarde.';
+      }
+    });
+
+    /* ---------- final / restart ---------- */
+    document.getElementById('finishBtn').addEventListener('click', ()=>{
+      // Reset minimal state and go to step 1
+      selectedServices = []; selectedDate = null; selectedHour = null; clientData = {}; isOldClient=false;
+      // reset UI fields
+      document.querySelectorAll('input[name="clientType"]').forEach(i=>i.checked=false);
+      document.getElementById('clientCode').value=''; document.getElementById('codeMsg').textContent='';
+      document.getElementById('name').value=''; document.getElementById('email').value=''; document.getElementById('phone').value=''; document.getElementById('birth').value='';
+      document.getElementById('voucher').value=''; document.getElementById('datepicker').value='';
+      renderSelectedList(); setSummaryClientText(); showStep(1);
+      // hide boxes
+      oldCodeBox.classList.add('hidden'); newClientBox.classList.add('hidden'); document.getElementById('step-2').classList.add('hidden'); document.getElementById('step-1').classList.remove('hidden');
+    });
+
+    /* ---------- init ---------- */
+    function bootstrap(){
+      initCategories();
+      renderSelectedList();
+      showStep(1);
+    }
+    bootstrap();
+
+  })();
+  </script>
+</body>
+</html>

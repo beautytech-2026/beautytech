@@ -1,0 +1,177 @@
+<!-- menu.html -->
+<div class="top-bar">
+    <a href="#" class="back-button" title="Voltar" onclick="goBack(event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 8 8 12 12 16" />
+        <line x1="16" y1="12" x2="8" y2="12" />
+      </svg>
+    </a>
+  
+    <div class="logo">
+      <img src="images/icon.png" alt="Logo" />
+    </div>
+  
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  
+  <div class="glass-menu" id="glassMenu">
+    <ul>
+      <li><a href="perfectbodytechamora.html">PERFECT BODY TECH</a></li>
+      <li><a href="perfectfacetechamora.html">PERFECT FACE TECH</a></li>
+      <li><a href="facedesigntechamora.html">FACE DESIGN TECH</a></li>
+      <li><a href="perfectnaildesign.html">PERFECT NAIL DESIGN</a></li>
+      <li><a href="contacto.html">CONTACTOS</a></li>
+      <li><a href="catalogamora.pdf">CATALOGO</a></li>
+    </ul>
+  </div>
+  
+  <script>
+  function toggleMenu() {
+    document.getElementById('glassMenu').classList.toggle('open');
+  }
+  
+  function goBack(e) {
+    e.preventDefault();
+    if (document.referrer) {
+      window.history.back();
+    } else {
+      window.location.href = "index1.html";
+    }
+  }
+  </script>
+  
+  <style>
+ .logo {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
+
+
+
+.logo img {
+  max-height: 200px;
+  width: auto;
+}
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+  </style>
+  

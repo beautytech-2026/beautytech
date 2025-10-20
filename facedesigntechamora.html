@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Programa Detox braga retail</title>
+  <title>Face Design Tech Amora</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
   <style>
      body {
@@ -289,7 +289,7 @@
 
 <script>
   // بارگذاری فایل منو
-  fetch("menubraga.html")
+  fetch("menuamora.html")
     .then(res => res.text())
     .then(html => {
       const placeholder = document.getElementById("menu-placeholder");
@@ -308,6 +308,9 @@
       });
     });
 </script>
+
+
+
 
 
 
@@ -357,22 +360,22 @@
     <h3>FACE DESIGN TECH</h3>
 
     <!-- HIFU 12D فقط یک دکمه رزرو برای کل -->
-    <div class="price-row"><span>PREENCHIMENTO LABIAL, HYALURON PEN</span><span>150€</span></div>
+    <div class="price-row"><span>PREENCHIMENTO LABIAL, HYALURON PEN</span><span>120€</span></div>
     <button class="mini-btn" onclick="reserve('PREENCHIMENTO LABIAL, HYALURON PEN')">Reservar</button>
 
-    <div class="price-row"><span>MICROPIGMENTAÇÃO LABIAL</span><span>180€</span></div>
+    <div class="price-row"><span>MICROPIGMENTAÇÃO LABIAL</span><span>100€</span></div>
     <button class="mini-btn" onclick="reserve('MICROPIGMENTAÇÃO LABIAL')">Reservar</button>
 
-    <div class="price-row"><span>TÉCNICA HÍBRIDA DE SOBRANCELHAS</span><span>180€</span></div>
+    <div class="price-row"><span>TÉCNICA HÍBRIDA DE SOBRANCELHAS</span><span>100€</span></div>
     <button class="mini-btn" onclick="reserve('TÉCNICA HÍBRIDA DE SOBRANCELHAS')">Reservar</button>
 
-    <div class="price-row"><span>LASH & BROW LAMINATION</span><span>60€</span></div>
+    <div class="price-row"><span>LASH & BROW LAMINATION</span><span>35€</span></div>
     <button class="mini-btn" onclick="reserve('LASH & BROW LAMINATION')">Reservar</button>
 
-    <div class="price-row"><span>EXTENSÃO DE PESTANAS</span><span>35€</span></div>
+    <div class="price-row"><span>EXTENSÃO DE PESTANAS</span><span>25€</span></div>
     <button class="mini-btn" onclick="reserve('EXTENSÃO DE PESTANAS')">Reservar</button>
 
-    <div class="price-row"><span>DESIGN DE SOBRANCELHAS & HENNA</span><span>25€</span></div>
+    <div class="price-row"><span>DESIGN DE SOBRANCELHAS & HENNA</span><span>15€</span></div>
     <button class="mini-btn" onclick="reserve('DESIGN DE SOBRANCELHAS & HENNA')">Reservar</button>
    
 
@@ -385,7 +388,7 @@
 function reserve(servico) {
 const params = new URLSearchParams();
 params.set('service', servico);
-window.location.href = `reservebraga.html?${params.toString()}`;
+window.location.href = `reserve.html?${params.toString()}`;
 }
 </script>
 
@@ -398,7 +401,7 @@ window.location.href = `reservebraga.html?${params.toString()}`;
     function reserve(servico) {
       const params = new URLSearchParams();
       params.set('service', servico);
-      window.location.href = `reservebraga.html?${params.toString()}`;
+      window.location.href = `reserve.html?${params.toString()}`;
     }
     </script>
     

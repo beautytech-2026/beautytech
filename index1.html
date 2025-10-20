@@ -13,7 +13,7 @@
   <meta charset="UTF-8">
  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BeautyTech - Galeria de Serviços</title>
+  <title>BeautyTech Amora </title>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet" />
@@ -34,33 +34,47 @@ header {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
- /* عکس با همون افکت */
- .magic-img {
-      width: 300px; /* می‌تونی هر سایزی خواستی بذاری */
-      animation: fadeZoomGlow 5s ease-in-out infinite;
-      user-select: none;
-      filter: drop-shadow(0 0 20px #ffb6ff);
-    }
+.magic-heading {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 5em;
+  color: #d61381, #b3109b;
+  margin-bottom: 30px;
+  text-shadow: 0 0 13px #fff9fc;
+}
 
-    /* همون انیمیشنی که روی h2 بود */
-    @keyframes fadeZoomGlow {
-      0% {
-        opacity: 0.7;
-        transform: scale(1);
-        filter: drop-shadow(0 0 10px #ffb6ff);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 30px #ffc6ff);
-      }
-      100% {
-        opacity: 0.7;
-        transform: scale(1);
-        filter: drop-shadow(0 0 10px #ffb6ff);
-      }
-    }
+.magic-h2 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #efe4ed;
+  text-align: center;
+  animation: fadeZoomGlow 5s ease-in-out infinite;
+  user-select: none;
+  margin: 40px 0;
+}
 
+@keyframes fadeZoomGlow {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    text-shadow: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1e6, 0 0 10px #e0a2de, 0 0 14px #cf94c5;
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    text-shadow: 0 0 6px #f2a1ee, 0 0 10px #c556a9, 0 0 14px #de89d9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+    text-shadow: none;
+  }
+}
 
 .header-container {
   display: flex;
@@ -82,55 +96,6 @@ header {
   width: auto;
 }
 
-.slider-wrapper {
-  position: relative;
-  width: 320px;
-  max-width: 400px;
-  overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #e178f4;
-  margin-left: 300px;
-  margin-right: 300px;
-}
-
-.slider-horizontal {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.slide {
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 400px;
-}
-
-.slide img,
-.slide video {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 20px;
-  max-width: 400px;
-}
-
-.slide-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  border: none;
-  color: #fff;
-  font-size: 26px;
-  padding: 12px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 2;
-}
-
-.slide-btn.prev { left: 15px; }
-.slide-btn.next { right: 15px; }
-.slide-btn:hover { background: #d81e6f; }
-
 .services {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -138,125 +103,19 @@ header {
   padding: 40px;
 }
 
-.card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(12px);
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  overflow: hidden;
-  text-align: center;
-  padding-bottom: 40px;
-  transition: transform 0.3s ease;
-  color: #fff;
-  max-width: 450px;
+
+/* تیتر جادویی (ویژه) */
+.magic-h2 {
+  color: #ffb6e6;
+  text-shadow: 0 0 8px #ff80d5, 0 0 18px #ff1493;
+  font-size: 1.1rem;
+  margin: 10px 0;
 }
-
-.card:hover { transform: scale(1.03); }
-.card img { width: 100%; height: 350px; object-fit: cover; }
-.card h3 { margin: 15px 0 10px; color: #ffccf9; }
-.card p { margin: 0 18px 12px; font-size: 18px; }
-
-.card button {
-  padding: 10px 20px;
-  background-color: #ea166a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-.card button:hover { background-color: #b5137f; }
-.card-slider-horizontal {
-  overflow-x: auto;
-  white-space: nowrap;
-  padding: 40px 20px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  cursor: grab;
-}
-
-.card-slider-horizontal:active {
-  cursor: grabbing;
-}
-
-.card-track-horizontal {
-  display: flex;
-  gap: 20px;
-  animation: slideLeft 20s linear infinite;
-  animation-play-state: running; /* حالت پیشفرض */
-}
-
-.card-slider-horizontal .card {
-  min-width: 280px;
-  max-width: 300px;
-  flex-shrink: 0;
-  scroll-snap-align: start;
-}
-
-
-
-@keyframes slideLeft {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-@media screen and (max-width: 768px) {
-  .header-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .slider-wrapper {
-    width: 90%;
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 300px;
-  }
-
-  .slide img, .slide video {
-    height: 400px;
-    width: 100%;
-    max-width: 400px;
-  }
 
   .logo img {
     max-height: 300px;
   }
-}
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
-}
 
-.card-slider {
-  position: relative;
-  width: 100%;
-  height: 250px;
-  display: flex;
-  overflow: hidden;
-  border-radius: 1rem;
-  max-width: 400px;
-}
-
-.card-slider img,
-.card-slider video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  opacity: 0;
-  transition: opacity 0.6s ease-in-out;
-  max-width: 400px;
-}
-
-.card-slider img.active,
-.card-slider video.active {
-  opacity: 1;
-  position: relative;
-}
 
 .side-panel {
       position: fixed;
@@ -454,129 +313,217 @@ header {
 }
 
 
-/* 🌸 محل قرارگیری دکمه‌ها (زیر هم، در مرکز صفحه) */
-.neon-button-container {
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 18px;
-  margin-top: 45px;
-  margin-bottom: 60px;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
 }
 
-/* 🌸 دکمه نئونی شیشه‌ای صورتی روشن */
-.neon-pink-btn {
-  width: 230px;
-  background: rgba(255, 182, 193, 0.15);
-  border: 1.5px solid rgba(255, 105, 180, 0.9);
-  color: #fff;
-  padding: 14px 32px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.05rem;
-  border-radius: 20px;
-  cursor: pointer;
-  letter-spacing: 1px;
-  backdrop-filter: blur(14px);
-  text-shadow: 0 0 10px #ffb6c1, 0 0 30px #ff66cc;
-  box-shadow: 0 0 12px rgba(255,105,180,0.6), 0 0 40px rgba(255,20,147,0.3);
-  transition: all 0.3s ease, transform 0.2s ease;
-  animation: neonPulsePink 2.5s infinite ease-in-out;
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
-/* ✨ افکت hover */
-.neon-pink-btn:hover {
-  background: rgba(255, 105, 180, 0.25);
-  box-shadow: 0 0 25px #ff80d5, 0 0 60px #ff1493, 0 0 120px #ff33cc;
-  transform: translateY(-3px) scale(1.04);
+.back-button svg {
+  width: 24px;
+  height: 24px;
 }
 
-/* 🌟 انیمیشن نئون */
-@keyframes neonPulsePink {
-  0% { box-shadow: 0 0 10px #ff66cc, 0 0 25px #ff1493; }
-  50% { box-shadow: 0 0 25px #ff99dd, 0 0 60px #ff33bb, 0 0 120px #ff1493; }
-  100% { box-shadow: 0 0 10px #ff66cc, 0 0 25px #ff1493; }
+/* عکس با همون افکت */
+.magic-img {
+      width: 300px; /* می‌تونی هر سایزی خواستی بذاری */
+      animation: fadeZoomGlow 5s ease-in-out infinite;
+      user-select: none;
+      filter: drop-shadow(0 0 20px #ffb6ff);
+    }
+
+    /* همون انیمیشنی که روی h2 بود */
+    @keyframes fadeZoomGlow {
+      0% {
+        opacity: 0.7;
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #ffb6ff);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 30px #f5d6f5);
+      }
+      100% {
+        opacity: 0.7;
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px #ffb6ff);
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+  /* 🌿 دکمه شناور واتساپ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: #25d366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 9999;
+  transition: all 0.3s ease;
+  animation: pulseWhats 2s infinite ease-in-out;
 }
 
-/* 📱 برای موبایل */
-@media (max-width: 600px) {
-  .neon-pink-btn {
-    width: 85%;
-    font-size: 1rem;
-    padding: 12px 20px;
-  }
+.whatsapp-float img {
+  width: 30px;
+  height: 30px;
 }
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px #25d366;
+}
+
+/* ✨ انیمیشن پالس */
+@keyframes pulseWhats {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
 
 
 
   </style>
 </head>
 <body>
-
-
-  <!-- 🌿 دکمه واتساپ -->
+    <!-- 🌿 دکمه واتساپ -->
 <a href="https://wa.me/351931670667" target="_blank" class="whatsapp-float" title="Fale conosco no WhatsApp">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
 </a>
 
- 
-<header>
+  <header>
+   
+   
 
 
-      <!-- لوگو در مرکز -->
-      <div class="logo">
-        <img src="images/icon.png" alt="Logo" />
-      </div>
-    </div>
-    
-    <img src="images/Screenshot_2025-10-16_at_18.44.43-removebg-preview.png" alt="Logo Mágico" class="magic-img">
-
-    
-    <div class="neon-button-container">
-      <button class="neon-pink-btn" onclick="goToPage('index1.html')">BEAUTYTECH AMORA</button>
-      <button class="neon-pink-btn" onclick="goToPage('index3.html')">BEAUTYTECH BRAGA RETAIL</button>
-    </div>
+     
+    <div id="menu-placeholder"></div>
 
     <script>
-      function goToPage(url) {
-        window.location.href = url;
-      }
-      </script>
+      // بارگذاری فایل منو
+      fetch("menuamora.html")
+        .then(res => res.text())
+        .then(html => {
+          const placeholder = document.getElementById("menu-placeholder");
+          placeholder.innerHTML = html;
+    
+          // حالا اسکریپت‌های داخل menu.html رو پیدا و اجرا می‌کنیم
+          const scripts = placeholder.querySelectorAll("script");
+          scripts.forEach(script => {
+            const newScript = document.createElement("script");
+            if (script.src) {
+              newScript.src = script.src;
+            } else {
+              newScript.textContent = script.textContent;
+            }
+            document.body.appendChild(newScript);
+          });
+        });
+    </script>
+    
 
+    <img src="images/Screenshot_2025-10-16_at_18.44.43-removebg-preview.png" alt="Logo Mágico" class="magic-img">
 
-  <!-- Hamburger Icon -->
-  <div class="hamburger" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
+      </div>
+  </header>
+
+  <div class="side-panel" id="sidePanel">
+    <button id="closePanel" class="close-button">×</button>
+  
+    <img src="" alt="Service Image" id="panelImage">
+    <h3 id="panelTitle"></h3>
+    <p id="panelText"></p>
+    <button id="panelButton">Saber Mais</button>
   </div>
   
-  <!-- Drop-down Menu -->
-  <div class="glass-menu" id="glassMenu">
-    <ul>
-     
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const services = [
    
     
-      <li><a href="contacto.html">CONTACTOS</a></li>
-      <li><a href="ROLL-UP BRAGA RETAIL 1X206.pdf">CATALOGO DE BRAGA RETAIL</a></li>
-      <li><a href="new.pdf">CATALOGO DE AMORA</a></li>
-    </ul>
-  </div>
-  
-  </header>
-  <script>
-    function toggleMenu() {
-      document.getElementById('glassMenu').classList.toggle('open');
+    {
+        image: "images/massagem1.jpeg",
+        title: "Bem-Estar",
+        text: "Relaxamento e massagem",
+        link: "bemestarbraga.html",
+        param: "Bem-Estar"
+      },
+   
+      {
+        image: "images/hifu1.png",
+        title: "HIFU 12D",
+        text: "Rejuvenescimento facial, melhora da textura da pele, redução das rugas.",
+        link: "hifu12braga.html",
+        param: "HIFU 12D"
+      },
+      
+    ];
+
+    let current = 0;
+    const img = document.getElementById("panelImage");
+    const title = document.getElementById("panelTitle");
+    const text = document.getElementById("panelText");
+    const button = document.getElementById("panelButton");
+
+    function updatePanel(index) {
+      const service = services[index];
+      img.src = service.image;
+      title.textContent = service.title;
+      text.textContent = service.text;
+      button.onclick = () => {
+        const url = `${service.link}?service=${encodeURIComponent(service.param)}`;
+        window.location.href = url;
+      };
     }
-  
-    function toggleSubMenu(item) {
-      const submenu = item.querySelector('.submenu');
-      if (submenu) {
-        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-      }
-    }
+
+    updatePanel(current);
+    setInterval(() => {
+      current = (current + 1) % services.length;
+      updatePanel(current);
+    }, 5000);
+
+    const closeBtn = document.getElementById("closePanel");
+    closeBtn.addEventListener("click", () => {
+      document.getElementById("sidePanel").style.display = "none";
+    });
+  });
+
+
+
   </script>
-
-
+  
 </body>
 
 <script>
@@ -615,11 +562,113 @@ header {
 <!-- اسلایدر پایان -->
 
   
+<div class="sectionGallery">
+  <div class="sectionCircle" onclick="goToPage('perfectfacetechamora.html')">
+    <img src="images/Untitled design (4).png" alt="FACIAL">
+    <div class="sectionName">PERFECT FACE TECH</div>
+  </div>
+
+  <div class="sectionCircle" onclick="goToPage('perfectbodytechamora.html')">
+    <img src="images/Untitled design (6).png" alt="BODY TECH">
+    <div class="sectionName">PERFECT BODY TECH</div>
+  </div>
+
+
+  <div class="sectionCircle" onclick="goToPage('perfecthairamora.html')">
+    <img src="images/Untitled design (6).png" alt="PERFECT HAIR">
+    <div class="sectionName">PERFECT HAIR </div>
+  </div>
+
+
+  <div class="sectionCircle" onclick="goToPage('facedesigntechamora.html')">
+    <img src="images/Untitled design (2).png" alt="MASSAGEM">
+    <div class="sectionName">FACE DESIGN TECH</div>
+  </div>
+
+  <div class="sectionCircle" onclick="goToPage('perfectnaildesign.html')">
+    <img src="images/Untitled design (2).png" alt="MASSAGEM">
+    <div class="sectionName">PERFECT NAIL DESIGN</div>
+  </div>
+</div>
+
+<script>
+function goToPage(page) {
+  window.location.href = page;
+}
+</script>
+
+<style>
+  /* 🎨 گالری دایره‌ها */
+  .sectionGallery {
+    display: flex;
+    justify-content: center;  /* وسط‌چین */
+    align-items: flex-start;
+    flex-wrap: wrap;           /* اجازه بده اگه جا نشد بره خط بعد */
+    gap: 40px;                 /* فاصله بین دایره‌ها */
+    margin: 40px auto;
+    width: 100%;
+    max-width: 1200px;         /* حداکثر عرض */
+    text-align: center;
+  }
+  
+  /* 🔵 هر دایره */
+  .sectionCircle {
+    width: 150px;              /* عرض ثابت برای هم‌ردیفی */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .sectionCircle:hover {
+    transform: scale(1.08);
+  }
+  
+  /* 🖼 تصویر دایره‌ای */
+  .sectionCircle img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.8);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    object-fit: cover;
+    background: #fff;
+  }
+  
+  /* ✨ نام زیر دایره */
+  .sectionName {
+    margin-top: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  /* 📱 واکنش‌گرا برای موبایل */
+  @media (max-width: 768px) {
+    .sectionGallery {
+      gap: 25px;
+    }
+    .sectionCircle {
+      width: 120px;
+    }
+    .sectionCircle img {
+      width: 110px;
+      height: 110px;
+    }
+  }
+  </style>
+  
 
 
 
 
 
+
+
+
+
+  <header>
 
 
 
@@ -634,7 +683,7 @@ header {
   backdrop-filter: blur(10px);
   margin: 30px auto;
 ">
-  <img src="https://i.imgur.com/uzss8l5.jpeg" alt="logo" style="max-width: 120px; display: block; margin: 0 auto 20px;">
+  <img src="images/icon.png" alt="logo" style="max-width: 120px; display: block; margin: 0 auto 20px;">
   
   <p style="text-align: center; margin-top: 20px;">
     Junte-se a nós e comece a ganhar com suas indicações!🎉
@@ -675,10 +724,7 @@ header {
     É simples, mágico e feito para você que acredita no poder da conexão! ✨💖
   </p>
 </div>
-
-
-
-
+</header>
 
   <script>
     function goToPageWithParams(page, servico) {
@@ -807,41 +853,6 @@ header {
     max-width: 85%;
     align-self: flex-start;
   }
-  /* 🌿 دکمه شناور واتساپ */
-.whatsapp-float {
-  position: fixed;
-  bottom: 100px;
-  RIGHT: 20px;
-  width: 60px;
-  height: 60px;
-  background: #25d366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  z-index: 9999;
-  transition: all 0.3s ease;
-  animation: pulseWhats 2s infinite ease-in-out;
-}
-
-.whatsapp-float img {
-  width: 36px;
-  height: 36px;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 25px #25d366;
-}
-
-/* ✨ انیمیشن پالس */
-@keyframes pulseWhats {
-  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
-  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-}
-
 </style>
 
 <!-- Botão -->
@@ -1052,6 +1063,4 @@ sliders.forEach((slider) => {
 
 
 </body>
-
-
 </html>

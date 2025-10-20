@@ -18,6 +18,61 @@
   position: relative;
   
 }
+.price-section {
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  .price-section h3 {
+    color: #ffb6ff;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+  }
+
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  td:first-child {
+    text-align: left;
+  }
+
+  td:last-child {
+    text-align: right;
+    color: #ffeaff;
+    font-weight: 600;
+  }
+
+  .reserve-btn {
+    background: linear-gradient(45deg, #ff99ff, #ff66cc);
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 15px auto 0;
+    font-weight: 600;
+  }
+
+  .reserve-btn:hover {
+    background: linear-gradient(45deg, #ff66cc, #ff99ff);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #ffb6ff;
+  }
+
     .container {
       background: rgba(255, 255, 255, 0.33);
       backdrop-filter: blur(10px);
@@ -229,67 +284,65 @@
     right: 15px;
   }
 }
-
 .price-section {
-  margin-bottom: 25px;
+  background: rgba(255,255,255,0.08);
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .price-section h3 {
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
+  color: #ffb6ff;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 8px;
 }
 
-.category {
-  color: #f48ee0;
-  font-size: 14px;
-  margin-left: 6px;
+.treatment-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.price-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
-  color: white;
-  font-size: 15px;
+.treatment-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
 }
 
-.price-row span:first-child {
-  flex: 1;
+.treatment-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
 }
 
-.mini-btn {
-  background: #dc059f;
+.mini-reserve {
+  background: linear-gradient(45deg, #ff99ff, #ff66cc);
   border: none;
-  color: white;
-  font-weight: bold;
-  border-radius: 8px;
-  padding: 6px 12px;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 8px;
   cursor: pointer;
-  font-size: 13px;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.mini-btn:hover {
-  background: #f1e6ef;
-  color: rgb(222, 20, 158);
+.mini-reserve:hover {
+  background: linear-gradient(45deg, #ff66cc, #ff99ff);
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #ffb6ff;
 }
-
-
 
   </style>
-</head>
-<body>
-  
+</head><body>
+    
+
     <div id="menu-placeholder"></div>
 
 <script>
   // بارگذاری فایل منو
-  fetch("menubraga.html")
+  fetch("menuamora.html")
     .then(res => res.text())
     .then(html => {
       const placeholder = document.getElementById("menu-placeholder");
@@ -311,151 +364,42 @@
 
 
 
-<!-- محتواهای داینامیک -->
 
-  <div id="detox" class="tab-section" style="display:block;">
-  <div class="container">
-   
-    
-    <!-- عکس embed -->
-    <img src="images/Untitled design (25).png" alt="Programa Modeladora" />
 
-   
-     
-    
-  
-
-    <img src="images/Untitled design (26).png" alt="JUST4YOU" />
-    
-
-    <img src="images/Untitled design (27).png" alt="PURE FACIAL" />
-   
-
-    <img src="images/Untitled design (28).png" alt="APLICAÇÃO DE FIOS DE SEDA" />
-  
-
-    <img src="images/Untitled design (29).png" alt="BOOSTER COM DERMAPEN" />
-   
-
-    <img src="images/Untitled design (30).png" alt="INTRADERMOTERAPIA PRESSURIZADA" />
-   
-    <img src="images/Untitled design (31).png" alt="INTRADERMOTERAPIA PRESSURIZADA" />
-
-    <img src="images/Untitled design (32).png" alt="INTRADERMOTERAPIA PRESSURIZADA" />
-    <!-- دکمه رزرو -->
-
-   
+    <div class="price-section">
+        <h3> APLICAÇÃO & MANUTENÇÃO DE UNHAS</h3>
       
+        <table class="treatment-table">
+          <!-- Aplicação -->
+          <tr><td><strong>Unhas de Gel (com cutilagem)</strong></td><td>30€ <button class="mini-reserve" onclick="reserve('Unhas de Gel')">Reservar</button></td></tr>
+          <tr><td><strong>Unhas de Fibras (com cutilagem)</strong></td><td>45€ <button class="mini-reserve" onclick="reserve('Unhas de Fibras')">Reservar</button></td></tr>
+          <tr><td><strong>Acrygel (com cutilagem)</strong></td><td>35€ <button class="mini-reserve" onclick="reserve('Acrygel')">Reservar</button></td></tr>
+          <tr><td><strong>Blindagem (com cutilagem)</strong></td><td>20€ <button class="mini-reserve" onclick="reserve('Blindagem')">Reservar</button></td></tr>
+          <tr><td><strong>Gelhinho Mão (com cutilagem)</strong></td><td>15€ <button class="mini-reserve" onclick="reserve('Gelhinho Mão')">Reservar</button></td></tr>
+          <tr><td><strong>Gelhinho Pé (com cutilagem)</strong></td><td>25€ <button class="mini-reserve" onclick="reserve('Gelhinho Pé')">Reservar</button></td></tr>
+          <tr><td><strong>Gelhinho Pé (simples)</strong></td><td>12€ <button class="mini-reserve" onclick="reserve('Gelhinho Pé Simples')">Reservar</button></td></tr>
       
- 
+        
+          <!-- Decoração -->
+          <tr><td colspan="2" class="section-title"> Decoração</td></tr>
+          
+          <tr><td>Nail Art simples</td><td>2€ <button class="mini-reserve" onclick="reserve('Nail Art Simples')">Reservar</button></td></tr>
+          <tr><td>Adesivos / Glitter / Pedraria</td><td>1€ <button class="mini-reserve" onclick="reserve('Adesivos / Glitter / Pedraria')">Reservar</button></td></tr>
+          <tr><td>Nails com Styling Elaborado</td><td>5€ <button class="mini-reserve" onclick="reserve('Nails com Styling Elaborado')">Reservar</button></td></tr>
       
+          <!-- Outros -->
+          <tr><td colspan="2" class="section-title"> Cuidados de Mãos e Pés</td></tr>
+          <tr><td>Manicure</td><td>10€ <button class="mini-reserve" onclick="reserve('Manicure')">Reservar</button></td></tr>
+          <tr><td>Pedicure</td><td>20€ <button class="mini-reserve" onclick="reserve('Pedicure')">Reservar</button></td></tr>
+        </table>
+      </div>
     
-    
-  
-      
-  <div class="price-section">
-    <h3>FACE DESIGN TECH</h3>
-
-    <!-- HIFU 12D فقط یک دکمه رزرو برای کل -->
-    <div class="price-row"><span>PREENCHIMENTO LABIAL, HYALURON PEN</span><span>150€</span></div>
-    <button class="mini-btn" onclick="reserve('PREENCHIMENTO LABIAL, HYALURON PEN')">Reservar</button>
-
-    <div class="price-row"><span>MICROPIGMENTAÇÃO LABIAL</span><span>180€</span></div>
-    <button class="mini-btn" onclick="reserve('MICROPIGMENTAÇÃO LABIAL')">Reservar</button>
-
-    <div class="price-row"><span>TÉCNICA HÍBRIDA DE SOBRANCELHAS</span><span>180€</span></div>
-    <button class="mini-btn" onclick="reserve('TÉCNICA HÍBRIDA DE SOBRANCELHAS')">Reservar</button>
-
-    <div class="price-row"><span>LASH & BROW LAMINATION</span><span>60€</span></div>
-    <button class="mini-btn" onclick="reserve('LASH & BROW LAMINATION')">Reservar</button>
-
-    <div class="price-row"><span>EXTENSÃO DE PESTANAS</span><span>35€</span></div>
-    <button class="mini-btn" onclick="reserve('EXTENSÃO DE PESTANAS')">Reservar</button>
-
-    <div class="price-row"><span>DESIGN DE SOBRANCELHAS & HENNA</span><span>25€</span></div>
-    <button class="mini-btn" onclick="reserve('DESIGN DE SOBRANCELHAS & HENNA')">Reservar</button>
-   
-
- 
- 
-</div>
-
-
-<script>
-function reserve(servico) {
-const params = new URLSearchParams();
-params.set('service', servico);
-window.location.href = `reservebraga.html?${params.toString()}`;
-}
-</script>
-
-
-     
-      
-   
-    
+    </body>
     <script>
-    function reserve(servico) {
-      const params = new URLSearchParams();
-      params.set('service', servico);
-      window.location.href = `reservebraga.html?${params.toString()}`;
-    }
-    </script>
-    
-  
-  
-  <script>
-    function goToPageWithParams(page, servico) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const ref = urlParams.get("ref");
-  
-      const newParams = new URLSearchParams();
-      newParams.set("service", servico);
-      if (ref) newParams.set("ref", ref);
-  
-      window.location.href = `${page}?${newParams.toString()}`;
-    }
-  </script>
-  
-
-  
-
-   
-
-</div>
-
-
-
-  
-
-
-
-  <script>
-     function goToPageWithParams(page, servico) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const ref = urlParams.get("ref");
-
-  const newParams = new URLSearchParams();
-  newParams.set("service", servico);
-  if (ref) newParams.set("ref", ref);
-
-  window.location.href = `${page}?${newParams.toString()}`;
-}
-    document.getElementById("commentForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const stars = document.getElementById("stars").value;
-      const commentText = document.getElementById("comment").value;
-
-      const newComment = document.createElement("div");
-      newComment.classList.add("comment");
-      newComment.innerHTML = `
-        <div class="stars">${"⭐".repeat(stars)}</div>
-        <p>${commentText}</p>
-      `;
-      document.querySelector(".comments-section").insertBefore(newComment, document.getElementById("commentForm"));
-
-      this.reset();
-    });
-  </script>
-</body>
+        function reserve(servico) {
+          const params = new URLSearchParams();
+          params.set('service', servico);
+          window.location.href = `reserve.html?${params.toString()}`;
+        }
+        </script>
 </html>

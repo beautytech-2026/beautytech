@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Programa Redutor</title>
+  <title>Perfect Face Tech Amora</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
   <style>
      body {
-  background: linear-gradient(to bottom right, #e51e8f, #e35fda);
+  background: linear-gradient(to bottom right, #dd0583, #8e2de2);
   font-family: 'Vazirmatn', sans-serif;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
   
 }
     .container {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.33);
       backdrop-filter: blur(10px);
       border-radius: 16px;
       padding: 25px;
@@ -34,7 +34,7 @@
     }
     img {
       width: 100%;
-      max-height: 200px;
+      max-height: 800px;
       object-fit: cover;
       border-radius: 12px;
       margin-bottom: 20px;
@@ -62,7 +62,8 @@
       transition: background 0.3s;
     }
     button:hover {
-      background: #a01875;
+      background: #f4e9f0;
+      color: rgb(172, 12, 148);
     }
     .comments-section {
       margin-top: 30px;
@@ -101,6 +102,7 @@
         font-size: 15px;
       }
     }
+
     .logo {
   margin-top: 10px;
   margin-bottom: 20px;
@@ -121,7 +123,6 @@
   max-height: 200px;
   width: auto;
 }
-
 .back-button {
   position: fixed;
   top: 20px;
@@ -228,191 +229,196 @@
     right: 15px;
   }
 }
+
+.price-section {
+  margin-bottom: 25px;
+}
+
+.price-section h3 {
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.category {
+  color: #f48ee0;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.price-row span:first-child {
+  flex: 1;
+}
+
+.mini-btn {
+  background: #dc059f;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s ease;
+}
+
+.mini-btn:hover {
+  background: #f1e6ef;
+  color: rgb(222, 20, 158);
+}
+
+
+
   </style>
 </head>
 <body>
-  <a href="index2.html" class="back-button" title=" voltar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 8 8 12 12 16" />
-      <line x1="16" y1="12" x2="8" y2="12" />
-    </svg>
-  </a>
+  <div id="menu-placeholder"></div>
+
+  <script>
+    // بارگذاری فایل منو
+    fetch("menuamora.html")
+      .then(res => res.text())
+      .then(html => {
+        const placeholder = document.getElementById("menu-placeholder");
+        placeholder.innerHTML = html;
   
-  <!-- لوگو در مرکز -->
-<div class="logo">
-  <img src="images/icon.png" alt="Logo" />
-</div>
-</div>
+        // حالا اسکریپت‌های داخل menu.html رو پیدا و اجرا می‌کنیم
+        const scripts = placeholder.querySelectorAll("script");
+        scripts.forEach(script => {
+          const newScript = document.createElement("script");
+          if (script.src) {
+            newScript.src = script.src;
+          } else {
+            newScript.textContent = script.textContent;
+          }
+          document.body.appendChild(newScript);
+        });
+      });
+  </script>
+  
 
 
 
 
-  <!-- Hamburger Icon -->
-  <div class="hamburger" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
+<!-- محتواهای داینامیک -->
+
+  <div id="detox" class="tab-section" style="display:block;">
+  <div class="container">
+   
+    
+    <!-- عکس embed -->
+    <img src="images/Untitled design (7).png" alt="Programa Modeladora" />
+
+   
+     
+    
+      
+        <div class="price-section">
+          <h3>HIFU 12D</h3>
+    
+          <!-- HIFU 12D فقط یک دکمه رزرو برای کل -->
+          <div class="price-row"><span>ROSTO COMPLETO</span><span>200€</span></div>
+          <div class="price-row"><span>ROSTO, PAPADA</span><span>300€</span></div>
+          <div class="price-row"><span>PAPADA</span><span>120€</span></div>
+          <div class="price-row"><span>PESCOÇO</span><span>70€</span></div>
+          <div class="price-row"><span>ROSTO, PAPADA, PESCOÇO</span><span>360€</span></div>
+         
+    
+          <div class="button-group">
+            <button class="mini-btn" onclick="reserve('HIFU 12D FACIAL')">Reservar HIFU 12D</button>
+          </div>
+    
+       
+
+      
+    
+    <script>
+    function reserve(servico) {
+      const params = new URLSearchParams();
+      params.set('service', servico);
+      window.location.href = `reserve.html?${params.toString()}`;
+    }
+    </script>
+    
+    
+  
+
+    <img src="images/Untitled design (8).png" alt="JUST4YOU" />
+    <div class="button-group">
+      <button class="mini-btn" onclick="reserve('JUST4YOU FACIAL')">Reservar  JUST4YOU</button>
+    </div>
+
+    <img src="images/Untitled design (9).png" alt="PURE FACIAL" />
+    <div class="button-group">
+      <button class="mini-btn" onclick="reserve('PURE FACIAL')">Reservar PURE FACIAL</button>
+    </div>
+
+    <img src="images/Untitled design (10).png" alt="APLICAÇÃO DE FIOS DE SEDA" />
+    <div class="button-group">
+      <button class="mini-btn" onclick="reserve('APLICAÇÃO DE FIOS DE SEDA')">Reservar APLICAÇÃO DE FIOS DE SEDA</button>
+    </div>
+
+    <img src="images/Untitled design (11).png" alt="BOOSTER COM DERMAPEN" />
+    <div class="button-group">
+      <button class="mini-btn" onclick="reserve('BOOSTER COM DERMAPEN')">Reservar BOOSTER COM DERMAPEN</button>
+    </div>
+
+    <img src="images/Untitled design (12).png" alt="INTRADERMOTERAPIA PRESSURIZADA" />
+    <div class="button-group">
+      <button class="mini-btn" onclick="reserve('INTRADERMOTERAPIA PRESSURIZADA')">Reservar INTRADERMOTERAPIA PRESSURIZADA</button>
+    </div>
+
+    <!-- دکمه رزرو -->
+
+   
+      
+      
   </div>
+      
+    
+    
   
-  <!-- Drop-down Menu -->
-  <div class="glass-menu" id="glassMenu">
-    <ul>
-      <li onclick="toggleSubMenu(this)">ESTÉTICA CORPORAL
-        <ul class="submenu">
-  
-          <li><a href="programadetox.html">Programa Detox</a></li>
-          <li><a href="programaredutor.html">Programa Redutor</a></li>
-  
-          <li><a href="programamodelador.html">Programa Modelador</a></li>
-        </ul>
-      </li>
-      <li onclick="toggleSubMenu(this)">CAPILAR
-        <ul class="submenu">
-  
-          <li><a href="Recontruçãocapilar.html">Recontrução Capilar</a></li>
-          <li><a href="tratamentocapilar.html">tratamento Capilar</a></li>
-  
-        </ul>
-      </li>
-      <li><a href="depilacaoalaser.html">DEPILAÇÃO A LASER</a></li>
-      <li><a href="HIFU12.HTML">HIFU 12D</a></li>
-  
-      <li><a href="unhas.html">UNHAS</a></li>
-      <li><a href="bemestar.html">BEM-ESTAR</a></li>
-      <li><a href="limpezapele.html">LIMPEZA A PELE</a></li>
-  
-      <li><a href="voucher.html">VOUCHER</a></li>
-      <li><a href="contacto.html">CONTACTO</a></li>
-    </ul>
-  </div>
+     
+      
+   
+    
+    <script>
+    function reserve(servico) {
+      const params = new URLSearchParams();
+      params.set('service', servico);
+      window.location.href = `reserve.html?${params.toString()}`;
+    }
+    </script>
+    
   
   
   <script>
-    function toggleMenu() {
-      document.getElementById('glassMenu').classList.toggle('open');
-    }
+    function goToPageWithParams(page, servico) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get("ref");
   
-    function toggleSubMenu(item) {
-      const submenu = item.querySelector('.submenu');
-      if (submenu) {
-        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-      }
+      const newParams = new URLSearchParams();
+      newParams.set("service", servico);
+      if (ref) newParams.set("ref", ref);
+  
+      window.location.href = `${page}?${newParams.toString()}`;
     }
   </script>
+  
 
-
-
-
-  <div class="container">
-    <h2>✨ Programa Redutor ✨</h2>
-    <video
-    src="https://i.imgur.com/lVP7xU9.mp4"
-    class="card-video"
-    controls
-    autoplay
-    loop
-    muted
-    playsinline
-    style="width: 100%; border-radius: 12px; margin-bottom: 20px;"
-  >
-    Seu navegador não suporta vídeo HTML5.
-  </video>
-
-    Reduza medidas e modele o seu corpo de forma eficaz!
-    Este programa foi desenvolvido para quem deseja reduzir gordura localizada, combater a celulite, melhorar a firmeza da pele e modelar o corpo, proporcionando uma silhueta mais definida e harmoniosa.
-    
-    <h2> ✅ O que inclui:</h2>
-    4 Sessões de Manta Térmica
-    
-    4 Sessões de Pressoterapia
-    
-    4 Sessões de Radiofrequência
-    
-    1 Massagem Modeladora
-    
-    <h2> 🔥 Valor Promocional: 180€</h2>
-    📍 Local: Rua Foros de Amora, n.º 12B – 2845-004 Amora
-    📞 Telefone/WhatsApp: 933 272 697
-    
-    <h2>ℹ️ Benefícios do Programa:</h2>
-    Redução de medidas
-    
-    Melhora da firmeza da pele
-    
-    Combate à gordura localizada
-    
-    Diminuição da celulite
-    
-    Estímulo à produção de colagénio e elastina
-    
-    Melhora da circulação e eliminação de toxinas
-    
-    Silhueta mais modelada
-    
-    <h2> 💆‍♀️ O que é cada tratamento?</h2>
-    Manta Térmica:
-    Utiliza calor para ativar o metabolismo, promover a queima de gordura e ajudar na eliminação de líquidos acumulados.
-    
-    <h2>  Pressoterapia:</h2>
-    Técnica de drenagem linfática mecânica que estimula a circulação e ajuda a eliminar líquidos e toxinas.
-    
-    <h2> Radiofrequência:</h2>
-    Tecnologia que aquece as camadas profundas da pele, ajudando a reduzir gordura localizada, combater a flacidez e melhorar a textura da pele.
-    
-    <h2> Massagem Modeladora:</h2>
-    Massagem vigorosa que auxilia na quebra de nódulos de gordura, melhora a circulação e ajuda na modelação corporal.
-    
-    <h2> 📜 Regulamento do Combo:</h2>
-    Validade:
-    O pacote tem validade de 90 dias a partir da data da compra. Sessões não realizadas dentro deste prazo serão consideradas expiradas.
-    
-    <h2>Agendamento:</h2>
-    
-    As sessões devem ser agendadas com antecedência.
-    
-    O cancelamento ou remarcação deverá ser comunicado com pelo menos 24 horas de antecedência.
-    
-    A falta sem aviso no prazo estipulado resultará na perda da sessão.
-    
-    <h2> Forma de pagamento:</h2>
-    O valor promocional é pago integralmente no momento da compra e não é reembolsável.
-    
-    <h2> Transferência:</h2>
-    O pacote é pessoal e intransferível.
-    
-    <h2>Contraindicações:</h2>
-    Este programa não é recomendado para:
-    
-    Gestantes
-    
-    Pessoas com insuficiência cardíaca ou renal
-    
-    Portadores de marcapasso (para tratamentos com radiofrequência)
-    
-    Pessoas com inflamações ou infecções ativas
-    
-    Pacientes oncológicos (exceto com liberação médica)
-    
-    <h2>Recomendações:</h2>
-    Para melhores resultados, recomenda-se:
-    
-    Alimentação equilibrada
-    
-    Hidratação adequada
-    
-    Prática regular de atividade física
-    
-    
-   
-
-    <div class="button-group">
-      <button onclick="goToPageWithParams('reserve.html','Programa Redutor')">Reservar Agora</button>
-      <h2> 🎟️ VOUCHER BEAUTYTECH – COMBO Corpo Perfeito
-💎 Programa Redutor Especial – 💎A beleza que você sente, agora em forma de presente. Dê um voucher e espalhe cuidado</h2>
-
-      <button onclick="goToPageWithParams('voucher.html','Programa Redutor')">Comprar Voucher VIP</button>
-    </div>
+  
 
     <div class="comments-section">
       <h3>Comentários dos Clientes</h3>
@@ -444,6 +450,14 @@
       </form>
     </div>
   </div>
+
+</div>
+
+
+
+  
+
+
 
   <script>
      function goToPageWithParams(page, servico) {

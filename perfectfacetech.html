@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Programa Detox braga retail</title>
+  <title>Perfect Hair Tech Amora</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
   <style>
      body {
@@ -284,55 +284,30 @@
   </style>
 </head>
 <body>
-  <a href="index3.html" class="back-button" title=" voltar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 8 8 12 12 16" />
-      <line x1="16" y1="12" x2="8" y2="12" />
-    </svg>
-  </a>
-  
-  <!-- لوگو در مرکز -->
-<div class="logo">
-  <img src="images/icon.png" alt="Logo" />
-</div>
-</div>
+  <div id="menu-placeholder"></div>
 
-  <!-- Hamburger Icon -->
-  <div class="hamburger" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-  
-  <!-- Drop-down Menu -->
-  <!-- Drop-down Menu -->
-<div class="glass-menu" id="glassMenu">
-  <ul>
-   
-    <li><a href="perfectbodytech.html">PPERFECT BODY TECH</a></li>
-        <li><a href="perfectfacetech.html">PERFECT FACE TECH</a></li>
-
-        <li><a href=".html">FACE DESIGN TECH</a></li>
-    <li><a href="contacto.html">CONTACTOS</a></li>
-    <li><a href="contacto.html">CATALOGO</a></li>
-  </ul>
-</div>
-  
-  
   <script>
-    function toggleMenu() {
-      document.getElementById('glassMenu').classList.toggle('open');
-    }
+    // بارگذاری فایل منو
+    fetch("menubraga.html")
+      .then(res => res.text())
+      .then(html => {
+        const placeholder = document.getElementById("menu-placeholder");
+        placeholder.innerHTML = html;
   
-    function toggleSubMenu(item) {
-      const submenu = item.querySelector('.submenu');
-      if (submenu) {
-        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-      }
-    }
+        // حالا اسکریپت‌های داخل menu.html رو پیدا و اجرا می‌کنیم
+        const scripts = placeholder.querySelectorAll("script");
+        scripts.forEach(script => {
+          const newScript = document.createElement("script");
+          if (script.src) {
+            newScript.src = script.src;
+          } else {
+            newScript.textContent = script.textContent;
+          }
+          document.body.appendChild(newScript);
+        });
+      });
   </script>
-
+  
 
 
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Programa Detox braga retail</title>
+  <title>Perfect Body Tech Amora</title>
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
   <style>
      body {
@@ -326,11 +326,16 @@
   </style>
 </head>
 <body>
-   <div id="menu-placeholder"></div>
+ 
+ 
+
+
+
+    <div id="menu-placeholder"></div>
 
 <script>
   // بارگذاری فایل منو
-  fetch("menubraga.html")
+  fetch("menuamora.html")
     .then(res => res.text())
     .then(html => {
       const placeholder = document.getElementById("menu-placeholder");
@@ -349,6 +354,7 @@
       });
     });
 </script>
+
 
 
 
@@ -382,7 +388,7 @@
         <h3>PERFECT BODY TECH <span class="category">DETOX</span></h3>
         <div class="price-row">
           <span>Drenagem Linfática Manual</span>
-          <span>35€</span>
+          <span>40€</span>
           <button class="mini-btn" onclick="reserve('Drenagem Linfática Manual')">Reservar</button>
         </div>
         <div class="price-row">
@@ -459,7 +465,7 @@
 
     
     <div class="button-group">
-      <button onclick="goToPageWithParams('reservebraga.html','MASSAGEM COMPLETE ')">MASSAGEM COMPLETE AGENDAR AGORA</button>
+      <button onclick="goToPageWithParams('reserve.html','MASSAGEM COMPLETE ')">MASSAGEM COMPLETE AGENDAR AGORA</button>
     </div>
 
   </div>
@@ -501,56 +507,15 @@
     
         <div class="price-row">
           <span>AXILA VIRILHA E BUÇO</span>
-          <span>30€</span>
+          <span>20€</span>
           <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER AXILA VIRILHA E BUÇO')">Reservar</button>
         </div>
     
-        <div class="price-row">
-          <span>AXILA VIRILHAS, TÓRAX, ABDÓMEN E BRAÇOS</span>
-          <span>60€</span>
-          <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER AXILA VIRILHAS, TÓRAX, ABDÓMEN E BRAÇOS')">Reservar</button>
-        </div>
-    
-
-        <div class="price-row">
-          <span>BRAÇOS, COSTAS, TÓRAX, AXILA OU VIRILHA</span>
-          <span>60€</span>
-          <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER BRAÇOS, COSTAS, TÓRAX, AXILA OU VIRILHA')">Reservar</button>
-        </div>
-    
-
-
-        <div class="price-row">
-          <span>BRAÇOS, AXILA OU VIRILHA</span>
-          <span>35€</span>
-          <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER BRAÇOS, AXILA OU VIRILHA')">Reservar</button>
-        </div>
-    
-
-
-        <div class="price-row">
-          <span>BUÇO E QUEIXO</span>
-          <span>15€</span>
-          <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER BUÇO E QUEIXO')">Reservar</button>
-        </div>
-    
-
-        <div class="price-row">
-          <span>BUÇO, QUEIXO, AXILA OU VIRILHA</span>
-          <span>25€</span>
-          <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER BUÇO, QUEIXO, AXILA OU VIRILHA')">Reservar</button>
-        </div>
-
-        <div class="price-row">
-          <span>MEIA PERNA, AXILA OU VIRILHA</span>
-          <span>40€</span>
-          <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER MEIA PERNA, AXILA OU VIRILHA')">Reservar</button>
-        </div>
 
 
         <div class="price-row">
           <span>CORPO COMPLETO</span>
-          <span>60€</span>
+          <span>50€</span>
           <button class="mini-btn" onclick="reserve('DEPILAÇÃO LASER CORPO COMPLETO')">Reservar</button>
         </div>
   
@@ -604,7 +569,7 @@
     
       
     <div class="button-group">
-      <button onclick="goToPageWithParams('reservebraga.html','Programa Modelador complet')">PERFECT BODY TECH MODELADORA COMPLET </button>
+      <button onclick="goToPageWithParams('reserve.html','Programa Modelador complet')">PERFECT BODY TECH MODELADORA COMPLET </button>
     </div>
 
  
@@ -669,7 +634,7 @@
     </div>
   </div>
   <div class="button-group">
-    <button onclick="goToPageWithParams('reservebraga.html','PERFECT BODY TECH REDUTORA / FLACIDEZ COMPLETE')"> PERFECT BODY TECH REDUTORA / FLACIDEZ COMPLETE </button>
+    <button onclick="goToPageWithParams('reserve.html','PERFECT BODY TECH REDUTORA / FLACIDEZ COMPLETE')"> PERFECT BODY TECH REDUTORA / FLACIDEZ COMPLETE </button>
   </div>
 
 
@@ -698,7 +663,7 @@
     event.stopPropagation(); // جلوگیری از باز/بسته شدن ناخواسته هنگام کلیک روی دکمه
     const params = new URLSearchParams();
     params.set('service', servico);
-    window.location.href = `reservebraga.html?${params.toString()}`;
+    window.location.href = `reserve.html?${params.toString()}`;
   }
   </script>
   
@@ -746,7 +711,7 @@
   function reserve(servico) {
     const params = new URLSearchParams();
     params.set('service', servico);
-    window.location.href = `reservebraga.html?${params.toString()}`;
+    window.location.href = `reserve.html?${params.toString()}`;
   }
   
   function goToPageWithParams(page, servico) {

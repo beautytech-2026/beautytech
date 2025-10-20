@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programa Detox braga retail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+  <style>
+     body {
+  background: linear-gradient(to bottom right, #dd0583, #8e2de2);
+  font-family: 'Vazirmatn', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+  overflow-x: hidden;
+  position: relative;
+  
+}
+.price-section {
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  .price-section h3 {
+    color: #ffb6ff;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+  }
+
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  td:first-child {
+    text-align: left;
+  }
+
+  td:last-child {
+    text-align: right;
+    color: #ffeaff;
+    font-weight: 600;
+  }
+
+  .reserve-btn {
+    background: linear-gradient(45deg, #ff99ff, #ff66cc);
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 15px auto 0;
+    font-weight: 600;
+  }
+
+  .reserve-btn:hover {
+    background: linear-gradient(45deg, #ff66cc, #ff99ff);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #ffb6ff;
+  }
+
+    .container {
+      background: rgba(255, 255, 255, 0.33);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 25px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 0 20px #e178f4;
+      color: white;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    img {
+      width: 100%;
+      max-height: 800px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #c02190;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #f4e9f0;
+      color: rgb(172, 12, 148);
+    }
+    .comments-section {
+      margin-top: 30px;
+    }
+    .comment {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .stars {
+      color: gold;
+      margin-bottom: 5px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #c13a8f;
+    }
+    .card-video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      button {
+        font-size: 15px;
+      }
+    }
+
+    .logo {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
+
+
+
+.logo img {
+  max-height: 200px;
+  width: auto;
+}
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+.price-section {
+  background: rgba(255,255,255,0.08);
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.price-section h3 {
+  color: #ffb6ff;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 8px;
+}
+
+.treatment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.treatment-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.treatment-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mini-reserve {
+  background: linear-gradient(45deg, #ff99ff, #ff66cc);
+  border: none;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mini-reserve:hover {
+  background: linear-gradient(45deg, #ff66cc, #ff99ff);
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #ffb6ff;
+}
+
+  </style>
+</head><body>
+ 
+  <div id="menu-placeholder"></div>
+
+  <script>
+    // بارگذاری فایل منو
+    fetch("menuamora.html")
+      .then(res => res.text())
+      .then(html => {
+        const placeholder = document.getElementById("menu-placeholder");
+        placeholder.innerHTML = html;
+  
+        // حالا اسکریپت‌های داخل menu.html رو پیدا و اجرا می‌کنیم
+        const scripts = placeholder.querySelectorAll("script");
+        scripts.forEach(script => {
+          const newScript = document.createElement("script");
+          if (script.src) {
+            newScript.src = script.src;
+          } else {
+            newScript.textContent = script.textContent;
+          }
+          document.body.appendChild(newScript);
+        });
+      });
+  </script>
+  
+  
+
+    <div class="container">
+    <h2> TABELA DE PREÇOS </h2>
+    
+    <!-- LAVAGEM -->
+    <div class="price-section">
+      <h3> LAVAGEM E CUIDADOS</h3>
+      <table>
+        <tr><td>Só lavagem de cabelo (incl. shampoo e amaciador calha)</td><td>5€</td></tr>
+        <tr><td>Shampoo especial</td><td>4.5€</td></tr>
+        <tr><td>Condicionador especial</td><td>3.5€</td></tr>
+        <tr><td>Máscara Argan</td><td>6.5€</td></tr>
+        <tr><td>Máscara hidratante</td><td>4.5€</td></tr>
+      </table>
+      
+      <button class="reserve-btn" onclick="reserve('Lavagem')">Reservar Lavagem</button>
+    </div>
+    
+    <!-- CORTE E COLORAÇÃO -->
+    <div class="price-section">
+      <h3> CORTE E COLORAÇÃO</h3>
+      <table class="treatment-table">
+      
+        <tr><td>Corte simples</td><td>15€<button class="mini-reserve" onclick="reserve('Corte simples')">Reservar</button></td></tr>
+        <tr><td>Coloração (a partir de)</td><td>30€</td></tr>
+        <tr><td>Curto</td><td>30€<button class="mini-reserve" onclick="reserve('Perfect Hair Growth Therapy')">Reservar</button></td></tr>
+        <tr><td>Médio</td><td>35€<button class="mini-reserve" onclick="reserve('Coloração Curto')">Reservar</button></td></tr>
+        <tr><td>Longo</td><td>40€<button class="mini-reserve" onclick="reserve('Coloração longo')">Reservar</button></td></tr>
+        <tr><td>Extra longo</td><td>50€<button class="mini-reserve" onclick="reserve('Coloração Extra longo ')">Reservar</button></td></tr>
+        <tr><td>Coloração raízes</td><td>30€<button class="mini-reserve" onclick="reserve('Coloração raízes')">Reservar</button></td></tr>
+        <tr><td>Matização / Tonalização</td><td>25€<button class="mini-reserve" onclick="reserve('Matização / Tonalização')">Reservar</button></td></tr>
+        <tr><td>Madeixas / Nuances / Californianas (a partir de)</td><td>50€<button class="mini-reserve" onclick="reserve('Madeixas / Nuances / Californianas ')">Reservar</button></td></tr>
+        
+        
+        <tr><td>Descoloração total (longo)</td><td>100€</td></tr>
+        <tr><td>Descoloração total (curto/médio)</td><td>75€</td></tr>
+        <tr><td>Descoloração raízes</td><td>30€</td></tr>
+     
+    </table>
+      
+      <button class="reserve-btn" onclick="reserve('Descoloração')">Reservar Descoloração</button>
+    </div>
+    
+    <!-- BRUSHING -->
+    <div class="price-section">
+      <h3> BRUSHING / ESCOVA</h3>
+      <table>
+        <tr><td>Curto</td><td>10€</td></tr>
+        <tr><td>Médio</td><td>12.5€</td></tr>
+        <tr><td>Longo</td><td>15€</td></tr>
+        <tr><td>Extra longo</td><td>25€</td></tr>
+      </table>
+     
+      <button class="reserve-btn" onclick="reserve('Escova')">Reservar Escova</button>
+    </div>
+    
+    <!-- ALISAMENTO -->
+    <div class="price-section">
+      <h3> ALISAMENTO / PROGRESSIVA</h3>
+      <table>
+        <tr><td>Curto</td><td>90€</td></tr>
+        <tr><td>Médio</td><td>120€</td></tr>
+        <tr><td>Longo</td><td>150€</td></tr>
+        <tr><td>Extra longo (extensões de queratina ou amarradinho)</td><td>180€</td></tr>
+        <tr><td>Desfissagem (a partir de)</td><td>50€</td></tr>
+      </table>
+     
+      <button class="reserve-btn" onclick="reserve('Alisamento')">Reservar Alisamento</button>
+      
+    </div>
+    
+    <!-- TRATAMENTOS -->
+    <div class="price-section">
+        <h3> TRATAMENTOS CAPILARES</h3>
+        <table class="treatment-table">
+          <tr><td>Selagem</td><td>45€ <button class="mini-reserve" onclick="reserve('Selagem')">Reservar</button></td></tr>
+          <tr><td>Botox</td><td>50€ <button class="mini-reserve" onclick="reserve('Botox')">Reservar</button></td></tr>
+          <tr><td>Tratamento detox</td><td>15€ <button class="mini-reserve" onclick="reserve('Tratamento detox')">Reservar</button></td></tr>
+          <tr><td>Tratamento pós alisamento</td><td>15€ <button class="mini-reserve" onclick="reserve('Tratamento pós alisamento')">Reservar</button></td></tr>
+          <tr><td>Nutrição profunda</td><td>35€ <button class="mini-reserve" onclick="reserve('Nutrição profunda')">Reservar</button></td></tr>
+          <tr><td>Reconstrução capilar</td><td>25€ <button class="mini-reserve" onclick="reserve('Reconstrução capilar')">Reservar</button></td></tr>
+          <tr><td>Ampola de tratamento</td><td>8€ <button class="mini-reserve" onclick="reserve('Ampola de tratamento')">Reservar</button></td></tr>
+          <tr><td>Hidratação profunda</td><td>35€ <button class="mini-reserve" onclick="reserve('Hidratação profunda')">Reservar</button></td></tr>
+          <tr><td>Hidratação com queratina</td><td>40€ <button class="mini-reserve" onclick="reserve('Hidratação com queratina')">Reservar</button></td></tr>
+          <tr><td>Perfect Hair Growth Therapy (a partir de)</td><td>150€ <button class="mini-reserve" onclick="reserve('Perfect Hair Growth Therapy')">Reservar</button></td></tr>
+          <tr><td>Aplicação extra</td><td>3€ </td></tr>
+          <tr><td>Sérum</td><td>3€ </td></tr>
+          <tr><td>Laca</td><td>1.5€ </td></tr>
+          
+        </table>
+      </div>
+
+      
+</div>
+    
+    </body>
+    <script>
+        function reserve(servico) {
+          const params = new URLSearchParams();
+          params.set('service', servico);
+          window.location.href = `reserve.html?${params.toString()}`;
+        }
+        </script>
+</html>
