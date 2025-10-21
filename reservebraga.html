@@ -221,26 +221,38 @@
       initCalendar();
     }
 
+
+   
+  
     function initCalendar() {
-      if (pikadayInstance) return;
-      pikadayInstance = new Pikaday({
-        field: document.getElementById('datepicker'),
-        format: 'DD/MM/YYYY',
-        onSelect(date) {
-          const year = date.getFullYear();
-          const month = (date.getMonth() + 1).toString().padStart(2, '0');
-          const day = date.getDate().toString().padStart(2, '0');
-          const formattedDate = `${year}-${month}-${day}`;
-          selectedSlot.date = formattedDate;
+  if (pikadayInstance) return; // جلوگیری از ساخت چندباره
+  
+  // محاسبه‌ی تاریخ مجاز از دو روز بعد
+  const today = new Date();
+  const minSelectableDate = new Date(today);
+  minSelectableDate.setDate(today.getDate() + 3); // ← امروز + 3 = از 17ام قابل رزرو (14 + 3 = 17)
+  
+  pikadayInstance = new Pikaday({
+    field: document.getElementById('datepicker'),
+    format: 'DD/MM/YYYY',
+    minDate: minSelectableDate, // ✅ اضافه شد
+    onSelect(date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      selectedSlot.date = formattedDate;
+      fetchAvailableSlots(formattedDate);
 
-          // ensure header still correct (in case URL param changed or not)
-          if(headerEl) headerEl.textContent = prettyServiceName(service);
+       // ensure header still correct (in case URL param changed or not)
+       if(headerEl) headerEl.textContent = prettyServiceName(service);
 
-          // fetch available hours — now we **send the service name too**
-          fetchAvailableSlots(formattedDate);
-        }
-      });
+     
     }
+  });
+}
+
+         
 
     function renderTimeSlots(unavailable = []) {
       const container = document.getElementById("slots");
@@ -269,10 +281,22 @@
       });
     }
 
+    const serviceToMachine = {
+  "HIFU Facial": "HIFU",
+  "HIFU Corporal": "HIFU",
+  "HIFU 12 Corporal": "HIFU",
+  "Lipo Cavitação": "LIPO",
+  "Radiofrequência Facial": "RADIO",
+  "Massagem Desportiva": "MANUAL",
+  "Drenagem Linfática": "MANUAL",
+  // ... هر سرویس دیگه‌ای که داری
+};
+ 
     async function fetchAvailableSlots(date) {
       if (!date) return;
+      const machine = serviceToMachine[service] || service; // نوع دستگاه بر اساس سرویس
       try {
-        const body = { date, ref };
+        const body = { date, ref, machine, service };
         // send service param if present, decode for readability
         if(service){
           body.service = prettyServiceName(service);
@@ -322,6 +346,23 @@
         return;
       }
       document.getElementById("message").textContent = "Enviando reserva...";
+
+      // 👇 این قسمت اضافه شده
+  const serviceToMachine = {
+    "HIFU Facial": "HIFU",
+    "HIFU Corporal": "HIFU",
+    "HIFU 12 Corporal": "HIFU",
+    "Lipo Cavitação": "LIPO",
+    "Radiofrequência Facial": "RADIO",
+    "Massagem Desportiva": "MANUAL",
+    "Drenagem Linfática": "MANUAL",
+    // سایر سرویس‌ها رو اینجا اضافه کن
+  };
+
+  const machine = serviceToMachine[service] || service; // اگر تو جدول بالا نبود، خودش فرستاده میشه
+
+
+  
       const voucherCode = document.getElementById('voucherCode').value.trim();
       let payload = {
         service: prettyServiceName(service) || null,
@@ -329,7 +370,8 @@
         date: selectedSlot.date,
         hour: selectedSlot.hour,
         voucherCode,
-        clientInfo
+        clientInfo,
+        machine, // 👈 این خط اضافه شد
       };
 
       
