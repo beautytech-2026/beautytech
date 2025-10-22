@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BeautyTech Amora — Painel do Gerente</title>
+  <style>
+    :root {
+      --grad1: #ff4fa8;
+      --grad2: #9b2ddf;
+      --accent: #ff78cb;
+      --bg-card: rgba(255,255,255,0.08);
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, var(--grad1), var(--grad2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: white;
+    }
+    .card {
+      width: 100%;
+      max-width: 800px;
+      background: var(--bg-card);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      padding: 24px 28px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 22px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      outline: none;
+    }
+    select option {
+      color: #333;
+    }
+    .slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .slot {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #fff;
+      transition: all 0.2s;
+    }
+    .slot:hover { background: rgba(255,255,255,0.25); }
+    .slot.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .slot.selected {
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(255,255,255,0.4);
+    }
+    button {
+      background: linear-gradient(90deg, #ff7edb, #b24df9);
+      color: #fff;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 18px;
+      width: 100%;
+      transition: 0.3s;
+    }
+    button:hover { opacity: 0.9; }
+    .msg {
+      margin-top: 10px;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .ok { background: rgba(34,197,94,0.15); color: #aef7c4; }
+    .err { background: rgba(255,255,255,0.15); color: #ffd5d5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Painel do Gerente — BeautyTech Amora</h1>
+
+    <label>Serviço</label>
+    <select id="service">
+      <option value="">-- selecione um serviço --</option>
+      <option>EMBELEZAMENTO FACIAL E DESIGN PERSONALIZADO</option>
+      <option>PREENCHIMENTO LABIAL - HY ALURON PEN — 120€</option>
+      <option>MICROPIGMENTAÇÃO LABIAL — 100€</option>
+      <option>TÉCNICA HÍBRIDA DE SOBRANCELHAS — 100€</option>
+      <option>LASH & BROW LAMINATION — 35€</option>
+      <option>EXTENSÃO DE PESTANAS — 25€</option>
+      <option>DESIGN DE SOBRANCELHAS & HENNA — 15€</option>
+      <option>HIFU ROSTO COMPLETO — 150€</option>
+      <option>HIFU ROSTO,PAPADA — 250€</option>
+      <option>HIFU PAPADA — 70€</option>
+      <option>HIFU PESCOÇO — 70€</option>
+      <option>HIFU ROSTO,PAPADA,PESCOÇO — 280€</option>
+      <option>LIMPEZA DE PELE — 25€</option>
+      <option>APLICAÇÃO DE FIOS DE SEDA — 35€</option>
+      <option>BOOSTER COM DERMAPEN — desde 50€</option>
+      <option>INTRADERMOTERAPIA PRESSURIZADA — desde 50€</option>
+      <option>PREENCHIMENTO RUGAS HYALURON PEN — desde 100€</option>
+      <option>MASSAGEM MODELADORA E REDUTORA — 35€</option>
+      <option>MASSAGEM TURBINADA — 40€</option>
+      <option>DRENAGEM LINFÁTICA MANUAL — 40€</option>
+      <option>HIFU BARRIGA+FLANCOS — 380€</option>
+      <option>HIFU GLÚTEOS — 200€</option>
+      <option>DEPILAÇÃO AXILA E VIRILHA — 20€</option>
+      <option>DEPILAÇÃO CORPO COMPLETO — 50€</option>
+      <option>UNHAS DE GEL (S) — 27€</option>
+      <option>UNHAS DE GEL (M) — 32€</option>
+      <option>UNHAS DE GEL (L) — 35€</option>
+      <option>ACRYGEL (com cutilagem) — 30€</option>
+      <option>MANICURE — 8€</option>
+      <option>PEDICURE — 17€</option>
+      <option>CORTE SIMPLES — 10€</option>
+      <option>COLORAÇÃO LONGO — 35€</option>
+    </select>
+
+    <label>Nome do cliente</label>
+    <input id="name" type="text" placeholder="Ex: Ana Pereira" />
+
+    <label>Data</label>
+    <input id="date" type="date" />
+
+    <label>Horários disponíveis</label>
+    <div id="slots" class="slots">Selecione uma data...</div>
+
+    <button id="confirm">Confirmar Reserva</button>
+    <div id="msg"></div>
+  </div>
+
+<script>
+const WEBHOOK_GET  = "https://hook.eu2.make.com/sw48l9g8shmdh766arjpngluo7pk0ja6";
+const WEBHOOK_POST = "https://hook.eu2.make.com/vs5dvcr5g9gxoea1h9ytiad98vecuyjy";
+
+const hours = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30",
+               "13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30"];
+
+const dateInput = document.getElementById('date');
+const serviceSelect = document.getElementById('service');
+const slotsDiv = document.getElementById('slots');
+const nameInput = document.getElementById('name');
+const msgDiv = document.getElementById('msg');
+const confirmBtn = document.getElementById('confirm');
+
+let unavailable = new Set();
+let selectedTime = null;
+
+(function setMinDate(){
+  const d = new Date();
+  const iso = d.toISOString().split("T")[0];
+  dateInput.min = iso;
+  dateInput.value = iso;
+})();
+
+async function loadAvailability(){
+  slotsDiv.innerHTML = "<p>Carregando horários...</p>";
+  selectedTime = null;
+  unavailable.clear();
+  try {
+    const res = await fetch(WEBHOOK_GET, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ date: dateInput.value, service: serviceSelect.value })
+    });
+    const data = await res.json();
+    const list = Array.isArray(data) ? data :
+      data.unavailableHours || data.unavailable || [];
+      
+    list.forEach(h => unavailable.add(h.trim()));
+  } catch (e) {
+    console.error(e);
+    msg("Erro ao carregar horários.", true);
+  }
+  renderSlots();
+}
+
+function renderSlots(){
+  slotsDiv.innerHTML = "";
+  hours.forEach(h=>{
+    const b = document.createElement("div");
+    b.className = "slot";
+    b.textContent = h;
+    if(unavailable.has(h)){
+      b.classList.add("disabled");
+      b.title = "Horário indisponível";
+    } else {
+      b.onclick = () => {
+        document.querySelectorAll(".slot.selected").forEach(el=>el.classList.remove("selected"));
+        b.classList.add("selected");
+        selectedTime = h;
+      };
+    }
+    slotsDiv.appendChild(b);
+  });
+}
+
+function msg(text, err=false){
+  msgDiv.innerHTML = `<div class="msg ${err?"err":"ok"}">${text}</div>`;
+}
+
+confirmBtn.onclick = async () => {
+  msgDiv.innerHTML = "";
+  const name = nameInput.value.trim();
+  const service = serviceSelect.value;
+  const date = dateInput.value;
+
+  if(!name || !service || !date || !selectedTime){
+    msg("Preencha todos os campos e selecione um horário.", true);
+    return;
+  }
+
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Enviando...";
+
+  try {
+    await fetch(WEBHOOK_POST, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        name, service, date, time: selectedTime, branch: "Amora", created_at: new Date().toISOString()
+      })
+    });
+    msg("✅ Reserva registrada com sucesso!");
+    unavailable.add(selectedTime);
+    renderSlots();
+    nameInput.value = "";
+  } catch (e) {
+    msg("Erro ao enviar reserva.", true);
+  }
+
+  confirmBtn.disabled = false;
+  confirmBtn.textContent = "Confirmar Reserva";
+};
+
+dateInput.addEventListener("change", loadAvailability);
+serviceSelect.addEventListener("change", () => {
+  if(dateInput.value) loadAvailability();
+});
+
+window.addEventListener("load", loadAvailability);
+</script>
+</body>
+</html>
