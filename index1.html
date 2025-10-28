@@ -1060,7 +1060,49 @@ sliders.forEach((slider) => {
   }
   </script>
   
-  <script src="ref-handler.js"></script>
+  <script>
+    (function() {
+      try {
+        // ref را از URL بگیر
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get("ref");
+    
+        // اگر وجود داشت، ذخیره کن
+        if (ref) {
+          console.log("🔹 Ref detected in URL:", ref);
+          localStorage.setItem("refCode", ref);
+        } else {
+          console.log("ℹ️ No ref in URL. Using saved value:", localStorage.getItem("refCode"));
+        }
+    
+        // اگر هنوز در لینک‌ها نبود، اضافه کن
+        const savedRef = localStorage.getItem("refCode");
+        if (savedRef) {
+          document.querySelectorAll("a[href]").forEach(link => {
+            try {
+              const href = link.getAttribute("href");
+              if (!href || href.startsWith("javascript:") || href.startsWith("#")) return;
+              const url = new URL(href, window.location.origin);
+              if (!url.searchParams.has("ref")) {
+                url.searchParams.set("ref", savedRef);
+                link.href = url.toString();
+              }
+            } catch(e){}
+          });
+        }
+    
+        // جلوگیری از ارورهای اسکریپت‌های دیگه (مثلاً slider)
+        window.addEventListener("error", e => {
+          console.warn("⚠️ JS error ignored:", e.message);
+          e.preventDefault();
+        });
+    
+      } catch (err) {
+        console.error("Ref handler error:", err);
+      }
+    })();
+    </script>
+    
 
 
 </body>
