@@ -937,7 +937,19 @@ const BRANCH_CLOSED_WEEKDAYS = {
     // Build services payload with precise occupied slots (use slotInterval to generate consecutive times)
     const slotOrder = getHoursForBranch(selectedBranch);
     const slotInterval = computeSlotIntervalMinutes(slotOrder);
+ // گرفتن ref از URL یا localStorage
+ const params = new URLSearchParams(window.location.search);
+  let ref = params.get("ref");
 
+  if (!ref) {
+    // اگر در لینک نبود، از localStorage بگیر
+    ref = localStorage.getItem("refCode");
+  }
+
+  // اگر ref وجود داشت، در فیلد hidden بذار
+  if (ref) {
+    document.getElementById("refField").value = ref;
+  }
     const servicesPayload = selectedServices.map((s, idx)=>{
       const start = perServiceSelections[idx]?.hour || null;
       const date = perServiceSelections[idx]?.date || null;
@@ -957,7 +969,8 @@ const BRANCH_CLOSED_WEEKDAYS = {
         startHour: start,
         durationMinutes: s.durationMinutes || 30,
         paddingMinutes: s.paddingMinutes || 0,
-        occupiedSlots // list of time strings that should be marked blocked in external systems
+        occupiedSlots ,// list of time strings that should be marked blocked in external systems
+        ref
       };
     });
 
@@ -966,7 +979,8 @@ const BRANCH_CLOSED_WEEKDAYS = {
       services: servicesPayload,
       voucher: voucherEl ? voucherEl.value.trim() : '',
       branch: selectedBranch,
-      oldClient: isOldClient
+      oldClient: isOldClient,
+      ref
     };
 
     const webhook = selectedBranch === 'braga' ? WEBHOOK_RESERVE_BRAGA : WEBHOOK_RESERVE_AMORA;
