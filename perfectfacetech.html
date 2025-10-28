@@ -335,11 +335,7 @@
           <div class="price-row"><span>PESCOÇO</span><span>70€</span></div>
           <div class="price-row"><span>ROSTO, PAPADA, PESCOÇO</span><span>360€</span></div>
          
-    
-          <div class="button-group">
-            <button class="mini-btn" onclick="reserve('HIFU 12D FACIAL')">Reservar HIFU 12D</button>
-          </div>
-    
+ 
        
 
       
@@ -348,7 +344,7 @@
     function reserve(servico) {
       const params = new URLSearchParams();
       params.set('service', servico);
-      window.location.href = `reservebraga.html?${params.toString()}`;
+      window.location.href = `reservegeneral.html?${params.toString()}`;
     }
     </script>
     
@@ -357,27 +353,31 @@
 
     <img src="images/Untitled design (8).png" alt="JUST4YOU" />
     <div class="button-group">
-      <button class="mini-btn" onclick="reserve('JUST4YOU FACIAL')">Reservar  JUST4YOU</button>
+  
     </div>
 
     <img src="images/Untitled design (9).png" alt="PURE FACIAL" />
     <div class="button-group">
-      <button class="mini-btn" onclick="reserve('PURE FACIAL')">Reservar PURE FACIAL</button>
+  
     </div>
 
     <img src="images/Untitled design (10).png" alt="APLICAÇÃO DE FIOS DE SEDA" />
     <div class="button-group">
-      <button class="mini-btn" onclick="reserve('APLICAÇÃO DE FIOS DE SEDA')">Reservar APLICAÇÃO DE FIOS DE SEDA</button>
+     
     </div>
 
     <img src="images/Untitled design (11).png" alt="BOOSTER COM DERMAPEN" />
     <div class="button-group">
-      <button class="mini-btn" onclick="reserve('BOOSTER COM DERMAPEN')">Reservar BOOSTER COM DERMAPEN</button>
+      
     </div>
 
     <img src="images/Untitled design (12).png" alt="INTRADERMOTERAPIA PRESSURIZADA" />
     <div class="button-group">
-      <button class="mini-btn" onclick="reserve('INTRADERMOTERAPIA PRESSURIZADA')">Reservar INTRADERMOTERAPIA PRESSURIZADA</button>
+  
+    </div>
+   
+    <div class="button-group">
+      <button class="mini-btn" onclick="reserve('FACIAL')">AGENDAR SERVIÇOS AGORA</button>
     </div>
 
     <!-- دکمه رزرو -->
@@ -398,7 +398,7 @@
     function reserve(servico) {
       const params = new URLSearchParams();
       params.set('service', servico);
-      window.location.href = `reservebraga.html?${params.toString()}`;
+      window.location.href = `reservegeneral.html?${params.toString()}`;
     }
     </script>
     
@@ -486,5 +486,48 @@
       this.reset();
     });
   </script>
+  <script>
+    (function() {
+      try {
+        // ref را از URL بگیر
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get("ref");
+    
+        // اگر وجود داشت، ذخیره کن
+        if (ref) {
+          console.log("🔹 Ref detected in URL:", ref);
+          localStorage.setItem("refCode", ref);
+        } else {
+          console.log("ℹ️ No ref in URL. Using saved value:", localStorage.getItem("refCode"));
+        }
+    
+        // اگر هنوز در لینک‌ها نبود، اضافه کن
+        const savedRef = localStorage.getItem("refCode");
+        if (savedRef) {
+          document.querySelectorAll("a[href]").forEach(link => {
+            try {
+              const href = link.getAttribute("href");
+              if (!href || href.startsWith("javascript:") || href.startsWith("#")) return;
+              const url = new URL(href, window.location.origin);
+              if (!url.searchParams.has("ref")) {
+                url.searchParams.set("ref", savedRef);
+                link.href = url.toString();
+              }
+            } catch(e){}
+          });
+        }
+    
+        // جلوگیری از ارورهای اسکریپت‌های دیگه (مثلاً slider)
+        window.addEventListener("error", e => {
+          console.warn("⚠️ JS error ignored:", e.message);
+          e.preventDefault();
+        });
+    
+      } catch (err) {
+        console.error("Ref handler error:", err);
+      }
+    })();
+    </script>
+    
 </body>
 </html>

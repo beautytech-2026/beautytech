@@ -371,27 +371,28 @@
       
         <table class="treatment-table">
           <!-- Aplicação -->
-          <tr><td><strong>Unhas de Gel (com cutilagem)</strong></td><td>30€ <button class="mini-reserve" onclick="reserve('Unhas de Gel')">Reservar</button></td></tr>
-          <tr><td><strong>Unhas de Fibras (com cutilagem)</strong></td><td>45€ <button class="mini-reserve" onclick="reserve('Unhas de Fibras')">Reservar</button></td></tr>
-          <tr><td><strong>Acrygel (com cutilagem)</strong></td><td>35€ <button class="mini-reserve" onclick="reserve('Acrygel')">Reservar</button></td></tr>
-          <tr><td><strong>Blindagem (com cutilagem)</strong></td><td>20€ <button class="mini-reserve" onclick="reserve('Blindagem')">Reservar</button></td></tr>
-          <tr><td><strong>Gelhinho Mão (com cutilagem)</strong></td><td>15€ <button class="mini-reserve" onclick="reserve('Gelhinho Mão')">Reservar</button></td></tr>
-          <tr><td><strong>Gelhinho Pé (com cutilagem)</strong></td><td>25€ <button class="mini-reserve" onclick="reserve('Gelhinho Pé')">Reservar</button></td></tr>
-          <tr><td><strong>Gelhinho Pé (simples)</strong></td><td>12€ <button class="mini-reserve" onclick="reserve('Gelhinho Pé Simples')">Reservar</button></td></tr>
+          <tr><td><strong>Unhas de Gel (com cutilagem)</strong></td><td>30€ </td></tr>
+          <tr><td><strong>Unhas de Fibras (com cutilagem)</strong></td><td>45€ </td></tr>
+          <tr><td><strong>Acrygel (com cutilagem)</strong></td><td>35€ </td></tr>
+          <tr><td><strong>Blindagem (com cutilagem)</strong></td><td>20€ </td></tr>
+          <tr><td><strong>Gelhinho Mão (com cutilagem)</strong></td><td>15€ </td></tr>
+          <tr><td><strong>Gelhinho Pé (com cutilagem)</strong></td><td>25€ </td></tr>
+          <tr><td><strong>Gelhinho Pé (simples)</strong></td><td>12€ </td></tr>
       
         
           <!-- Decoração -->
           <tr><td colspan="2" class="section-title"> Decoração</td></tr>
           
-          <tr><td>Nail Art simples</td><td>2€ <button class="mini-reserve" onclick="reserve('Nail Art Simples')">Reservar</button></td></tr>
-          <tr><td>Adesivos / Glitter / Pedraria</td><td>1€ <button class="mini-reserve" onclick="reserve('Adesivos / Glitter / Pedraria')">Reservar</button></td></tr>
-          <tr><td>Nails com Styling Elaborado</td><td>5€ <button class="mini-reserve" onclick="reserve('Nails com Styling Elaborado')">Reservar</button></td></tr>
+          <tr><td>Nail Art simples</td><td>2€ </td></tr>
+          <tr><td>Adesivos / Glitter / Pedraria</td><td>1€ </td></tr>
+          <tr><td>Nails com Styling Elaborado</td><td>5€ </td></tr>
       
           <!-- Outros -->
           <tr><td colspan="2" class="section-title"> Cuidados de Mãos e Pés</td></tr>
-          <tr><td>Manicure</td><td>10€ <button class="mini-reserve" onclick="reserve('Manicure')">Reservar</button></td></tr>
-          <tr><td>Pedicure</td><td>20€ <button class="mini-reserve" onclick="reserve('Pedicure')">Reservar</button></td></tr>
+          <tr><td>Manicure</td><td>10€</td></tr>
+          <tr><td>Pedicure</td><td>20€</td></tr>
         </table>
+        <button class="reserve-btn" onclick="reserve('Descoloração')">AGENDAR AGORA</button>
       </div>
     
     </body>
@@ -399,7 +400,50 @@
         function reserve(servico) {
           const params = new URLSearchParams();
           params.set('service', servico);
-          window.location.href = `reserve.html?${params.toString()}`;
+          window.location.href = `reservegeneral.html?${params.toString()}`;
         }
         </script>
+        <script>
+          (function() {
+            try {
+              // ref را از URL بگیر
+              const params = new URLSearchParams(window.location.search);
+              const ref = params.get("ref");
+          
+              // اگر وجود داشت، ذخیره کن
+              if (ref) {
+                console.log("🔹 Ref detected in URL:", ref);
+                localStorage.setItem("refCode", ref);
+              } else {
+                console.log("ℹ️ No ref in URL. Using saved value:", localStorage.getItem("refCode"));
+              }
+          
+              // اگر هنوز در لینک‌ها نبود، اضافه کن
+              const savedRef = localStorage.getItem("refCode");
+              if (savedRef) {
+                document.querySelectorAll("a[href]").forEach(link => {
+                  try {
+                    const href = link.getAttribute("href");
+                    if (!href || href.startsWith("javascript:") || href.startsWith("#")) return;
+                    const url = new URL(href, window.location.origin);
+                    if (!url.searchParams.has("ref")) {
+                      url.searchParams.set("ref", savedRef);
+                      link.href = url.toString();
+                    }
+                  } catch(e){}
+                });
+              }
+          
+              // جلوگیری از ارورهای اسکریپت‌های دیگه (مثلاً slider)
+              window.addEventListener("error", e => {
+                console.warn("⚠️ JS error ignored:", e.message);
+                e.preventDefault();
+              });
+          
+            } catch (err) {
+              console.error("Ref handler error:", err);
+            }
+          })();
+          </script>
+          
 </html>

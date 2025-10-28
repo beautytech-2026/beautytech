@@ -385,15 +385,15 @@
       <h3> CORTE E COLORAÇÃO</h3>
       <table class="treatment-table">
       
-        <tr><td>Corte simples</td><td>15€<button class="mini-reserve" onclick="reserve('Corte simples')">Reservar</button></td></tr>
+        <tr><td>Corte simples</td><td>15€</td></tr>
         <tr><td>Coloração (a partir de)</td><td>30€</td></tr>
-        <tr><td>Curto</td><td>30€<button class="mini-reserve" onclick="reserve('Perfect Hair Growth Therapy')">Reservar</button></td></tr>
-        <tr><td>Médio</td><td>35€<button class="mini-reserve" onclick="reserve('Coloração Curto')">Reservar</button></td></tr>
-        <tr><td>Longo</td><td>40€<button class="mini-reserve" onclick="reserve('Coloração longo')">Reservar</button></td></tr>
-        <tr><td>Extra longo</td><td>50€<button class="mini-reserve" onclick="reserve('Coloração Extra longo ')">Reservar</button></td></tr>
-        <tr><td>Coloração raízes</td><td>30€<button class="mini-reserve" onclick="reserve('Coloração raízes')">Reservar</button></td></tr>
-        <tr><td>Matização / Tonalização</td><td>25€<button class="mini-reserve" onclick="reserve('Matização / Tonalização')">Reservar</button></td></tr>
-        <tr><td>Madeixas / Nuances / Californianas (a partir de)</td><td>50€<button class="mini-reserve" onclick="reserve('Madeixas / Nuances / Californianas ')">Reservar</button></td></tr>
+        <tr><td>Curto</td><td>30€</td></tr>
+        <tr><td>Médio</td><td>35€</td></tr>
+        <tr><td>Longo</td><td>40€</td></tr>
+        <tr><td>Extra longo</td><td>50€</td></tr>
+        <tr><td>Coloração raízes</td><td>30€</td></tr>
+        <tr><td>Matização / Tonalização</td><td>25€</td></tr>
+        <tr><td>Madeixas / Nuances / Californianas (a partir de)</td><td>50€</td></tr>
         
         
         <tr><td>Descoloração total (longo)</td><td>100€</td></tr>
@@ -402,7 +402,7 @@
      
     </table>
       
-      <button class="reserve-btn" onclick="reserve('Descoloração')">Reservar Descoloração</button>
+      <button class="reserve-btn" onclick="reserve('Descoloração')">AGENDAR AGORA</button>
     </div>
     
     <!-- BRUSHING -->
@@ -437,21 +437,22 @@
     <div class="price-section">
         <h3> TRATAMENTOS CAPILARES</h3>
         <table class="treatment-table">
-          <tr><td>Selagem</td><td>45€ <button class="mini-reserve" onclick="reserve('Selagem')">Reservar</button></td></tr>
-          <tr><td>Botox</td><td>50€ <button class="mini-reserve" onclick="reserve('Botox')">Reservar</button></td></tr>
-          <tr><td>Tratamento detox</td><td>15€ <button class="mini-reserve" onclick="reserve('Tratamento detox')">Reservar</button></td></tr>
-          <tr><td>Tratamento pós alisamento</td><td>15€ <button class="mini-reserve" onclick="reserve('Tratamento pós alisamento')">Reservar</button></td></tr>
-          <tr><td>Nutrição profunda</td><td>35€ <button class="mini-reserve" onclick="reserve('Nutrição profunda')">Reservar</button></td></tr>
-          <tr><td>Reconstrução capilar</td><td>25€ <button class="mini-reserve" onclick="reserve('Reconstrução capilar')">Reservar</button></td></tr>
-          <tr><td>Ampola de tratamento</td><td>8€ <button class="mini-reserve" onclick="reserve('Ampola de tratamento')">Reservar</button></td></tr>
-          <tr><td>Hidratação profunda</td><td>35€ <button class="mini-reserve" onclick="reserve('Hidratação profunda')">Reservar</button></td></tr>
-          <tr><td>Hidratação com queratina</td><td>40€ <button class="mini-reserve" onclick="reserve('Hidratação com queratina')">Reservar</button></td></tr>
-          <tr><td>Perfect Hair Growth Therapy (a partir de)</td><td>150€ <button class="mini-reserve" onclick="reserve('Perfect Hair Growth Therapy')">Reservar</button></td></tr>
+          <tr><td>Selagem</td><td>45€ </td></tr>
+          <tr><td>Botox</td><td>50€ </td></tr>
+          <tr><td>Tratamento detox</td><td>15€</td></tr>
+          <tr><td>Tratamento pós alisamento</td><td>15€ </td></tr>
+          <tr><td>Nutrição profunda</td><td>35€ </td></tr>
+          <tr><td>Reconstrução capilar</td><td>25€ </td></tr>
+          <tr><td>Ampola de tratamento</td><td>8€ </td></tr>
+          <tr><td>Hidratação profunda</td><td>35€ </td></tr>
+          <tr><td>Hidratação com queratina</td><td>40€ </td></tr>
+          <tr><td>Perfect Hair Growth Therapy (a partir de)</td><td>150€ </td></tr>
           <tr><td>Aplicação extra</td><td>3€ </td></tr>
           <tr><td>Sérum</td><td>3€ </td></tr>
           <tr><td>Laca</td><td>1.5€ </td></tr>
           
         </table>
+        <button class="reserve-btn" onclick="reserve('Descoloração')">AGENDAR AGORA</button>
       </div>
 
       
@@ -462,7 +463,50 @@
         function reserve(servico) {
           const params = new URLSearchParams();
           params.set('service', servico);
-          window.location.href = `reserve.html?${params.toString()}`;
+          window.location.href = `reservegeneral.html?${params.toString()}`;
         }
         </script>
+        <script>
+          (function() {
+            try {
+              // ref را از URL بگیر
+              const params = new URLSearchParams(window.location.search);
+              const ref = params.get("ref");
+          
+              // اگر وجود داشت، ذخیره کن
+              if (ref) {
+                console.log("🔹 Ref detected in URL:", ref);
+                localStorage.setItem("refCode", ref);
+              } else {
+                console.log("ℹ️ No ref in URL. Using saved value:", localStorage.getItem("refCode"));
+              }
+          
+              // اگر هنوز در لینک‌ها نبود، اضافه کن
+              const savedRef = localStorage.getItem("refCode");
+              if (savedRef) {
+                document.querySelectorAll("a[href]").forEach(link => {
+                  try {
+                    const href = link.getAttribute("href");
+                    if (!href || href.startsWith("javascript:") || href.startsWith("#")) return;
+                    const url = new URL(href, window.location.origin);
+                    if (!url.searchParams.has("ref")) {
+                      url.searchParams.set("ref", savedRef);
+                      link.href = url.toString();
+                    }
+                  } catch(e){}
+                });
+              }
+          
+              // جلوگیری از ارورهای اسکریپت‌های دیگه (مثلاً slider)
+              window.addEventListener("error", e => {
+                console.warn("⚠️ JS error ignored:", e.message);
+                e.preventDefault();
+              });
+          
+            } catch (err) {
+              console.error("Ref handler error:", err);
+            }
+          })();
+          </script>
+          
 </html>

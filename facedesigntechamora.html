@@ -361,24 +361,24 @@
 
     <!-- HIFU 12D فقط یک دکمه رزرو برای کل -->
     <div class="price-row"><span>PREENCHIMENTO LABIAL, HYALURON PEN</span><span>120€</span></div>
-    <button class="mini-btn" onclick="reserve('PREENCHIMENTO LABIAL, HYALURON PEN')">Reservar</button>
-
-    <div class="price-row"><span>MICROPIGMENTAÇÃO LABIAL</span><span>100€</span></div>
-    <button class="mini-btn" onclick="reserve('MICROPIGMENTAÇÃO LABIAL')">Reservar</button>
-
-    <div class="price-row"><span>TÉCNICA HÍBRIDA DE SOBRANCELHAS</span><span>100€</span></div>
-    <button class="mini-btn" onclick="reserve('TÉCNICA HÍBRIDA DE SOBRANCELHAS')">Reservar</button>
-
-    <div class="price-row"><span>LASH & BROW LAMINATION</span><span>35€</span></div>
-    <button class="mini-btn" onclick="reserve('LASH & BROW LAMINATION')">Reservar</button>
-
-    <div class="price-row"><span>EXTENSÃO DE PESTANAS</span><span>25€</span></div>
-    <button class="mini-btn" onclick="reserve('EXTENSÃO DE PESTANAS')">Reservar</button>
-
-    <div class="price-row"><span>DESIGN DE SOBRANCELHAS & HENNA</span><span>15€</span></div>
-    <button class="mini-btn" onclick="reserve('DESIGN DE SOBRANCELHAS & HENNA')">Reservar</button>
    
 
+    <div class="price-row"><span>MICROPIGMENTAÇÃO LABIAL</span><span>100€</span></div>
+    
+
+    <div class="price-row"><span>TÉCNICA HÍBRIDA DE SOBRANCELHAS</span><span>100€</span></div>
+    
+
+    <div class="price-row"><span>LASH & BROW LAMINATION</span><span>35€</span></div>
+    
+
+    <div class="price-row"><span>EXTENSÃO DE PESTANAS</span><span>25€</span></div>
+   
+
+    <div class="price-row"><span>DESIGN DE SOBRANCELHAS & HENNA</span><span>15€</span></div>
+    
+   
+    <button class="reserve-btn" onclick="reserve('FACE DESIGN TECH')">AGENDAR AGORA</button>
  
  
 </div>
@@ -388,7 +388,7 @@
 function reserve(servico) {
 const params = new URLSearchParams();
 params.set('service', servico);
-window.location.href = `reserve.html?${params.toString()}`;
+window.location.href = `reservegeneral.html?${params.toString()}`;
 }
 </script>
 
@@ -401,7 +401,7 @@ window.location.href = `reserve.html?${params.toString()}`;
     function reserve(servico) {
       const params = new URLSearchParams();
       params.set('service', servico);
-      window.location.href = `reserve.html?${params.toString()}`;
+      window.location.href = `reservegeneral.html?${params.toString()}`;
     }
     </script>
     
@@ -460,5 +460,48 @@ window.location.href = `reserve.html?${params.toString()}`;
       this.reset();
     });
   </script>
+  <script>
+    (function() {
+      try {
+        // ref را از URL بگیر
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get("ref");
+    
+        // اگر وجود داشت، ذخیره کن
+        if (ref) {
+          console.log("🔹 Ref detected in URL:", ref);
+          localStorage.setItem("refCode", ref);
+        } else {
+          console.log("ℹ️ No ref in URL. Using saved value:", localStorage.getItem("refCode"));
+        }
+    
+        // اگر هنوز در لینک‌ها نبود، اضافه کن
+        const savedRef = localStorage.getItem("refCode");
+        if (savedRef) {
+          document.querySelectorAll("a[href]").forEach(link => {
+            try {
+              const href = link.getAttribute("href");
+              if (!href || href.startsWith("javascript:") || href.startsWith("#")) return;
+              const url = new URL(href, window.location.origin);
+              if (!url.searchParams.has("ref")) {
+                url.searchParams.set("ref", savedRef);
+                link.href = url.toString();
+              }
+            } catch(e){}
+          });
+        }
+    
+        // جلوگیری از ارورهای اسکریپت‌های دیگه (مثلاً slider)
+        window.addEventListener("error", e => {
+          console.warn("⚠️ JS error ignored:", e.message);
+          e.preventDefault();
+        });
+    
+      } catch (err) {
+        console.error("Ref handler error:", err);
+      }
+    })();
+    </script>
+    
 </body>
 </html>
