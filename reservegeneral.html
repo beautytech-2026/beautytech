@@ -937,19 +937,14 @@ const BRANCH_CLOSED_WEEKDAYS = {
     // Build services payload with precise occupied slots (use slotInterval to generate consecutive times)
     const slotOrder = getHoursForBranch(selectedBranch);
     const slotInterval = computeSlotIntervalMinutes(slotOrder);
- // گرفتن ref از URL یا localStorage
- const params = new URLSearchParams(window.location.search);
-  let ref = params.get("ref");
-
-  if (!ref) {
-    // اگر در لینک نبود، از localStorage بگیر
-    ref = localStorage.getItem("refCode");
-  }
-
-  // اگر ref وجود داشت، در فیلد hidden بذار
+ 
+    const params = new URLSearchParams(window.location.search);
+  let ref = params.get("ref") || localStorage.getItem("refCode");
   if (ref) {
-    document.getElementById("refField").value = ref;
+    const refField = document.getElementById("refField");
+    if (refField) refField.value = ref;
   }
+
     const servicesPayload = selectedServices.map((s, idx)=>{
       const start = perServiceSelections[idx]?.hour || null;
       const date = perServiceSelections[idx]?.date || null;
