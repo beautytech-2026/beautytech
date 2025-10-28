@@ -913,130 +913,6 @@ function sanitizeText(text) {
 }
 
 </script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script>
-  const swiper = new Swiper(".card-slider", {
-    slidesPerView: 1,
-    spaceBetween: 20,
-    loop: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    breakpoints: {
-      768: {
-        slidesPerView: 2
-      },
-      1024: {
-        slidesPerView: 3
-      }
-    }
-  });
-  const track = document.querySelector('.card-track-horizontal');
-
-track.addEventListener('touchstart', () => {
-  track.style.animationPlayState = 'paused';
-});
-
-track.addEventListener('touchend', () => {
-  track.style.animationPlayState = 'running';
-});
-</script>
-<script>
-  const sliders = document.querySelectorAll(".card-slider");
-
-sliders.forEach((slider) => {
-  const items = slider.querySelectorAll("img, video");
-  let current = 0;
-
-  // اگر آیتم فعال ویدیو بود، اون رو پخش کن
-  const activate = (index) => {
-    items.forEach((item) => {
-      item.classList.remove("active");
-      if (item.tagName === "VIDEO") item.pause();
-    });
-    items[index].classList.add("active");
-    if (items[index].tagName === "VIDEO") items[index].play();
-  };
-
-  activate(current);
-  setInterval(() => {
-    current = (current + 1) % items.length;
-    activate(current);
-  }, 4000); // هر ۴ ثانیه تعویض
-});
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const track = document.querySelector(".card-track-horizontal");
-    let isUserInteracting = false;
-    let scrollSpeed = 0.5;
-    let autoScrollPaused = false;
-    let pauseTimeout;
-
-    // تابع اسکرول خودکار
-    function autoScroll() {
-      if (!autoScrollPaused && !isUserInteracting) {
-        track.scrollLeft += scrollSpeed;
-
-        // وقتی به انتها رسید، برگرد اول
-        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 1) {
-          track.scrollLeft = 0;
-        }
-      }
-      requestAnimationFrame(autoScroll);
-    }
-
-    autoScroll(); // شروع انیمیشن
-
-    // توقف خودکار اسکرول وقتی کاربر تعامل کرد
-    function pauseAutoScroll() {
-      autoScrollPaused = true;
-      clearTimeout(pauseTimeout);
-      pauseTimeout = setTimeout(() => {
-        autoScrollPaused = false;
-      }, 8000); // ۸ ثانیه بعد دوباره حرکت کنه
-    }
-
-    // کاربر در حال تعامله (لمس یا موس)
-    track.addEventListener("mousedown", () => {
-      isUserInteracting = true;
-      pauseAutoScroll();
-    });
-
-    track.addEventListener("mouseup", () => {
-      isUserInteracting = false;
-    });
-
-    track.addEventListener("touchstart", () => {
-      isUserInteracting = true;
-      pauseAutoScroll();
-    });
-
-    track.addEventListener("touchend", () => {
-      isUserInteracting = false;
-    });
-
-    track.addEventListener("scroll", () => {
-      pauseAutoScroll();
-    });
-
-    // وقتی موس میاد روی کارتها، تعامل حساب می‌شه
-    track.addEventListener("mouseenter", () => {
-      isUserInteracting = true;
-      pauseAutoScroll();
-    });
-
-    track.addEventListener("mouseleave", () => {
-      isUserInteracting = false;
-    });
-  });
-</script>
-
-
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -1048,9 +924,8 @@ sliders.forEach((slider) => {
     });
   }
   </script>
-  
-
   <script src="ref-handler.js"></script>
+
 </body>
 
 
