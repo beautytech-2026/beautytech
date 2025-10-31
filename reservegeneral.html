@@ -562,6 +562,13 @@
     selectedServices.push({ category, name: svcName, price: svc.price || '', machine: svc.machine || null, durationMinutes, paddingMinutes });
     perServiceSelections = selectedServices.map((s,i)=> perServiceSelections[i] ? perServiceSelections[i] : {date:null,hour:null});
     renderSelectedList();
+    // DEBUG + sync to global + persist
+console.log('[addService] adding:', svc.name);
+window.selectedServices = selectedServices;
+try {
+  localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
+} catch(e){ console.warn('localStorage write failed in addService', e); }
+
   }
 
   function removeServiceAt(idx){
@@ -573,6 +580,13 @@
     if(!document.getElementById('step-3').classList.contains('hidden')){
       buildPerServicePickers();
     }
+    // بعد از حذف از آرایه
+selectedServices.splice(idx,1);
+perServiceSelections.splice(idx,1);
+window.selectedServices = selectedServices;
+try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices)); } catch(e){}
+
+    
   }
 
   function renderSelectedList(){
@@ -588,11 +602,20 @@
       right.appendChild(price); right.appendChild(rem);
       li.appendChild(left); li.appendChild(right);
       selectedListEl.appendChild(li);
+      
     });
     countSelected.textContent = selectedServices.length;
     calcTotal();
     updateConfirmEnabled();
     if(selectedServices.length>0 || (clientData && (clientData.name || clientData.code))) showResumo();
+    // انتهای renderSelectedList (بعد از update count, price ...)
+countSelected.textContent = selectedServices.length;
+calcTotal();
+
+window.selectedServices = selectedServices;
+try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices)); } catch(e){ console.warn('localStorage write failed in renderSelectedList', e); }
+console.log('[renderSelectedList] now selectedServices =', selectedServices);
+
   }
 
   function flashServiceRow(name){
@@ -1051,6 +1074,208 @@ const BRANCH_CLOSED_WEEKDAYS = {
     }
   })();
   </script>
+  <!-- === PASTE BELOW INTO YOUR EXISTING SCRIPT (near other functions) === -->
+<script>
+  // ----------------- Buy Selected Services as ONE Voucher -----------------
+  /*
+    Usage:
+    - This uses the global selectedServices (array), selectedBranch, clientData.
+    - It creates voucherCode, saves pendingReservation_<voucherCode> to localStorage,
+      posts payload to the branch-specific WEBHOOK_RESERVE_* and expects { checkoutUrl }.
+    - Opens checkoutUrl in a new tab.
+  */
+  
+  // if you haven't defined webhook constants above, put them here (replace with your real URLs)
+  
+  const WEBHOOK_VOUCHER = window.WEBHOOK_VOUCHER || "https://hook.eu2.make.com/i5m0z7hi3nxay8fru0na3fuksnj6gpww"; // optional - if you have a voucher logging webhook
+  
+  function parsePriceToNumber(priceStr){
+    if(!priceStr) return 0;
+    const m = String(priceStr).replace(/\s/g,'').match(/(\d+([.,]\d+)?)/);
+    if(!m) return 0;
+    return Number(m[1].replace(',', '.'));
+  }
+  
+  function generateVoucherCode() {
+    const d = new Date();
+    const datePart = d.getFullYear().toString() +
+                     String(d.getMonth()+1).padStart(2,'0') +
+                     String(d.getDate()).padStart(2,'0') + '-' +
+                     String(d.getHours()).padStart(2,'0') +
+                     String(d.getMinutes()).padStart(2,'0');
+    const rand = Math.random().toString(36).substring(2,8).toUpperCase();
+    return `VCHR-${datePart}-${rand}`;
+  }
+  
+  // create and insert the Buy button into the resumo UI (only once)
+  (function injectBuyVoucherButton(){
+    try {
+      const resumo = document.getElementById('resumoBox') || document.querySelector('.summary');
+      if(!resumo) return;
+      // avoid double-insert
+      if(document.getElementById('buyVoucherBtn')) return;
+  
+      const wrapper = document.createElement('div');
+      wrapper.style.marginTop = '12px';
+      wrapper.style.display = 'flex';
+      wrapper.style.justifyContent = 'center';
+  
+      const btn = document.createElement('button');
+      btn.id = 'buyVoucherBtn';
+      btn.textContent = 'Buy Voucher • Comprar';
+      btn.className = 'btn-primary';
+      btn.style.padding = '10px 18px';
+      btn.style.cursor = 'pointer';
+      wrapper.appendChild(btn);
+      resumo.appendChild(wrapper);
+  
+      btn.addEventListener('click', buySelectedServicesAsVoucher);
+    } catch(e){ console.warn('injectBuyVoucherButton error', e); }
+  })();
+  // ---------- Helper: read branch from multiple places ----------
+function getSelectedBranch(){
+  // 1) try window/global variable
+  if (typeof window.selectedBranch !== 'undefined' && window.selectedBranch) return window.selectedBranch;
+  if (typeof selectedBranch !== 'undefined' && selectedBranch) return selectedBranch;
+  // 2) try common DOM selectors (customize these to match your form)
+  const selectors = [
+    '#branch', 'select[name="branch"]', 'input[name="branch"]',
+    '#selectedBranch', '[data-branch]', '#branchInput', '.branch-select'
+  ];
+  for(const sel of selectors){
+    const el = document.querySelector(sel);
+    if(el){
+      const val = (el.value || el.getAttribute('data-branch') || el.textContent || '').trim();
+      if(val) return val;
+    }
+  }
+  // 3) try window.clientData.branch or ref fallback
+  if(window.clientData && window.clientData.branch) return window.clientData.branch;
+  return null; // not found
+}
+
+// ---------- Helper: build client payload robustly ----------
+function getClientPayload(){
+  // gather from window.clientData first
+  const cd = window.clientData || {};
+  // try many common form field ids/names
+  const nameSelectors = ['#name', '#clientName', 'input[name="name"]', 'input[name="client[name]"]', '#nome'];
+  const phoneSelectors = ['#phone', '#clientPhone', 'input[name="phone"]', 'input[name="client[phone]"]', '#telefone'];
+  const emailSelectors = ['#email', '#clientEmail', 'input[name="email"]', 'input[name="client[email]"]'];
+
+  function firstValue(selectors){
+    for(const s of selectors){
+      const el = document.querySelector(s);
+      if(el){
+        const v = (el.value || el.textContent || '').trim();
+        if(v) return v;
+      }
+    }
+    return null;
+  }
+
+  const name = firstValue(nameSelectors) || cd.name || '';
+  const phone = firstValue(phoneSelectors) || cd.phone || '';
+  const email = firstValue(emailSelectors) || cd.email || '';
+  const clientCode = cd.code || (document.getElementById('clientCode')?.value?.trim()) || null;
+
+  // If it's an old client flag and you still want full info, prefer full info if available:
+  if (window.isOldClient) {
+    // keep clientCode but also attach any details we have
+    return { type: 'old', clientCode, name, phone, email };
+  } else {
+    return { type: 'new', name, phone, email, clientCode: clientCode || undefined };
+  }
+}
+
+// ---------- Revised buySelectedServicesAsVoucher (replace original) ----------
+async function buySelectedServicesAsVoucher(e){
+  const btn = document.getElementById('buyVoucherBtn');
+  if(btn){ btn.disabled = true; btn.textContent = 'Processando...'; }
+
+  try {
+    // read services
+    let servicesArray = window.selectedServices?.length ? window.selectedServices : JSON.parse(localStorage.getItem('selectedServices') || '[]');
+    if(!servicesArray?.length){
+      alert('هیچ سرویسی در خلاصه وجود ندارد. لطفاً ابتدا سرویس را اضافه کنید.');
+      if(btn){ btn.disabled=false; btn.textContent='Buy Voucher • Comprar'; }
+      return;
+    }
+
+    const branch = getSelectedBranch();
+    const voucherCode = generateVoucherCode();
+    const ref = localStorage.getItem('refCode') || null;
+    const clientPayload = getClientPayload();
+
+    const servicesPayload = servicesArray.map(s => ({
+      id: s.machine || s.id || s.code || s.name || null,
+      name: s.name || s.title || null,
+      priceRaw: s.price || '',
+      priceNumber: parsePriceToNumber(s.price || '0'),
+      category: s.category || null,
+      durationMinutes: s.durationMinutes || s.duration || null,
+      branch
+    }));
+
+    const total = servicesPayload.reduce((acc, x) => acc + (Number(x.priceNumber)||0), 0);
+    const pendingData = { voucherCode, branch, ref, client: clientPayload, services: servicesPayload, total, createdAt: new Date().toISOString() };
+
+    try { localStorage.setItem('pendingReservation_' + voucherCode, JSON.stringify(pendingData)); } catch(e){ console.warn(e); }
+
+    // optional: send pre-voucher webhook
+    if(WEBHOOK_VOUCHER){
+      fetch(WEBHOOK_VOUCHER, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'pre-voucher', data: pendingData }) }).catch(console.warn);
+    }
+
+    const payload = {
+      ref,
+      voucherCode,
+      client: clientPayload,
+      branch,
+      services: servicesPayload,
+      total,
+      meta: { source: 'site_buy_button' },
+      success_url: window.location.origin + window.location.pathname + '?voucher=' + encodeURIComponent(voucherCode) + '&session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: window.location.origin + window.location.pathname + '?cancelled=1'
+    };
+
+    // open popup immediately
+   // فقط یک fetch واقعی
+  
+  // فقط یک fetch واقعی برای ایجاد voucher / session
+  const resp = await fetch(WEBHOOK_VOUCHER, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await resp.json();
+  const checkoutUrl = data.checkoutUrl; // دقیقا همان URL که Make می‌دهد
+
+  if (!checkoutUrl) {
+    alert('خطا: لینک پرداخت در پاسخ موجود نیست.');
+    if (btn) { btn.disabled = false; btn.textContent = 'Buy Voucher • Comprar'; }
+    return;
+  }
+
+  // هدایت امن به صفحه پرداخت در همان تب
+  window.location.href = checkoutUrl;
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Buy Voucher • Comprar'; }
+
+} catch (err) {
+  console.error(err);
+  alert('خطا در پردازش درخواست پرداخت. دوباره تلاش کنید.');
+  if (btn) { btn.disabled = false; btn.textContent = 'Buy Voucher • Comprar'; }
+}
+
+}
+
+    
+
+
+  </script>
+  
   
 </body>
 </html>

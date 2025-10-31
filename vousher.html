@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reserva • BeautyTech</title>
+
+  <!-- Pikaday CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+
+  <style>
+    /* condensed CSS based on your theme (keeps same look + responsive). */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+    :root{ --bg1:#d62f91; --bg2:#980370; --card: rgba(255,255,255,0.06); --accent:#ff71b8; --accent-2:#a56bff; --muted: rgba(255,255,255,0.88); --muted-2: rgba(255,255,255,0.78); --input-bg: rgba(255,255,255,0.06); --glass: rgba(255,255,255,0.04); --success:#5ce6a6; --danger:#ff7a7a; --shadow: rgba(0,0,0,0.35); --radius: 12px; --font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    *{box-sizing:border-box} html,body{height:100%} body{ margin:0; font-family: var(--font-family); min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:28px; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:#fff; -webkit-font-smoothing:antialiased; }
+    .card{ width:100%; max-width:980px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.06); border-radius:16px; padding:22px; backdrop-filter: blur(10px); box-shadow:0 18px 50px var(--shadow); }
+    h1{ margin:0 0 8px; font-size:clamp(20px,2.6vw,30px); text-align:center; font-weight:800; background: linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .layout{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start;} @media(max-width:980px){ .layout{grid-template-columns:1fr} }
+    .flow-section{padding:12px;border-radius:12px;background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));border:1px solid rgba(255,255,255,0.03);}
+    .categories{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+    .cat{padding:8px 12px;border-radius:10px;cursor:pointer;background:linear-gradient(180deg, rgba(142,18,121,0.78), rgba(177,15,142,0.75));font-weight:700;color:#fff;border:1px solid rgba(201,21,138,0.5)}
+    .cat.active{ box-shadow:0 10px 30px rgba(165,107,255,0.09); transform:translateY(-2px) scale(1.02) }
+    .services-list{ max-height:360px; overflow:auto; padding:10px; border-radius:10px; background: rgba(0,0,0,0.06); border:1px dashed rgba(255,255,255,0.02); }
+    .service-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px 6px; border-bottom:1px solid rgba(255,255,255,0.03); }
+    .service-name{ font-weight:700; color:#fff }
+    .service-price{ color:#ffd6f6; min-width:92px; text-align:right; font-weight:800 }
+    .add-btn{ background: transparent; border: 1px solid rgba(255,255,255,0.36); color: #fff; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:800 }
+    .buy-btn{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); border:none; color:#fff; padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:800; margin-left:8px }
+    .selected-list{ list-style:none; padding:0; margin:6px 0 0 0; max-height:320px; overflow:auto }
+    .selected-list li{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(213,86,192,0.12), rgba(0,0,0,0.02)); margin-bottom:10px; border:1px solid rgba(158,55,124,0.12); }
+    .remove-small{ background: rgba(0,0,0,0.35); color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:700 }
+    .summary{ padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(89,3,73,0.45), rgba(0,0,0,0.06)); border:1px solid rgba(255,255,255,0.03); min-height:180px; }
+    label{display:block;margin:10px 0 6px;font-weight:700;color:#fff}
+    input, select, button{ font-family: inherit }
+    .small-btn{ padding:8px 12px;border-radius:10px;border:none;background:#2b6; color:#fff; cursor:pointer }
+    .muted{ color: rgba(255,255,255,0.78); font-size:13px }
+    .slot-button{ display:inline-block; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); margin:6px 6px 0 0; background:#fff; color:var(--accent-2); cursor:pointer }
+    .slot-button.selected{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff }
+    .hidden{ display:none }
+    .back-button { position: fixed; top: 18px; left: 18px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; }
+    .btn-primary{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:800 }
+    @media(max-width:560px){ .layout{grid-template-columns:1fr} .services-list{max-height:240px} .summary{order:2} }
+  </style>
+</head>
+<body>
+  <a href="index1.html" class="back-button" title="Voltar" aria-label="Voltar">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
+  </a>
+
+  <div class="card" role="main">
+    <div style="text-align:center;margin-bottom:10px"><img src="images/icon.png" alt="logo" style="max-height:72px"></div>
+    <h1>Reserva • Comprar Voucher</h1>
+
+    <div class="layout">
+      <div class="flow-section">
+        <!-- STEP 1: client & branch -->
+        <div id="step-1">
+          <label>Escolha a sua filial</label>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <label><input type="radio" name="branch" value="amora"> Beautytech Amora</label>
+            <label><input type="radio" name="branch" value="braga"> Beautytech Braga Retail</label>
+          </div>
+
+          <label style="margin-top:12px">Já tem número de cliente?</label>
+          <div style="display:flex;gap:12px;align-items:center">
+            <label><input type="radio" name="clientType" value="old"> Sim</label>
+            <label><input type="radio" name="clientType" value="new" checked> Não</label>
+            <button id="clientNextBtn" class="small-btn" disabled>Continuar</button>
+          </div>
+
+          <div id="oldCodeBox" class="hidden" style="margin-top:10px">
+            <label for="clientCode">Código do cliente</label>
+            <input id="clientCode" type="text" placeholder="Insira o código...">
+            <div style="margin-top:8px"><button id="validateCodeBtn" class="small-btn">Validar Código</button></div>
+            <p id="codeMsg" class="muted"></p>
+          </div>
+
+          <form id="newClientBox" class="hidden" onsubmit="return false" style="margin-top:10px">
+            <label>Nome</label><input id="name" type="text" placeholder="Nome completo">
+            <label>Email</label><input id="email" type="email" placeholder="email@exemplo">
+            <label>Telefone</label><input id="phone" type="text" placeholder="+351 ...">
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button id="newClientNext" class="small-btn">Próximo</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- STEP 2: services -->
+        <div id="step-2" class="hidden" style="margin-top:12px">
+          <label>Escolha uma categoria</label>
+          <div class="categories" id="categories"></div>
+
+          <div class="services-list" id="servicesList"><p class="muted">Selecione uma categoria para ver serviços...</p></div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+            <div class="muted">Itens adicionados: <span id="countSelected">0</span></div>
+            <div style="display:flex;gap:8px">
+              <button id="backToStep1From2" class="btn-primary" style="background:#666;border:none">Voltar</button>
+              <button id="toCalendarBtn" class="btn-primary">Escolher data (opcional)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: calendar/slots -->
+        <div id="step-3" class="hidden" style="margin-top:12px">
+          <label>Defina data e hora (por serviço)</label>
+          <div id="servicePickersWrap"></div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button id="backToStep2" class="btn-primary" style="background:#666">Voltar</button>
+            <button id="confirmBtn" class="btn-primary" disabled>Confirmar & Enviar (comprar vários)</button>
+          </div>
+          <p id="calendarMsg" class="muted" style="margin-top:8px"></p>
+        </div>
+
+        <!-- STEP 4: final -->
+        <div id="step-4" class="hidden" style="margin-top:12px">
+          <h3>Obrigado</h3>
+          <p id="finalMsg" class="muted"></p>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button id="finishBtn" class="btn-primary">Voltar ao Início</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="summary" id="resumoBox" aria-label="Resumo">
+        <h4>Resumo da Reserva</h4>
+        <div style="margin-top:8px"><strong>Cliente</strong><div id="summaryClient" class="muted">—</div></div>
+        <div style="margin-top:12px">
+          <strong>Serviços selecionados</strong>
+          <ul id="selectedList" class="selected-list"></ul>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+            <div class="muted">Total estimado:</div>
+            <div id="totalPrice" style="font-weight:800">0€</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <p class="muted" style="text-align:center;margin-top:12px">Ao comprar, você receberá um voucher. Depois do pagamento, poderá agendar a data/hora para o(s) serviço(s).</p>
+  </div>
+
+  <!-- Pikaday -->
+  <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
+
+  /* ==========================
+     === CONFIG: replace these with your real webhooks ===
+     ========================== */
+  const WEBHOOK_VOUCHER = "https://hook.eu2.make.com/your-voucher-webhook-id"; // optional (store voucher record)
+  const WEBHOOK_VALIDATE = "https://hook.eu2.make.com/mgz53fgt82dhtfc4wnaiubjy7j5ajcjv"; // validate client code
+  const WEBHOOK_AVAILABLE_AMORA = "https://hook.eu2.make.com/sw48l9g8shmdh766arjpngluo7pk0ja6"; // optional avail
+  const WEBHOOK_AVAILABLE_BRAGA = "https://hook.eu2.make.com/l7ns23v63g27prryvriwikp7bh1j75vu"; // optional avail
+  const WEBHOOK_RESERVE_AMORA = "https://hook.eu2.make.com/vs5dvcr5g9gxoea1h9ytiad98vecuyjy";
+  const WEBHOOK_RESERVE_BRAGA = "https://hook.eu2.make.com/2i4jvjo24m07632lbwbduvulrpy760w3";
+  const WEBHOOK_VERIFY = "https://hook.eu2.make.com/verify-session"; // should verify session & activate voucher
+  const WEBHOOK_FETCH_RESERVATION = "https://hook.eu2.make.com/fetch-reservation-by-voucher"; // optional
+
+  /* ==========================
+     === DATA: services (from your file) - truncated examples included
+     ========================== */
+  const SERVICES_AMORA = {
+    FACE_DESIGN_TECH: [
+      { name:"Embelezamento Facial e Design Personalizado", price:"150€", machine: "helena", durationMinutes:90, paddingMinutes:15 },
+      { name:"Lash & Brow Lamination", price:"35€", machine: "helena", durationMinutes:90 }
+    ],
+    PERFECT_FACE_TECH: [
+      { name: "HIFU 12D — Rosto Completo", price: "150€", machine: "HIFU12D", durationMinutes:60 },
+      { name: "Limpeza de Pele", price: "25€", machine: null, durationMinutes:30 }
+    ]
+  };
+  const SERVICES_BRAGA = {
+    FACE_DESIGN_TECH: [
+      { name: "Embelezamento Facial e Design Personalizado", price:"140€", machine:"helena-braga", durationMinutes:60 },
+      { name: "Lash & Brow Lamination", price:"60€", machine:"lash-braga", durationMinutes:45 }
+    ],
+    PERFECT_FACE_TECH: [
+      { name: "HIFU 12D — Rosto Completo", price: "200€", machine: "HIFU12D", durationMinutes:90 }
+    ]
+  };
+
+  function servicesForBranch(branch){ if(branch==='braga') return SERVICES_BRAGA; return SERVICES_AMORA; }
+  const CATEGORY_LABELS = { FACE_DESIGN_TECH: "FACE DESIGN", PERFECT_FACE_TECH: "PERFECT FACE TECH" };
+
+  const HOURS_BY_BRANCH = {
+    amora: ["09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","14:00","15:00","16:00","17:00"],
+    braga: ["10:00","10:30","11:00","11:30","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"]
+  };
+  function getHoursForBranch(branch){ return HOURS_BY_BRANCH[branch]||HOURS_BY_BRANCH['amora']; }
+
+  /* ==========================
+     === Utils & state
+     ========================== */
+  function parsePriceToNumber(priceStr){
+    if(!priceStr) return 0;
+    const m = String(priceStr).replace(/\s/g,'').match(/(\d+([.,]\d+)?)/);
+    if(!m) return 0;
+    return Number(m[1].replace(',', '.'));
+  }
+  function generateVoucherCode() {
+    const d = new Date();
+    const datePart = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + '-' + String(d.getHours()).padStart(2,'0') + String(d.getMinutes()).padStart(2,'0');
+    const rand = Math.random().toString(36).substring(2,8).toUpperCase();
+    return `VCHR-${datePart}-${rand}`;
+  }
+
+  // state
+  let selectedBranch = null;
+  let isOldClient = false;
+  let clientData = {};
+  let selectedCategoryKey = null;
+  let selectedServices = [];
+  let perServiceSelections = []; // for scheduling later
+  let pikadayInstances = {};
+
+  // DOM refs
+  const branchRadios = document.querySelectorAll('input[name="branch"]');
+  const clientTypeRadios = document.querySelectorAll('input[name="clientType"]');
+  const clientNextBtn = document.getElementById('clientNextBtn');
+  const oldCodeBox = document.getElementById('oldCodeBox');
+  const newClientBox = document.getElementById('newClientBox');
+  const validateCodeBtn = document.getElementById('validateCodeBtn');
+  const clientCodeInput = document.getElementById('clientCode');
+  const codeMsg = document.getElementById('codeMsg');
+  const newClientNext = document.getElementById('newClientNext');
+
+  const categoriesWrap = document.getElementById('categories');
+  const servicesList = document.getElementById('servicesList');
+  const selectedListEl = document.getElementById('selectedList');
+  const countSelected = document.getElementById('countSelected');
+  const totalPriceEl = document.getElementById('totalPrice');
+  const summaryClient = document.getElementById('summaryClient');
+
+  const backToStep1From2 = document.getElementById('backToStep1From2');
+  const toCalendarBtn = document.getElementById('toCalendarBtn');
+  const backToStep2 = document.getElementById('backToStep2');
+  const confirmBtn = document.getElementById('confirmBtn');
+
+  const servicePickersWrap = document.getElementById('servicePickersWrap');
+  const calendarMsg = document.getElementById('calendarMsg');
+
+  const resumoBox = document.getElementById('resumoBox');
+  const stepBlocks = {1:document.getElementById('step-1'),2:document.getElementById('step-2'),3:document.getElementById('step-3'),4:document.getElementById('step-4')};
+  const stepLabels = {1:document.getElementById('stepLabel-1'),2:document.getElementById('stepLabel-2'),3:document.getElementById('stepLabel-3'),4:document.getElementById('stepLabel-4')};
+
+  function showStep(n){
+    Object.values(stepBlocks).forEach(el=>el.classList.add('hidden'));
+    stepBlocks[n].classList.remove('hidden');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function enableClientNext(){
+    const branchSelected = !!document.querySelector('input[name="branch"]:checked');
+    const clientTypeSelected = !!document.querySelector('input[name="clientType"]:checked');
+    clientNextBtn.disabled = !(branchSelected && clientTypeSelected);
+  }
+
+  function setSummaryClientText(){
+    if(isOldClient && clientData.name) summaryClient.textContent = `${clientData.name} (Cliente) — código: ${clientData.code || '—'}`;
+    else { const name = document.getElementById('name')?.value || 'Cliente novo'; const phone = document.getElementById('phone')?.value || ''; summaryClient.textContent = `${name} ${phone? '• '+phone: ''}`; }
+  }
+
+  function calcTotal(){ let total=0; selectedServices.forEach(s=>{ if(!s.price) return; const m=String(s.price).match(/(\d+([.,]\d+)?)/); if(m){ const val=Number(String(m[1]).replace(',','.')); if(!isNaN(val)) total+=val; } }); totalPriceEl.textContent = total? total.toFixed(2).replace('.',',')+'€' : '0€'; }
+
+  function showResumo(){ resumoBox.style.display = ''; }
+  function hideResumoAndClear(){
+    resumoBox.style.display = 'none';
+    selectedServices = [];
+    perServiceSelections = [];
+    Object.keys(pikadayInstances || {}).forEach(k=>{ try{ pikadayInstances[k].destroy(); }catch(e){} });
+    pikadayInstances = {};
+    selectedListEl.innerHTML = '';
+    servicePickersWrap.innerHTML = '';
+    totalPriceEl.textContent = '0€';
+    countSelected.textContent = '0';
+    confirmBtn.disabled = true;
+  }
+
+  /* ==========================
+     === render categories & services
+     ========================== */
+  function initCategories(){
+    categoriesWrap.innerHTML = '';
+    if(!selectedBranch){ categoriesWrap.innerHTML = '<div class="muted">Escolha a filial primeiro.</div>'; servicesList.innerHTML = '<p class="muted">Selecione uma categoria para ver serviços...</p>'; return; }
+    const S = servicesForBranch(selectedBranch); const keys = Object.keys(S);
+    keys.forEach(k=>{
+      const div=document.createElement('div'); div.className='cat'; div.textContent=CATEGORY_LABELS[k] || k.replace(/_/g,' '); div.dataset.key=k;
+      div.addEventListener('click', ()=>{ document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active')); div.classList.add('active'); selectedCategoryKey=k; renderServicesForCategory(k); });
+      categoriesWrap.appendChild(div);
+    });
+    servicesList.innerHTML = '<p class="muted">Selecione uma categoria para ver serviços...</p>';
+  }
+
+  function renderServicesForCategory(key){
+    servicesList.innerHTML='';
+    const S = servicesForBranch(selectedBranch);
+    const list = S[key] || [];
+    const header = document.createElement('div'); header.style.padding='8px'; const title=document.createElement('h3'); title.style.margin='0 0 6px 0'; title.textContent = CATEGORY_LABELS[key] || key; header.appendChild(title); servicesList.appendChild(header);
+    if(!list.length){ const p=document.createElement('p'); p.className='muted'; p.textContent='Sem serviços nesta categoria.'; servicesList.appendChild(p); return; }
+    list.forEach(svc=>{
+      const row=document.createElement('div'); row.className='service-row';
+      const left=document.createElement('div'); left.style.maxWidth='65%';
+      left.innerHTML=`<div class="service-name">${svc.name}</div><div class="muted" style="font-size:12px">${svc.durationMinutes? svc.durationMinutes+' min':''}</div>`;
+      const right=document.createElement('div'); right.style.display='flex'; right.style.alignItems='center';
+      const price=document.createElement('div'); price.className='service-price'; price.textContent = svc.price || '';
+      const addBtn=document.createElement('button'); addBtn.className='add-btn'; addBtn.textContent = '+'; addBtn.title='Adicionar ao resumo';
+      addBtn.addEventListener('click', ()=> addService(key, svc));
+      const buyBtn=document.createElement('button'); buyBtn.className='buy-btn'; buyBtn.textContent='Buy Voucher';
+      buyBtn.addEventListener('click', ()=> buyVoucher(key, svc));
+      right.appendChild(price); right.appendChild(addBtn); right.appendChild(buyBtn);
+      row.appendChild(left); row.appendChild(right); servicesList.appendChild(row);
+    });
+  }
+
+  /* ==========================
+     === add/remove services (resumo)
+     ========================== */
+  function addService(category, svc){
+    const svcName = svc.name;
+    if(selectedServices.some(s=>s.name===svcName)){ flashServiceRow(svcName); return; }
+    const durationMinutes = typeof svc.durationMinutes !== 'undefined' ? svc.durationMinutes : 30;
+    const paddingMinutes = typeof svc.paddingMinutes !== 'undefined' ? svc.paddingMinutes : 0;
+    selectedServices.push({ category, name: svcName, price: svc.price || '', machine: svc.machine || null, durationMinutes, paddingMinutes });
+    perServiceSelections = selectedServices.map((s,i)=> perServiceSelections[i] ? perServiceSelections[i] : {date:null,hour:null});
+    renderSelectedList();
+  }
+
+  function removeServiceAt(idx){
+    selectedServices.splice(idx,1);
+    perServiceSelections.splice(idx,1);
+    Object.keys(pikadayInstances || {}).forEach(k=>{ try{ pikadayInstances[k].destroy(); }catch(e){} });
+    pikadayInstances = {};
+    renderSelectedList();
+  }
+
+  function renderSelectedList(){
+    selectedListEl.innerHTML='';
+    selectedServices.forEach((s, idx)=>{
+      const li=document.createElement('li');
+      li.innerHTML = `<div style="max-width:70%"><strong>${s.name}</strong><div style="font-size:12px;color:#ffdff4">${(CATEGORY_LABELS[s.category]||s.category)}</div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:6px">Duração: ${s.durationMinutes || 30} min</div></div>`;
+      const right=document.createElement('div'); right.style.display='flex'; right.style.alignItems='center';
+      const price=document.createElement('div'); price.style.marginRight='10px'; price.style.fontWeight='700'; price.style.color='#ffd6f6'; price.textContent = s.price || '';
+      const rem=document.createElement('button'); rem.className='remove-small'; rem.textContent='Remover'; rem.addEventListener('click', ()=> removeServiceAt(idx));
+      right.appendChild(price); right.appendChild(rem);
+      li.appendChild(right);
+      selectedListEl.appendChild(li);
+    });
+    countSelected.textContent = selectedServices.length;
+    calcTotal();
+    setSummaryClientText();
+    if(selectedServices.length>0) showResumo();
+    else hideResumoAndClear();
+  }
+
+  function flashServiceRow(name){
+    const rows = Array.from(document.querySelectorAll('.service-row'));
+    const row = rows.find(r => r.textContent.includes(name));
+    if(!row) return;
+    row.style.boxShadow='inset 0 0 0 2px rgba(255,255,255,0.06)';
+    setTimeout(()=> row.style.boxShadow='',360);
+  }
+
+  /* ==========================
+     === client & navigation events
+     ========================== */
+  branchRadios.forEach(r=>r.addEventListener('change', (e)=>{ selectedBranch = e.target.value; initCategories(); enableClientNext(); }));
+  clientTypeRadios.forEach(r=>r.addEventListener('change', enableClientNext));
+  clientNextBtn.addEventListener('click', ()=>{
+    const val=document.querySelector('input[name="clientType"]:checked')?.value;
+    if(!val || !selectedBranch) return alert('Escolha a filial e o tipo de cliente.');
+    isOldClient = val==='old';
+    if(isOldClient){ oldCodeBox.classList.remove('hidden'); newClientBox.classList.add('hidden'); }
+    else { newClientBox.classList.remove('hidden'); oldCodeBox.classList.add('hidden'); }
+    showStep(2);
+  });
+  validateCodeBtn.addEventListener('click', async ()=>{
+    const code = clientCodeInput.value.trim();
+    if(!code){ codeMsg.textContent='Insira o código.'; return; }
+    codeMsg.textContent='Validando...';
+    try {
+      const res = await fetch(WEBHOOK_VALIDATE, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code, branch: selectedBranch }) });
+      const data = await res.json();
+      if(data && data.success){
+        clientData = data.client||{};
+        clientData.code = code;
+        codeMsg.textContent='Código válido. Continue para selecionar serviços.';
+        setSummaryClientText();
+        showStep(2);
+        showResumo();
+      } else { codeMsg.textContent='Código inválido.'; }
+    } catch(e){ console.error(e); codeMsg.textContent='Erro na validação.'; }
+  });
+  newClientNext.addEventListener('click', ()=>{
+    const name=document.getElementById('name').value.trim();
+    const email=document.getElementById('email').value.trim();
+    const phone=document.getElementById('phone').value.trim();
+    if(!name||!email||!phone){ alert('Preencha nome, email e telefone.'); return; }
+    clientData = { name, email, phone, code: 'VIP-'+Math.floor(100000+Math.random()*900000) };
+    setSummaryClientText(); initCategories(); showStep(2); showResumo();
+  });
+
+  backToStep1From2.addEventListener('click', ()=> showStep(1));
+  toCalendarBtn.addEventListener('click', ()=>{
+    if(selectedServices.length===0){ if(!confirm('Nenhum serviço selecionado. Deseja continuar?')) return; }
+    buildPerServicePickers(); showStep(3);
+  });
+  backToStep2.addEventListener('click', ()=> showStep(2));
+
+  document.getElementById('finishBtn').addEventListener('click', ()=> { window.location.href = '/index1.html'; });
+
+  /* ==========================
+     === availability & slot helpers (simple)
+     ========================== */
+  function parseTimeToMinutes(t){ if(!t) return 0; const parts = String(t).split(':').map(Number); return (parts[0]||0)*60 + (parts[1]||0); }
+  function computeSlotIntervalMinutes(hours){ if(!hours||hours.length<2) return 30; const a=parseTimeToMinutes(hours[0]); const b=parseTimeToMinutes(hours[1]); const diff = Math.abs(b-a); return diff || 30; }
+  function slotsNeededForDuration(durationMinutes, slotInterval){ return Math.max(1, Math.ceil((Number(durationMinutes)||30) / slotInterval)); }
+
+  function expandUnavailableSet(unavailableArr, slotOrder, paddingSlots){
+    const idxMap = new Map(slotOrder.map((t,i)=>[t,i]));
+    const base = new Set((unavailableArr||[]).map(String));
+    const extra = new Set();
+    base.forEach(t => {
+      const idx = idxMap.get(String(t));
+      if(typeof idx === 'undefined') return;
+      for(let p=1;p<=paddingSlots;p++){
+        const i1 = idx - p; const i2 = idx + p;
+        if(i1>=0) extra.add(slotOrder[i1]);
+        if(i2 < slotOrder.length) extra.add(slotOrder[i2]);
+      }
+    });
+    return [...new Set([...base, ...extra])];
+  }
+
+  function isStartSlotValid(startTime, neededSlots, unavailableSet, slotOrder){
+    const idx = slotOrder.indexOf(startTime);
+    if(idx === -1) return false;
+    for(let k=0;k<neededSlots;k++){
+      const t = slotOrder[idx+k];
+      if(!t) return false;
+      if(unavailableSet.has(t)) return false;
+    }
+    return true;
+  }
+
+  async function fetchUnavailableSlots(branch, dateIso){
+    try{
+      const url = branch === 'braga' ? WEBHOOK_AVAILABLE_BRAGA : WEBHOOK_AVAILABLE_AMORA;
+      const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ date: dateIso }) });
+      const j = await res.json();
+      if(j && Array.isArray(j.unavailable)) return j.unavailable;
+      return [];
+    }catch(e){
+      console.warn('fetchUnavailableSlots error', e);
+      return [];
+    }
+  }
+
+  /* ==========================
+     === build per-service pickers (uses Pikaday)
+     ========================== */
+  function getMinDate(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+3); return d; } // +3 days
+  function buildPerServicePickers(){
+    servicePickersWrap.innerHTML = ''; pikadayInstances = {}; perServiceSelections = selectedServices.map(()=>({ date: null, hour: null }));
+    if(selectedServices.length === 0){ servicePickersWrap.innerHTML = '<div class="muted">Nenhum serviço selecionado.</div>'; confirmBtn.disabled = true; return; }
+    const slotInterval = computeSlotIntervalMinutes(getHoursForBranch(selectedBranch));
+    selectedServices.forEach((svc, idx) => {
+      const container = document.createElement('div'); container.style.padding='10px'; container.style.marginBottom='10px'; container.style.borderRadius='10px'; container.style.background='rgba(255,255,255,0.02)'; container.style.border='1px solid rgba(255,255,255,0.03)';
+      const title = document.createElement('div'); title.innerHTML = `<strong>${svc.name}</strong> <span style="float:right;color:#ffd6f6">${svc.price||''}</span>`;
+      container.appendChild(title);
+      const dateLabel = document.createElement('label'); dateLabel.textContent = 'Escolha a data:'; dateLabel.style.marginTop='8px'; container.appendChild(dateLabel);
+      const dateInput = document.createElement('input'); dateInput.type='text'; dateInput.placeholder='Clique para escolher a data'; dateInput.id = `picker-${idx}`; dateInput.readOnly=true; dateInput.style.marginTop='8px'; dateInput.style.padding='8px'; dateInput.style.borderRadius='8px'; dateInput.style.border='1px solid rgba(255,255,255,0.06)'; container.appendChild(dateInput);
+      const slotsWrap = document.createElement('div'); slotsWrap.className='slots'; slotsWrap.style.marginTop='8px'; container.appendChild(slotsWrap);
+      servicePickersWrap.appendChild(container);
+
+      const pik = new Pikaday({
+        field: dateInput,
+        minDate: getMinDate(),
+        format: 'YYYY-MM-DD',
+        onSelect: async function(date){
+          const iso = this.toString('YYYY-MM-DD');
+          slotsWrap.innerHTML = 'Carregando horários...';
+          const unavailable = await fetchUnavailableSlots(selectedBranch, iso);
+          const slotOrder = getHoursForBranch(selectedBranch);
+          const paddingSlots = Math.ceil((svc.paddingMinutes || 0) / slotInterval);
+          const unavailableExpanded = new Set(expandUnavailableSet(unavailable, slotOrder, paddingSlots));
+          const neededSlots = slotsNeededForDuration(svc.durationMinutes, slotInterval);
+          slotsWrap.innerHTML = '';
+          slotOrder.forEach(t => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'slot-button';
+            btn.textContent = t;
+            const valid = isStartSlotValid(t, neededSlots, unavailableExpanded, slotOrder);
+            if(!valid) btn.disabled = true;
+            btn.addEventListener('click', () => {
+              Array.from(slotsWrap.querySelectorAll('.slot-button')).forEach(b=>b.classList.remove('selected'));
+              btn.classList.add('selected');
+              perServiceSelections[idx] = { date: iso, hour: t };
+              updateConfirmEnabledAfterPick();
+            });
+            slotsWrap.appendChild(btn);
+          });
+        }
+      });
+      pikadayInstances[idx] = pik;
+    });
+
+    function updateConfirmEnabledAfterPick(){
+      const allOk = perServiceSelections.length === selectedServices.length && perServiceSelections.every(s => s && s.date && s.hour);
+      confirmBtn.disabled = !allOk;
+      calendarMsg.textContent = allOk ? '' : 'Escolha data e hora para todos os serviços.';
+    }
+  }
+
+  /* ==========================
+     === BUY VOUCHER for single service (immediate flow)
+     ========================== */
+  async function buyVoucher(categoryKey, svc){
+    try {
+      if(!selectedBranch){ alert('Por favor, selecione a filial antes.'); return; }
+      // gather client
+      let clientPayload = {};
+      if(isOldClient){
+        clientPayload = { type: 'old', clientCode: (clientData && clientData.code) || document.getElementById('clientCode')?.value.trim() || null };
+      } else {
+        clientPayload = { type: 'new', name: document.getElementById('name')?.value?.trim() || '', phone: document.getElementById('phone')?.value?.trim() || '', email: document.getElementById('email')?.value?.trim() || '' };
+      }
+
+      const voucherCode = generateVoucherCode();
+      const servicePayload = {
+        id: svc.machine || svc.name || null,
+        name: svc.name,
+        priceRaw: svc.price || '',
+        priceNumber: parsePriceToNumber(svc.price || '0'),
+        category: categoryKey
+      };
+      const branch = selectedBranch;
+      const ref = localStorage.getItem('refCode') || null;
+
+      // store pending local (so after payment we can restore)
+      const pendingKey = 'pendingReservation_' + voucherCode;
+      const pendingData = { voucherCode, branch, ref, client: clientPayload, services: [servicePayload], createdAt: new Date().toISOString() };
+      try { localStorage.setItem(pendingKey, JSON.stringify(pendingData)); } catch(e){ console.warn('localStorage failed', e); }
+
+      // optionally notify voucher webhook
+      (async ()=>{
+        try { await fetch(WEBHOOK_VOUCHER, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(pendingData) }); } catch(e){ console.warn('webhook voucher failed', e); }
+      })();
+
+      // call reserve webhook to create checkout session
+      const reservePayload = { branch, ref, voucherCode, client: clientPayload, services: [servicePayload], total: servicePayload.priceNumber || 0, success_url: window.location.origin + '/reservegeneral.html?session_id={CHECKOUT_SESSION_ID}&voucher=' + encodeURIComponent(voucherCode), cancel_url: window.location.origin + '/reservegeneral.html?cancelled=1' };
+      const reserveWebhook = branch === 'braga' ? WEBHOOK_RESERVE_BRAGA : WEBHOOK_RESERVE_AMORA;
+      const res = await fetch(reserveWebhook, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(reservePayload) });
+      const j = await res.json();
+      if(j && j.checkoutUrl){ window.location.href = j.checkoutUrl; return; }
+      else { alert((j && (j.error||j.message))||'Erro ao iniciar pagamento'); }
+    } catch(err){ console.error('buyVoucher err', err); alert('Erro. Tente novamente.'); }
+  }
+
+  /* ==========================
+     === Confirm (buy multiple) - simplified: creates voucher and checkout for all selected
+     ========================== */
+  if(confirmBtn){
+    confirmBtn.addEventListener('click', async ()=>{
+      confirmBtn.disabled = true; confirmBtn.textContent = 'A processar...';
+      try {
+        // client
+        let clientPayload = {};
+        if(isOldClient){ clientPayload = { type:'old', clientCode: clientData.code || document.getElementById('clientCode')?.value.trim() || null }; }
+        else { clientPayload = { type:'new', name: document.getElementById('name')?.value?.trim() || '', phone: document.getElementById('phone')?.value?.trim() || '', email: document.getElementById('email')?.value?.trim() || '' }; }
+        const voucherCode = generateVoucherCode();
+        const servicesPayload = selectedServices.map(s=>({ id: s.machine || null, name: s.name, priceRaw: s.price||'', priceNumber: parsePriceToNumber(s.price||'0') }));
+        const total = servicesPayload.reduce((acc,x)=> acc + (Number(x.priceNumber)||0), 0);
+        const branch = selectedBranch; const ref = localStorage.getItem('refCode') || null;
+        const pendingKey = 'pendingReservation_' + voucherCode;
+        const pendingData = { voucherCode, branch, ref, client: clientPayload, services: servicesPayload, createdAt: new Date().toISOString() };
+        try { localStorage.setItem(pendingKey, JSON.stringify(pendingData)); } catch(e){}
+        (async ()=>{ try { await fetch(WEBHOOK_VOUCHER, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(pendingData) }); } catch(e){ console.warn(e); } })();
+        const payload = { branch, ref, voucherCode, client: clientPayload, services: servicesPayload, total, success_url: window.location.origin + '/reservegeneral.html?session_id={CHECKOUT_SESSION_ID}&voucher=' + encodeURIComponent(voucherCode), cancel_url: window.location.origin + '/reservegeneral.html?cancelled=1' };
+        const reserveWebhook = branch === 'braga' ? WEBHOOK_RESERVE_BRAGA : WEBHOOK_RESERVE_AMORA;
+        const res = await fetch(reserveWebhook, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        const j = await res.json();
+        if(j && j.checkoutUrl){ window.location.href = j.checkoutUrl; return; }
+        else { alert((j && (j.error||j.message))||'Erro ao criar sessão de pagamento.'); confirmBtn.disabled=false; confirmBtn.textContent='Confirmar & Enviar'; }
+      } catch(e){ console.error(e); alert('Erro de rede'); confirmBtn.disabled=false; confirmBtn.textContent='Confirmar & Enviar'; }
+    });
+  }
+
+  /* ==========================
+     === Post-payment return handler: when user returns with ?voucher=...&session_id=...
+     ========================== */
+  (async function handlePostPaymentReturn(){
+    try {
+      const url = new URL(window.location.href);
+      const sessionId = url.searchParams.get('session_id') || url.searchParams.get('session');
+      const voucher = url.searchParams.get('voucher');
+      if(!voucher) return;
+
+      // show modal
+      function showModalHtml(html){ let m = document.getElementById('payment-modal'); if(!m){ m = document.createElement('div'); m.id='payment-modal'; m.style.position='fixed'; m.style.top=0; m.style.left=0; m.style.right=0; m.style.bottom=0; m.style.background='rgba(0,0,0,0.6)'; m.style.display='flex'; m.style.alignItems='center'; m.style.justifyContent='center'; m.style.zIndex=99999; document.body.appendChild(m); } m.innerHTML = `<div style="max-width:520px;background:#111;padding:22px;border-radius:12px;color:#fff">${html}</div>`; }
+      showModalHtml('<h3>Confirmando pagamento…</h3><p>Aguarde, estamos verificando o pagamento.</p>');
+
+      // verify with server (Make)
+      let verifyOk=false, serverData=null;
+      try {
+        const res = await fetch(WEBHOOK_VERIFY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessionId, voucherCode: voucher }) });
+        const j = await res.json();
+        if(j && j.success){ verifyOk=true; serverData=j.data||{}; }
+      } catch(e){ console.warn('verify error', e); }
+
+      if(!verifyOk){
+        showModalHtml(`<h3>Pagamento processado</h3><p>Não conseguimos confirmar automaticamente. Se o pagamento foi cobrado, contacte-nos com o código <strong>${voucher}</strong>.</p><div style="margin-top:12px;display:flex;gap:8px;justify-content:center"><a href="/index1.html" style="padding:10px 14px;background:#ff71b8;color:#fff;border-radius:10px;text-decoration:none">Voltar ao início</a></div>`);
+        return;
+      }
+
+      // ask user whether to schedule now
+      showModalHtml(`<h3>Pagamento confirmado ✅</h3><p>Voucher <strong>${voucher}</strong> ativado.</p><p>Deseja agendar agora a data/hora para este voucher?</p><div style="display:flex;gap:10px;margin-top:14px;justify-content:center"><button id="scheduleNowBtn" style="padding:8px 14px;border-radius:8px;border:none;background:#5ce6a6;cursor:pointer;font-weight:700">Sim, agendar agora</button><button id="noThanksBtn" style="padding:8px 14px;border-radius:8px;border:none;background:#ff7a7a;cursor:pointer;font-weight:700">Não, obrigado</button></div>`);
+
+      document.getElementById('noThanksBtn').addEventListener('click', ()=>{ const m=document.getElementById('payment-modal'); if(m) m.remove(); showStep(4); document.getElementById('finalMsg').textContent = `Voucher ${voucher} ativado. Conferimos o seu pagamento.`; });
+
+      document.getElementById('scheduleNowBtn').addEventListener('click', async ()=>{
+        const m=document.getElementById('payment-modal'); if(m) m.remove();
+        // try load from localStorage
+        const pendingKey = 'pendingReservation_' + voucher;
+        let pending = null;
+        try { const raw = localStorage.getItem(pendingKey); if(raw) pending = JSON.parse(raw); } catch(e){ pending = null; }
+        // if not local, fetch from server
+        if(!pending){
+          try {
+            const res2 = await fetch(WEBHOOK_FETCH_RESERVATION, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ voucherCode: voucher }) });
+            const j2 = await res2.json();
+            if(j2 && j2.success && j2.reservation) pending = j2.reservation;
+          } catch(e){ console.warn('fetch reservation failed', e); }
+        }
+        if(!pending){ alert('Não encontramos os dados do seu voucher localmente. Por favor contacte o salão com o código: ' + voucher); showStep(4); document.getElementById('finalMsg').textContent = `Voucher ${voucher} ativado. Contacte-nos para agendar.`; return; }
+        // populate UI and go to step 3
+        selectedBranch = pending.branch || selectedBranch;
+        if(pending.client){
+          if(pending.client.type === 'old'){ isOldClient=true; clientData = { code: pending.client.clientCode, name: pending.client.name || '' }; try{ document.getElementById('clientCode').value = pending.client.clientCode; }catch(e){} }
+          else { isOldClient=false; clientData = pending.client; try{ document.getElementById('name').value = pending.client.name || ''; document.getElementById('phone').value = pending.client.phone || ''; document.getElementById('email').value = pending.client.email || ''; }catch(e){} }
+        }
+        selectedServices = (pending.services || []).map(s => ({ category: s.category || 'UNKNOWN', name: s.name, price: s.priceRaw || s.price || '', machine: s.id || null, durationMinutes: s.durationMinutes || 30, paddingMinutes: s.paddingMinutes || 0 }));
+        renderSelectedList();
+        initCategories();
+        buildPerServicePickers();
+        showStep(3);
+      });
+
+    } catch(e){ console.error('post payment handler err', e); }
+  })();
+
+  /* ==========================
+     === initial UI
+     ========================== */
+  enableClientNext();
+  initCategories();
+
+  }); // DOMContentLoaded
+  </script>
+</body>
+</html>
