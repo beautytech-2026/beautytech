@@ -1,0 +1,222 @@
+<!--
+Filename: index.html
+Purpose: Single-page demo that lets a user enter email, requests a verification code to be sent
+via a Google Apps Script web app (server-side). After verifying the code, the page opens a small
+profile dashboard and fetches data from a Google Sheet through the same Apps Script web app.
+
+IMPORTANT:
+- This is a demo-ready implementation that requires you to deploy the accompanying Apps Script
+  as a Web App (see instructions below). The web app uses MailApp to send the verification code
+  and can read/write a Google Sheet.
+- For production, add HTTPS, stronger token handling, rate limits, expiry checks, and reCAPTCHA.
+-->
+
+<!doctype html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ورود با تایید ایمیل — نمونه</title>
+  <style>
+    :root{font-family: IRANSans, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue';}
+    body{display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f5f7fb}
+    .card{width:360px;background:white;border-radius:12px;box-shadow:0 6px 20px rgba(20,30,50,0.08);padding:20px}
+    h2{margin:0 0 10px 0;font-size:18px}
+    label{display:block;margin-top:10px;font-size:13px}
+    input{width:100%;padding:10px;margin-top:6px;border:1px solid #e3e7ef;border-radius:8px;font-size:14px}
+    button{width:100%;padding:10px;margin-top:14px;border:0;border-radius:8px;font-weight:600;cursor:pointer}
+    .btn-primary{background:#2563eb;color:white}
+    .btn-ghost{background:transparent;border:1px solid #cbd5e1}
+    .muted{font-size:13px;color:#6b7280;margin-top:8px}
+    .success{color:green}
+    .error{color:#b91c1c}
+    .dashboard{max-width:900px;padding:20px}
+    .profile-card{background:white;border-radius:12px;padding:16px;box-shadow:0 6px 20px rgba(20,30,50,0.04)}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px;text-align:left;border-bottom:1px solid #eef2f7}
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div class="card" id="loginCard">
+      <h2>ورود با ایمیل</h2>
+      <div id="stepEmail">
+        <label for="email">ایمیل</label>
+        <input id="email" type="email" placeholder="you@example.com" />
+        <button id="sendCodeBtn" class="btn-primary">ارسال کد تایید</button>
+        <div class="muted">کد تایید به ایمیل شما فرستاده خواهد شد.</div>
+      </div>
+
+      <div id="stepVerify" style="display:none">
+        <label for="code">کد تایید (۶ رقمی)</label>
+        <input id="code" type="text" placeholder="123456" maxlength="6" />
+        <button id="verifyBtn" class="btn-primary">تایید و ورود</button>
+        <button id="resendBtn" class="btn-ghost">ارسال مجدد</button>
+        <div id="message" class="muted"></div>
+      </div>
+    </div>
+
+    <div id="dashboard" style="display:none" class="dashboard">
+      <div style="display:flex;gap:16px;align-items:center;margin-bottom:12px">
+        <div class="profile-card" style="flex:0 0 280px">
+          <h3 id="profileName">پروفایل</h3>
+          <div id="profileEmail" class="muted"></div>
+          <div style="margin-top:12px"><button id="logoutBtn" class="btn-ghost">خروج</button></div>
+        </div>
+        <div style="flex:1">
+          <h3>اطلاعات دریافتی از Google Sheet</h3>
+          <div id="sheetContainer" class="profile-card">
+            <table id="sheetTable"><thead><tr><th>ردیف</th><th>عنوان</th><th>مقدار</th></tr></thead><tbody></tbody></table>
+            <div id="sheetMsg" class="muted" style="margin-top:8px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === CONFIG: Replace with your deployed Apps Script Web App URL ===
+    // Deploy the Apps Script (see instructions in the canvas) and paste the URL below.
+    const APPS_SCRIPT_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxMwooXAEyyLx4wf7pCr5KgHAaEV9aEgOc0LT6SK9uLnLHj5ZGi6nYo559PqW0tHPgB/exec';
+
+    // Small helpers
+    function qs(id){return document.getElementById(id)}
+    function show(el){el.style.display='block'}
+    function hide(el){el.style.display='none'}
+
+    // Elements
+    const emailInput = qs('email');
+    const sendCodeBtn = qs('sendCodeBtn');
+    const stepVerify = qs('stepVerify');
+    const stepEmail = qs('stepEmail');
+    const codeInput = qs('code');
+    const verifyBtn = qs('verifyBtn');
+    const message = qs('message');
+    const resendBtn = qs('resendBtn');
+    const loginCard = qs('loginCard');
+    const dashboard = qs('dashboard');
+    const profileEmail = qs('profileEmail');
+    const profileName = qs('profileName');
+    const logoutBtn = qs('logoutBtn');
+    const sheetTableBody = qs('sheetTable').querySelector('tbody');
+    const sheetMsg = qs('sheetMsg');
+
+    // Local storage keys
+    const TOKEN_KEY = 'demo_auth_token';
+    const EMAIL_KEY = 'demo_auth_email';
+
+    // Send request to Apps Script to create+send code
+    async function requestSendCode(email){
+      const res = await fetch(APPS_SCRIPT_WEBAPP_URL + '?action=sendCode', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({email})
+      });
+      return res.json();
+    }
+
+    async function requestVerifyCode(email, code){
+      const res = await fetch(APPS_SCRIPT_WEBAPP_URL + '?action=verifyCode', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({email, code})
+      });
+      return res.json();
+    }
+
+    async function fetchSheetData(token){
+      const url = APPS_SCRIPT_WEBAPP_URL + `?action=getSheet&token=${encodeURIComponent(token)}`;
+      const res = await fetch(url);
+      return res.json();
+    }
+
+    // UI flow
+    sendCodeBtn.addEventListener('click', async ()=>{
+      const email = emailInput.value.trim();
+      message.textContent='';
+      if(!email){message.textContent='لطفا ایمیل را وارد کنید'; return}
+      sendCodeBtn.disabled = true; sendCodeBtn.textContent='درحال ارسال...';
+      try{
+        const r = await requestSendCode(email);
+        if(r.success){
+          hide(stepEmail); show(stepVerify);
+          message.textContent = 'کد ارسال شد — صندوق اسپم را هم چک کنید.';
+        } else {
+          message.textContent = r.error || 'ارسال ناموفق';
+        }
+      }catch(e){
+        message.textContent = 'خطا در ارسال — بررسی کنید آدرس وب اپ را ست کرده‌اید.';
+      }
+      sendCodeBtn.disabled=false; sendCodeBtn.textContent='ارسال کد تایید';
+    });
+
+    verifyBtn.addEventListener('click', async ()=>{
+      const email = emailInput.value.trim();
+      const code = codeInput.value.trim();
+      message.textContent='';
+      if(!code || code.length<4){message.textContent='کد نامعتبر است';return}
+      verifyBtn.disabled=true; verifyBtn.textContent='درحال بررسی...';
+      try{
+        const r = await requestVerifyCode(email, code);
+        if(r.success && r.token){
+          // Save token and open dashboard
+          localStorage.setItem(TOKEN_KEY, r.token);
+          localStorage.setItem(EMAIL_KEY, email);
+          openDashboard(r.token, email);
+        } else {
+          message.textContent = r.error || 'کد درست نیست';
+        }
+      }catch(e){
+        message.textContent='خطا در برقراری ارتباط';
+      }
+      verifyBtn.disabled=false; verifyBtn.textContent='تایید و ورود';
+    });
+
+    resendBtn.addEventListener('click', ()=>{sendCodeBtn.click()});
+
+    logoutBtn.addEventListener('click', ()=>{
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(EMAIL_KEY);
+      hide(dashboard); show(loginCard); hide(stepVerify); show(stepEmail);
+      emailInput.value=''; codeInput.value='';
+    });
+
+    async function openDashboard(token, email){
+      hide(loginCard); show(dashboard);
+      profileEmail.textContent = email; profileName.textContent = email.split('@')[0];
+      sheetMsg.textContent='درحال دریافت اطلاعات...';
+      try{
+        const data = await fetchSheetData(token);
+        if(data.success && Array.isArray(data.rows)){
+          sheetTableBody.innerHTML='';
+          data.rows.forEach((row,i)=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${i+1}</td><td>${escapeHtml(row[0]||'')}</td><td>${escapeHtml(row[1]||'')}</td>`;
+            sheetTableBody.appendChild(tr);
+          });
+          sheetMsg.textContent = `تعداد ${data.rows.length} سطر دریافت شد`;
+        }else{
+          sheetMsg.textContent = data.error || 'دریافت اطلاعات ناموفق';
+        }
+      }catch(e){
+        sheetMsg.textContent='خطا در بارگیری اطلاعات';
+      }
+    }
+
+    function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"
+    }[c]))}
+
+    // Auto-login if token present
+    (function(){
+      const token = localStorage.getItem(TOKEN_KEY);
+      const email = localStorage.getItem(EMAIL_KEY);
+      if(token && email){
+        openDashboard(token,email);
+      }
+    })();
+  </script>
+
+    
+</body>
+</html>

@@ -50,7 +50,7 @@
       if (document.referrer) {
         window.history.back();
       } else {
-        window.location.href = "index1.html";
+        window.location.href = "index.html";
       }
     }
   </script>
@@ -129,8 +129,11 @@
 
         <div id="step-2" class="step-block hidden">
           <label>Escolha uma categoria</label>
+          
           <div class="categories" id="categories"></div>
           <div class="services-list" id="servicesList"><p class="muted">Selecione uma categoria para ver serviços...</p></div>
+
+          
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap">
             <div class="muted">Itens adicionados: <span id="countSelected">0</span></div>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -139,6 +142,9 @@
             </div>
           </div>
         </div>
+
+
+
 
         <div id="step-3" class="step-block hidden">
           <label>Para cada serviço selecione data e hora</label>
@@ -174,203 +180,182 @@
       </aside>
     </div>
 
-    <p class="note">Se precisar de ajuda, use o ícone de informação ao lado das perguntas.</p>
+    <p class="note"></p>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-  <script>
-  (function(){
-    // ------------------------------
-    // WEBHOOK URLs (unchanged)
-    // ------------------------------
-    const WEBHOOK_VALIDATE = "https://hook.eu2.make.com/mgz53fgt82dhtfc4wnaiubjy7j5ajcjv";
-    const WEBHOOK_AVAILABLE_AMORA = "https://hook.eu2.make.com/sw48l9g8shmdh766arjpngluo7pk0ja6";
-    const WEBHOOK_AVAILABLE_BRAGA = "https://hook.eu2.make.com/l7ns23v63g27prryvriwikp7bh1j75vu";
-    const WEBHOOK_RESERVE_AMORA = "https://hook.eu2.make.com/vs5dvcr5g9gxoea1h9ytiad98vecuyjy";
-    const WEBHOOK_RESERVE_BRAGA = "https://hook.eu2.make.com/2i4jvjo24m07632lbwbduvulrpy760w3";
+  <!-- Ensure Pikaday is loaded in your page -->
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 
-    // ------------------------------
-    // CATEGORIES / SERVICES (unchanged content)
-    // Note: you can optionally add durationMinutes/paddingMinutes here per service.
-    // If not present, the code uses defaults (durationMinutes:30, paddingMinutes:0).
-    // ------------------------------
-    const CATEGORY_LABELS = {
-      FACE_DESIGN_TECH: "FACE DESIGN",
-      PERFECT_FACE_TECH: "PERFECT FACE TECH",
-      PERFECT_BODY_TECH: "PERFECT BODY TECH",
-      DEPILACAO_LASER: "DEPILAÇÃO LASER",
-      PERFECT_NAILS_TECH: "PERFECT NAILS TECH",
-      PERFECT_HAIR_TECH: "PERFECT HAIR TECH"
-    };
-    const CATEGORY_SUBHEADERS = {
-      FACE_DESIGN_TECH: "Procedimentos de design e embelezamento facial",
-      PERFECT_FACE_TECH: "Tecnologia avançada para cuidados faciais",
-      PERFECT_BODY_TECH: "Tratamentos e tecnologias corporais"
-    };
+<script>
+(function(){
+  // ------------------------------
+  // CONFIG / WEBHOOKS
+  // ------------------------------
+  const WEBHOOK_VALIDATE = "https://hook.eu2.make.com/mgz53fgt82dhtfc4wnaiubjy7j5ajcjv";
+  const WEBHOOK_AVAILABLE_AMORA = "https://hook.eu2.make.com/sw48l9g8shmdh766arjpngluo7pk0ja6";
+  const WEBHOOK_AVAILABLE_BRAGA = "https://hook.eu2.make.com/l7ns23v63g27prryvriwikp7bh1j75vu";
+  const WEBHOOK_RESERVE_AMORA = "https://hook.eu2.make.com/vs5dvcr5g9gxoea1h9ytiad98vecuyjy";
+  const WEBHOOK_RESERVE_BRAGA = "https://hook.eu2.make.com/2i4jvjo24m07632lbwbduvulrpy760w3";
+  const WEBHOOK_CHECKOUT_BRAGA = "https://hook.eu2.make.com/i5m0z7hi3nxay8fru0na3fuksnj6gpww";
+  // WEBHOOK_CHECKOUT_AMORA optional
 
-    // You may add durationMinutes/paddingMinutes directly in these objects.
-    const SERVICES_AMORA = {
-      FACE_DESIGN_TECH: [
-        { name:"Embelezamento Facial e Design Personalizado", price:"150", machine: "Helena", durationMinutes:90, paddingMinutes:15 },
-        { name:"Preenchimento Labial, Hy Aluron Pen", price:"120€", machine: "Helena", durationMinutes:90 },
-        { name:"Micropigmentação Labial", price:"100€", machine: "Helena", durationMinutes:90 },
-        { name:"Técnica Híbrida de Sobrancelhas", price:"100€", machine: "naira", durationMinutes:90 },
-        { name:"Lash & Brow Lamination", price:"35€", machine: "Helena", durationMinutes:90, paddingMinutes:15 },
-        { name:"Extensão de Pestanas", price:"25€", machine:"Helena", durationMinutes:90 },
-        { name:"Design de Sobrancelhas & Henna", price:"15€", machine: "naira", durationMinutes:45 }
-      ],
-      PERFECT_FACE_TECH: [
-  { name: "HIFU 12D — Rosto Completo", price: "150€", machine: "HIFU12D", durationMinutes: 60, paddingMinutes: 30 },
-  { name: "HIFU 12D — Rosto + Papada", price: "250€", machine: "HIF12D", durationMinutes: 100, paddingMinutes: 30 },
-  { name: "HIFU 12D — Papada", price: "70€", machine: "HIFU12D", durationMinutes: 45 },
-  { name: "HIFU 12D — Pescoço", price: "70€", machine: "HIFU12D", durationMinutes: 45 },
-  { name: "HIFU 12D — Rosto + Papada + Pescoço", price: "280€", machine: "HIFU12D", durationMinutes: 120, paddingMinutes: 30 },
-  { name: "Limpeza de Pele", price: "25€", machine: null, durationMinutes: 30 },
-  { name: "Aplicação de Fios de Seda", price: "35€", machine: "silk-threads-amora", durationMinutes: 50 },
-  { name: "Booster com Dermapen", price: "a partir de 50€", machine: "dermapen", durationMinutes: 50 },
-  { name: "Intradermoterapia Pressurizada", price: "a partir de 50€", machine: "pressurized-intradermotherapy", durationMinutes: 50 },
-  { name: "Preenchimento Rugas Hyaluron Pen", price: "a partir de 100€", machine: "hyaluron-pen", durationMinutes: 60 }
-],
+  // ------------------------------
+  // CATEGORIES / SERVICES (kept as you provided)
+  // ------------------------------
+  const CATEGORY_LABELS = {
+    FACE_DESIGN_TECH: "FACE DESIGN",
+    PERFECT_FACE_TECH: "PERFECT FACE TECH",
+    PERFECT_BODY_TECH: "PERFECT BODY TECH",
+    DEPILACAO_LASER: "DEPILAÇÃO LASER",
+    PERFECT_NAILS_TECH: "PERFECT NAILS TECH",
+    PERFECT_HAIR_TECH: "PERFECT HAIR TECH"
+  };
+  const CATEGORY_SUBHEADERS = {
+    FACE_DESIGN_TECH: "Procedimentos de design e embelezamento facial",
+    PERFECT_FACE_TECH: "Tecnologia avançada para cuidados faciais",
+    PERFECT_BODY_TECH: "Tratamentos e tecnologias corporais"
+  };
 
-      PERFECT_BODY_TECH:  [
-  { name: "Massagem Modeladora e Redutora", price: "35€", machine: null, durationMinutes: 60 },
-  { name: "Massagem Turbinada", price: "40€", machine: null, durationMinutes: 60 },
-  { name: "Drenagem Linfática Manual", price: "40€", machine: null, durationMinutes: 60 },
- 
+  const SERVICES_AMORA = {
+    /* ... your SERVICES_AMORA object (same as you provided) ... */
+    FACE_DESIGN_TECH: [
+      { name:"Embelezamento Facial e Design Personalizado", price:"150", machine: "Helena", durationMinutes:90, paddingMinutes:15 },
+      { name:"Preenchimento Labial, Hy Aluron Pen", price:"120€", machine: "Helena", durationMinutes:90 },
+      { name:"Micropigmentação Labial", price:"100€", machine: "Helena", durationMinutes:90 },
+      { name:"Técnica Híbrida de Sobrancelhas", price:"100€", machine: "naira", durationMinutes:90 },
+      { name:"Lash & Brow Lamination", price:"35€", machine: "Helena", durationMinutes:90, paddingMinutes:15 },
+      { name:"Extensão de Pestanas", price:"25€", machine:"Helena", durationMinutes:90 },
+      { name:"Design de Sobrancelhas & Henna", price:"15€", machine: "naira", durationMinutes:45 }
+    ],
+    PERFECT_FACE_TECH: [
+      { name: "HIFU 12D — Rosto Completo", price: "150€", machine: "HIFU12D", durationMinutes: 60, paddingMinutes: 30 },
+      { name: "HIFU 12D — Rosto + Papada", price: "250€", machine: "HIF12D", durationMinutes: 100 },
+      { name: "HIFU 12D — Papada", price: "70€", machine: "HIFU12D", durationMinutes: 45 },
+      { name: "HIFU 12D — Pescoço", price: "70€", machine: "HIFU12D", durationMinutes: 45 },
+      { name: "HIFU 12D — Rosto + Papada + Pescoço", price: "280€", machine: "HIFU12D", durationMinutes: 120, paddingMinutes: 30 },
+      { name: "Limpeza de Pele", price: "25€", machine: null, durationMinutes: 30 },
+      { name: "Aplicação de Fios de Seda", price: "35€", machine: "silk-threads-amora", durationMinutes: 50 },
+      { name: "Booster com Dermapen", price: "a partir de 50€", machine: "dermapen", durationMinutes: 50 },
+      { name: "Intradermoterapia Pressurizada", price: "a partir de 50€", machine: "pressurized-intradermotherapy", durationMinutes: 50 },
+      { name: "Preenchimento Rugas Hyaluron Pen", price: "a partir de 100€", machine: "hyaluron-pen", durationMinutes: 60 }
+    ],
+    PERFECT_BODY_TECH:  [
+      { name: "Massagem Modeladora e Redutora", price: "35€", machine: null, durationMinutes: 60 },
+      { name: "Massagem Turbinada", price: "40€", machine: null, durationMinutes: 60 },
+      { name: "Drenagem Linfática Manual", price: "40€", machine: null, durationMinutes: 60 },
+      { name: "HIFU 12D — Barriga + Flancos", price: "380€", machine: "HIFU12D", durationMinutes: 90, paddingMinutes: 30 },
+      { name: "HIFU 12D — Glúteos", price: "200€", machine: "HIFU12D", durationMinutes: 60, paddingMinutes: 30 },
+      { name: "Depilação Laser Tripla Onda — Axila e Virilha", price: "20€", machine: "Laser", durationMinutes: 30 },
+      { name: "Depilação Laser Tripla Onda — Axila, Virilha e Buço", price: "30€", machine: "Laser", durationMinutes: 45 },
+      { name: "Depilação Laser Tripla Onda — Corpo Completo", price: "50€", machine: "Laser", durationMinutes: 90 }
+    ],
+    PERFECT_NAILS_TECH: [
+      { name: "Unhas de Gel (com Cutilagem)", price: "27€", machine: "naira", durationMinutes: 60 },
+      { name: "Unhas de Fibras (com Cutilagem)", price: "42€", machine: "naira", durationMinutes: 90 },
+      { name: "Acrygel (com Cutilagem)", price: "30€", machine: "naira", durationMinutes: 75 },
+      { name: "Blindagem (com Cutilagem)", price: "18€", machine: "naira", durationMinutes: 45 },
+      { name: "Gelhinho Mão (com Cutilagem)", price: "12€", machine: "naira", durationMinutes: 30 },
+      { name: "Gelhinho Pé (com Cutilagem)", price: "22€", machine: "naira", durationMinutes: 45 },
+      { name: "Gelhinho Pé (sem Cutilagem)", price: "10€", machine: "naira", durationMinutes: 30 },
+      { category: "Manutenção", name: "Unhas de Gel (com Cutilagem)", price: "a partir de 17€", machine: "naira", durationMinutes: 60 },
+      { category: "Manutenção", name: "Unhas de Fibras (com Cutilagem)", price: "26€", machine: "naira", durationMinutes: 60 },
+      { category: "Manutenção", name: "Acrygel (com Cutilagem)", price: "21€", machine: "naira", durationMinutes: 60 },
+      { category: "Cuidados", name: "Manicure", price: "8€", machine: "naira", durationMinutes: 30 },
+      { category: "Cuidados", name: "Pedicure", price: "17€", machine: "naira", durationMinutes: 45 }
+    ],
+    PERFECT_HAIR_TECH: [
+      { name: "Só Lavagem de Cabelo (incluído shampoo e amaciador calha)", price: "4€", machine: null, durationMinutes: 100 },
+      { name: "Shampoo Especial", price: "3€", machine: null, durationMinutes: 100 },
+      { name: "Condicionador Especial", price: "2.5€", machine: null, durationMinutes: 100 },
+      { name: "Máscara Argan", price: "6.5€", machine: null, durationMinutes: 100 },
+      { name: "Máscara Hidratante", price: "4.5€", machine: null, durationMinutes: 100 },
+      { name: "Corte Simples", price: "10€", machine: null, durationMinutes: 30 },
+      { name: "Coloração Curto", price: "25€", machine: null, durationMinutes: 60 },
+      { name: "Coloração Médio", price: "30€", machine: null, durationMinutes: 60 },
+      { name: "Coloração Longo", price: "35€", machine: null, durationMinutes: 75 },
+      { name: "Coloração Extra Longo", price: "40€", machine: null, durationMinutes: 90 },
+      { name: "Coloração Raízes", price: "30€", machine: null, durationMinutes: 60 },
+      { name: "Matização / Tonalização", price: "25€", machine: null, durationMinutes: 60 },
+      { name: "Madeixas / Nuances / Californianas", price: "a partir de 40€", machine: null, durationMinutes: 90 },
+      { name: "Descoloração Total (Longo)", price: "60€", machine: null, durationMinutes: 75 },
+      { name: "Descoloração Total (Curto/Médio)", price: "40€", machine: null, durationMinutes: 60 },
+      { name: "Descoloração Raízes", price: "25€", machine: null, durationMinutes: 45 },
+      { name: "Brushing / Escova com Chapinha Curto", price: "8€", machine: null, durationMinutes: 30 },
+      { name: "Brushing / Escova com Chapinha Médio", price: "12€", machine: null, durationMinutes: 45 },
+      { name: "Brushing / Escova com Chapinha Longo", price: "12€", machine: null, durationMinutes: 45 },
+      { name: "Brushing / Escova com Chapinha Extra Longo", price: "20€", machine: null, durationMinutes: 60 },
+      { name: "Ondulação Curto", price: "35€", machine: null, durationMinutes: 45 },
+      { name: "Ondulação Médio", price: "45€", machine: null, durationMinutes: 45 },
+      { name: "Ondulação Longo", price: "60€", machine: null, durationMinutes: 45 },
+      { name: "Ondulação Extra Longo", price: "80€", machine: null, durationMinutes: 45 },
+      { name: "Alisamento / Progressiva Curto", price: "50€", machine: null, durationMinutes: 90 },
+      { name: "Alisamento / Progressiva Médio", price: "100€", machine: null, durationMinutes: 90 },
+      { name: "Alisamento / Progressiva Longo", price: "150€", machine: null, durationMinutes: 90 }
+    ]
+  };
 
+  const SERVICES_BRAGA = {
+    /* ... your SERVICES_BRAGA object (kept as provided) ... */
+    FACE_DESIGN_TECH: [
+      { name: "Embelezamento Facial e Design Personalizado", durationMinutes:60 },
+      { name: "Preenchimento Labial, Hy Aluron Pen", price: "150€", machine: "hyaluron-pen-lip-braga", durationMinutes:30 },
+      { name: "Micropigmentação Labial", price: "180€", machine: "micropigment-lip-braga", durationMinutes:45 },
+      { name: "Técnica Híbrida de Sobrancelhas", price: "180€", machine: "hybrid-brow-braga", durationMinutes:60 },
+      { name: "Lash & Brow Lamination", price: "60€", machine: "lash-brow-lamination-braga", durationMinutes:45 },
+      { name: "Extensão de Pestanas", price: "35€", machine: "eyelash-ext-braga", durationMinutes:60 },
+      { name: "Design de Sobrancelhas & Henna", price: "25€", machine: "brow-henna-braga", durationMinutes:30 }
+    ],
+    PERFECT_FACE_TECH: [
+      { name: "HIFU 12D — Rosto Completo", price: "200€", machine: "HIFU12D", durationMinutes:90 },
+      { name: "HIFU 12D Rosto + Papada", price: "300€", machine: "HIFU12D", durationMinutes:100 },
+      { name: "HIFU 12D Papada", price: "120€", machine: "HIFU12D", durationMinutes:45 },
+      { name: "HIFU 12D", price: "70€", machine: "HIFU12D", durationMinutes:30 },
+      { name: "HIFU 12D Rosto + Papada + Pescoço", price: "360€", machine: "HIFU12D", durationMinutes:120 },
+      { name: " HIFU 12D Pure Facial", price: "60€", machine: "HIFU12D", durationMinutes:30 },
+      { name: "Aplicação de Fios de Seda", price: "60€", machine: "silk-threads-braga", durationMinutes:45 }
+    ],
+    PERFECT_BODY_TECH: [
+      { name: "Drenagem Linfática Manual", price: "40€", machine: "lymph-drainage-braga", durationMinutes:45 },
+      { name: "Massagem Desportiva Localizada", price: "15€", machine: "sport-massage-braga", durationMinutes:30 },
+      { name: "Massagem Modeladora e Redutora", price: "35€", machine: "modeling-massage-braga", durationMinutes:45 },
+      { name: "Massagem Turbinada", price: "40€", machine: "turbo-massage-braga", durationMinutes:45 },
+      { name: "Pressoterapia", price: "20€", machine: "pressotherapy-braga", durationMinutes:30 },
+      { name: "Manta Térmica", price: "20€", machine: "thermal-blanket-braga", durationMinutes:20 },
+      { name: "Máquina Detox Pés", price: "20€", machine: "foot-detox-machine-braga", durationMinutes:20 },
+      { name: "HIFU 12D — Costas", price: "500€", machine: "HIFU12D", durationMinutes:120 },
+      { name: "HIFU 12D — Barriga", price: "230€", machine: "HIFU12D", durationMinutes:120 },
+      { name: "HIFU 12D — Glúteos", price: "200€", machine: "hifu-glutes-braga", durationMinutes:90 }
+    ],
+    COMBOS_TRATAMENTOS: [
+      { name: "FISIO LOCALIZADA 1x por mês", price: "85", machine: "lymph-drainage-braga", durationMinutes:45, noTimeRequired: true },
+      { name: "FISIO LOCALIZADA 2x por mês", price: "160", machine: "sport-massage-braga", durationMinutes:30, noTimeRequired: true },
+      { name: "FISIO MODELADO 1x por mês", price: "180", machine: "modeling-massage-braga", durationMinutes:45, noTimeRequired: true },
+      { name: "FISIO MODELADO 2x por mês", price: "340", machine: "turbo-massage-braga", durationMinutes:45, noTimeRequired: true },
+      { name: "FACIAL EMBELEZAMENTO", price: "190", machine: "pressotherapy-braga", durationMinutes:30, noTimeRequired: true },
+      { name: "FACIAL INTENSIVO FLACIDEZ E RUGAS", price: "1,120", machine: "thermal-blanket-braga", durationMinutes:20, noTimeRequired: true },
+      { name: "ELIMINAÇÃO DEFINITIVA DE PÊLOS", price: "325", machine: "foot-detox-machine-braga", durationMinutes:20, noTimeRequired: true }
+    ]
+  };
 
-
-  { name: "HIFU 12D — Barriga + Flancos", price: "380€", machine: "HIFU12D", durationMinutes: 90, paddingMinutes: 30 },
-  { name: "HIFU 12D — Glúteos", price: "200€", machine: "HIFU12D", durationMinutes: 60, paddingMinutes: 30 },
-
-  { name: "Depilação Laser Tripla Onda — Axila e Virilha", price: "20€", machine: "Laser", durationMinutes: 30 },
-  { name: "Depilação Laser Tripla Onda — Axila, Virilha e Buço", price: "30€", machine: "Laser", durationMinutes: 45 },
-  { name: "Depilação Laser Tripla Onda — Corpo Completo", price: "50€", machine: "Laser", durationMinutes: 90 },
-  
-
-],
-      PERFECT_NAILS_TECH: [
-  // --- Serviços Principais ---
-  { name: "Unhas de Gel (com Cutilagem)", price: "27€", machine: "naira", durationMinutes: 60 },
- 
-  { name: "Unhas de Fibras (com Cutilagem)", price: "42€", machine: "naira", durationMinutes: 90 },
-  { name: "Acrygel (com Cutilagem)", price: "30€", machine: "naira", durationMinutes: 75 },
-  { name: "Blindagem (com Cutilagem)", price: "18€", machine: "naira", durationMinutes: 45 },
-  { name: "Gelhinho Mão (com Cutilagem)", price: "12€", machine: "naira", durationMinutes: 30 },
-  { name: "Gelhinho Pé (com Cutilagem)", price: "22€", machine: "naira", durationMinutes: 45 },
-  { name: "Gelhinho Pé (sem Cutilagem)", price: "10€", machine: "naira", durationMinutes: 30 },
-
-  // --- Manutenção ---
-  { category: "Manutenção", name: "Unhas de Gel (com Cutilagem)", price: "a partir de 17€", machine: "naira", durationMinutes: 60 },
-  { category: "Manutenção", name: "Unhas de Fibras (com Cutilagem)", price: "26€", machine: "naira", durationMinutes: 60 },
-  { category: "Manutenção", name: "Acrygel (com Cutilagem)", price: "21€", machine: "naira", durationMinutes: 60 },
-
-
-  // --- Manicure e Pedicure ---
-  { category: "Cuidados", name: "Manicure", price: "8€", machine: "naira", durationMinutes: 30 },
-  { category: "Cuidados", name: "Pedicure", price: "17€", machine: "naira", durationMinutes: 45 }
-],
-
-      PERFECT_HAIR_TECH: [
-  // --- Lavagem e Tratamentos ---
-  { name: "Só Lavagem de Cabelo (incluído shampoo e amaciador calha)", price: "4€", machine: null, durationMinutes: 100 },
-  { name: "Shampoo Especial", price: "3€", machine: null, durationMinutes: 100 },
-  { name: "Condicionador Especial", price: "2.5€", machine: null, durationMinutes: 100 },
-  { name: "Máscara Argan", price: "6.5€", machine: null, durationMinutes: 100 },
-  { name: "Máscara Hidratante", price: "4.5€", machine: null, durationMinutes: 100 },
-
-  // --- Corte ---
-  { name: "Corte Simples", price: "10€", machine: null, durationMinutes: 30 },
-
-  // --- Coloração ---
-  { name: "Coloração Curto", price: "25€", machine: null, durationMinutes: 60 },
-  { name: "Coloração Médio", price: "30€", machine: null, durationMinutes: 60 },
-  { name: "Coloração Longo", price: "35€", machine: null, durationMinutes: 75 },
-  { name: "Coloração Extra Longo", price: "40€", machine: null, durationMinutes: 90 },
-  { name: "Coloração Raízes", price: "30€", machine: null, durationMinutes: 60 },
-  { name: "Matização / Tonalização", price: "25€", machine: null, durationMinutes: 60 },
-  { name: "Madeixas / Nuances / Californianas", price: "a partir de 40€", machine: null, durationMinutes: 90 },
-
-  // --- Descoloração ---
-  { name: "Descoloração Total (Longo)", price: "60€", machine: null, durationMinutes: 75 },
-  { name: "Descoloração Total (Curto/Médio)", price: "40€", machine: null, durationMinutes: 60 },
-  { name: "Descoloração Raízes", price: "25€", machine: null, durationMinutes: 45 },
-
-  // --- Brushing / Escova ---
-  { name: "Brushing / Escova com Chapinha Curto", price: "8€", machine: null, durationMinutes: 30 },
-  { name: "Brushing / Escova com Chapinha Médio", price: "12€", machine: null, durationMinutes: 45 },
-  { name: "Brushing / Escova com Chapinha Longo", price: "12€", machine: null, durationMinutes: 45 },
-  { name: "Brushing / Escova com Chapinha Extra Longo", price: "20€", machine: null, durationMinutes: 60 },
-
-  // --- Ondulação ---
-  { name: "Ondulação Curto", price: "35€", machine: null, durationMinutes: 45 },
-  { name: "Ondulação Médio", price: "45€", machine: null, durationMinutes: 45 },
-  { name: "Ondulação Longo", price: "60€", machine: null, durationMinutes: 45 },
-  { name: "Ondulação Extra Longo", price: "80€", machine: null, durationMinutes: 45 },
-
-  // --- Alisamento / Progressiva ---
-  { name: "Alisamento / Progressiva Curto", price: "50€", machine: null, durationMinutes: 90 },
-  { name: "Alisamento / Progressiva Médio", price: "100€", machine: null, durationMinutes: 90 },
-  { name: "Alisamento / Progressiva Longo", price: "150€", machine: null, durationMinutes: 90 }
-],
-
-    };
-
-    const SERVICES_BRAGA = {
-      FACE_DESIGN_TECH: [
-        { name: "Embelezamento Facial e Design Personalizado", durationMinutes:60 },
-        { name: "Preenchimento Labial, Hy Aluron Pen", price: "150€", machine: "hyaluron-pen-lip-braga", durationMinutes:30 },
-        { name: "Micropigmentação Labial", price: "180€", machine: "micropigment-lip-braga", durationMinutes:45 },
-        { name: "Técnica Híbrida de Sobrancelhas", price: "180€", machine: "hybrid-brow-braga", durationMinutes:60 },
-        { name: "Lash & Brow Lamination", price: "60€", machine: "lash-brow-lamination-braga", durationMinutes:45 },
-        { name: "Extensão de Pestanas", price: "35€", machine: "eyelash-ext-braga", durationMinutes:60 },
-        { name: "Design de Sobrancelhas & Henna", price: "25€", machine: "brow-henna-braga", durationMinutes:30 }
-      ],
-      PERFECT_FACE_TECH: [
-        { name: "HIFU 12D — Rosto Completo", price: "200€", machine: "HIFU12D", durationMinutes:90 },
-        { name: "HIFU 12D Rosto + Papada", price: "300€", machine: "HIFU12D", durationMinutes:100 },
-        { name: "HIFU 12D Papada", price: "120€", machine: "HIFU12D", durationMinutes:45 },
-        { name: "HIFU 12D", price: "70€", machine: "HIFU12D", durationMinutes:30 },
-        { name: "HIFU 12D Rosto + Papada + Pescoço", price: "360€", machine: "HIFU12D", durationMinutes:120 },
-        { name: " HIFU 12D Pure Facial", price: "60€", machine: "HIFU12D", durationMinutes:30 },
-        { name: "Aplicação de Fios de Seda", price: "60€", machine: "silk-threads-braga", durationMinutes:45 }
-      ],
-      PERFECT_BODY_TECH: [
-        { name: "Drenagem Linfática Manual", price: "40€", machine: "lymph-drainage-braga", durationMinutes:45 },
-        { name: "Massagem Desportiva Localizada", price: "15€", machine: "sport-massage-braga", durationMinutes:30 },
-        { name: "Massagem Modeladora e Redutora", price: "35€", machine: "modeling-massage-braga", durationMinutes:45 },
-        { name: "Massagem Turbinada", price: "40€", machine: "turbo-massage-braga", durationMinutes:45 },
-        { name: "Pressoterapia", price: "20€", machine: "pressotherapy-braga", durationMinutes:30 },
-        { name: "Manta Térmica", price: "20€", machine: "thermal-blanket-braga", durationMinutes:20 },
-        { name: "Máquina Detox Pés", price: "20€", machine: "foot-detox-machine-braga", durationMinutes:20 },
-        { name: "HIFU 12D — Costas", price: "500€", machine: "HIFU12D", durationMinutes:120 },
-        { name: "HIFU 12D — Barriga", price: "230€", machine: "HIFU12D", durationMinutes:120 },
-        { name: "HIFU 12D — Glúteos", price: "200€", machine: "hifu-glutes-braga", durationMinutes:90 }
-      ]
-    };
-
-   
   function servicesForBranch(branch){
     if(branch==='braga') return SERVICES_BRAGA;
     if(branch==='amora') return SERVICES_AMORA;
     return {};
   }
 
+  // ------------------------------
+  // HOURS / SLOTS HELPERS
+  // ------------------------------
   const HOURS_BY_BRANCH = {
     amora: ["09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30"],
     braga: ["10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00"]
   };
   const DEFAULT_HOURS = ["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30"];
   function getHoursForBranch(branch){ if(!branch) return DEFAULT_HOURS; return HOURS_BY_BRANCH[branch] || DEFAULT_HOURS; }
-
-  // ------------------------------
-  // NEW: scheduling helpers (added)
-  // ------------------------------
   function parseTimeToMinutes(t){ if(!t) return 0; const parts = String(t).split(':').map(Number); return (parts[0]||0)*60 + (parts[1]||0); }
   function computeSlotIntervalMinutes(hours){ if(!hours||hours.length<2) return 30; const a=parseTimeToMinutes(hours[0]); const b=parseTimeToMinutes(hours[1]); const diff = Math.abs(b-a); return diff || 30; }
   function slotsNeededForDuration(durationMinutes, slotInterval){ return Math.max(1, Math.ceil((Number(durationMinutes)||30) / slotInterval)); }
 
-  // expand an unavailable set by padding slots (both sides)
   function expandUnavailableSet(unavailableArr, slotOrder, paddingSlots){
     const idxMap = new Map(slotOrder.map((t,i)=>[t,i]));
     const base = new Set((unavailableArr||[]).map(String));
@@ -387,37 +372,31 @@
     return [...new Set([...base, ...extra])];
   }
 
-  // ensure a start time has enough consecutive free slots for the service
   function isStartSlotValid(startTime, neededSlots, unavailableSet, slotOrder){
     const idx = slotOrder.indexOf(startTime);
     if(idx === -1) return false;
     for(let k=0;k<neededSlots;k++){
       const t = slotOrder[idx+k];
-      if(!t) return false; // out of work hours
+      if(!t) return false;
       if(unavailableSet.has(t)) return false;
     }
     return true;
   }
 
   // ------------------------------
-  // state
+  // state + DOM refs
   // ------------------------------
   let selectedBranch = null;
   let isOldClient = false;
   let clientData = {};
   let selectedCategoryKey = null;
-  // NOTE: store duration/padding for each selected service when adding
-  let selectedServices = []; // {category,name,price,machine,durationMinutes,paddingMinutes}
-  let perServiceSelections = []; // {date, hour}
-  let pikadayInstances = {}; // idx => pikaday
+  let selectedServices = [];
+  let perServiceSelections = [];
+  let pikadayInstances = {};
 
-  // min days ahead for datepicker
   const MIN_DAYS_AHEAD = 3;
   function getMinDate(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+MIN_DAYS_AHEAD); return d; }
 
-  // ------------------------------
-  // DOM refs
-  // ------------------------------
   const branchRadios = document.querySelectorAll('input[name="branch"]');
   const clientTypeRadios = document.querySelectorAll('input[name="clientType"]');
   const clientNextBtn = document.getElementById('clientNextBtn');
@@ -433,7 +412,6 @@
   const categoriesWrap = document.getElementById('categories');
   const servicesList = document.getElementById('servicesList');
   const selectedListEl = document.getElementById('selectedList');
-  
   const summaryClient = document.getElementById('summaryClient');
 
   const backToStep1From2 = document.getElementById('backToStep1From2');
@@ -448,25 +426,30 @@
   const resumoBox = document.getElementById('resumoBox');
   const stepBlocks = {1:document.getElementById('step-1'),2:document.getElementById('step-2'),3:document.getElementById('step-3'),4:document.getElementById('step-4')};
   const stepLabels = {1:document.getElementById('stepLabel-1'),2:document.getElementById('stepLabel-2'),3:document.getElementById('stepLabel-3'),4:document.getElementById('stepLabel-4')};
+  const countSelected = document.getElementById('countSelected');
 
   function showStep(n){
-    Object.values(stepBlocks).forEach(el=>el.classList.add('hidden'));
-    stepBlocks[n].classList.remove('hidden');
-    Object.values(stepLabels).forEach(l=>l.classList.remove('active'));
-    stepLabels[n].classList.add('active');
+    Object.values(stepBlocks).forEach(el=>el && el.classList.add('hidden'));
+    stepBlocks[n] && stepBlocks[n].classList.remove('hidden');
+    Object.values(stepLabels).forEach(l=>l && l.classList.remove('active'));
+    stepLabels[n] && stepLabels[n].classList.add('active');
     window.scrollTo({top:0,behavior:'smooth'});
   }
+
   function enableClientNext(){
     const branchSelected = !!document.querySelector('input[name="branch"]:checked');
     const clientTypeSelected = !!document.querySelector('input[name="clientType"]:checked');
-    clientNextBtn.disabled = !(branchSelected && clientTypeSelected);
-    clientNextBtn.setAttribute('aria-disabled', String(clientNextBtn.disabled));
+    if(clientNextBtn) {
+      clientNextBtn.disabled = !(branchSelected && clientTypeSelected);
+      clientNextBtn.setAttribute('aria-disabled', String(clientNextBtn.disabled));
+    }
   }
+
   function setSummaryClientText(){
-    if(isOldClient && clientData.name) summaryClient.textContent = `${clientData.name} (Cliente) — código: ${clientData.code || '—'}`;
-    else { const name = document.getElementById('name')?.value || 'Cliente novo'; const phone = document.getElementById('phone')?.value || ''; summaryClient.textContent = `${name} ${phone? '• '+phone: ''}`; }
+    if(isOldClient && clientData.name && summaryClient) summaryClient.textContent = `${clientData.name} (Cliente) — código: ${clientData.code || '—'}`;
+    else if(summaryClient) { const name = document.getElementById('name')?.value || 'Cliente novo'; const phone = document.getElementById('phone')?.value || ''; summaryClient.textContent = `${name} ${phone? '• '+phone: ''}`; }
   }
-  
+
   function showResumo(){ if(resumoBox) resumoBox.style.display = ''; }
   function hideResumoAndClear(){
     if(resumoBox) resumoBox.style.display = 'none';
@@ -476,18 +459,21 @@
     pikadayInstances = {};
     if(selectedListEl) selectedListEl.innerHTML = '';
     if(servicePickersWrap) servicePickersWrap.innerHTML = '';
-   
     if(confirmBtn) { confirmBtn.disabled = true; confirmBtn.setAttribute('aria-disabled','true'); }
   }
 
+  // ------------------------------
+  // UI: categories/services rendering
+  // ------------------------------
   function initCategories(){
+    if(!categoriesWrap) return;
     categoriesWrap.innerHTML = '';
-    if(!selectedBranch){ categoriesWrap.innerHTML = '<div class="muted">Escolha a filial primeiro.</div>'; servicesList.innerHTML = '<p class="muted">Selecione uma categoria para ver serviços...</p>'; return; }
-    const S = servicesForBranch(selectedBranch); const keys = Object.keys(S);
+    if(!selectedBranch){ categoriesWrap.innerHTML = '<div class="muted">Escolha a filial primeiro.</div>'; servicesList && (servicesList.innerHTML = '<p class="muted">Selecione uma categoria para ver serviços...</p>'); return; }
+    const S = servicesForBranch(selectedBranch); const keys = Object.keys(S||{});
     keys.forEach(k=>{
       const div=document.createElement('div');
       div.className='cat';
-      div.textContent=CATEGORY_LABELS[k] || k.replace(/_/g,' ');
+      div.textContent=(CATEGORY_LABELS && CATEGORY_LABELS[k]) ? CATEGORY_LABELS[k] : k.replace(/_/g,' ');
       div.dataset.key=k;
       div.addEventListener('click', ()=>{
         document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
@@ -497,10 +483,11 @@
       });
       categoriesWrap.appendChild(div);
     });
-    servicesList.innerHTML = '<p class="muted">Selecione uma categoria para ver serviços...</p>';
+    servicesList && (servicesList.innerHTML = '<p class="muted">Selecione uma categoria para ver serviços...</p>');
   }
 
   function renderServicesForCategory(key){
+    if(!servicesList) return;
     servicesList.innerHTML='';
     const S = servicesForBranch(selectedBranch);
     const list = S[key] || [];
@@ -512,9 +499,9 @@
     title.style.margin='0 0 6px 0';
     title.style.fontSize='16px';
     title.style.fontWeight='800';
-    title.textContent = CATEGORY_LABELS[key] || key.replace(/_/g,' ');
+    title.textContent = (CATEGORY_LABELS && CATEGORY_LABELS[key]) ? CATEGORY_LABELS[key] : key.replace(/_/g,' ');
     header.appendChild(title);
-    if(CATEGORY_SUBHEADERS[key]){
+    if(CATEGORY_SUBHEADERS && CATEGORY_SUBHEADERS[key]){
       const sub = document.createElement('div');
       sub.style.fontSize='13px';
       sub.style.color='rgba(255,255,255,0.85)';
@@ -530,7 +517,7 @@
       const row=document.createElement('div'); row.className='service-row';
       const left=document.createElement('div'); left.style.display='flex'; left.style.flexDirection='column';
       const nameEl=document.createElement('div'); nameEl.className='service-name'; nameEl.textContent = svc.name || svc.name;
-      const catEl=document.createElement('div'); catEl.className='muted'; catEl.style.fontSize='12px'; catEl.textContent = CATEGORY_LABELS[key] || key.replace(/_/g,' ');
+      const catEl=document.createElement('div'); catEl.className='muted'; catEl.style.fontSize='12px'; catEl.textContent = (CATEGORY_LABELS && CATEGORY_LABELS[key]) ? CATEGORY_LABELS[key] : key.replace(/_/g,' ');
       left.appendChild(nameEl); left.appendChild(catEl);
       const right=document.createElement('div'); right.style.display='flex'; right.style.alignItems='center';
       const price=document.createElement('div'); price.className='service-price'; price.textContent = svc.price || '';
@@ -543,50 +530,42 @@
   }
 
   // ------------------------------
-  // MODIFY: addService now stores durationMinutes & paddingMinutes (defaulted)
+  // selected services management
   // ------------------------------
   function addService(category, svc){
-    const svcName = svc.name || svc.name;
+    const svcName = svc.name || '';
     if(selectedServices.some(s=>s.name===svcName)){ flashServiceRow(svcName); return; }
-    // Read duration/padding from svc if provided, otherwise defaults:
     const durationMinutes = typeof svc.durationMinutes !== 'undefined' ? svc.durationMinutes : 30;
     const paddingMinutes = typeof svc.paddingMinutes !== 'undefined' ? svc.paddingMinutes : 0;
-    selectedServices.push({ category, name: svcName, machine: svc.machine || null, durationMinutes, paddingMinutes });
+    const item = { ...svc, category, durationMinutes, paddingMinutes };
+    selectedServices.push(item);
     perServiceSelections = selectedServices.map((s,i)=> perServiceSelections[i] ? perServiceSelections[i] : {date:null,hour:null});
     renderSelectedList();
-    // DEBUG + sync to global + persist
-console.log('[addService] adding:', svc.name);
-window.selectedServices = selectedServices;
-try {
-  localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
-} catch(e){ console.warn('localStorage write failed in addService', e); }
-
+    console.log('[addService] added:', item);
+    try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices)); } catch(e){ console.warn('localStorage write failed in addService', e); }
   }
 
   function removeServiceAt(idx){
+    if(typeof idx !== 'number' || idx < 0 || idx >= selectedServices.length) return;
     selectedServices.splice(idx,1);
     perServiceSelections.splice(idx,1);
     Object.keys(pikadayInstances).forEach(k=>{ try{ pikadayInstances[k].destroy(); }catch(e){} });
     pikadayInstances = {};
     renderSelectedList();
-    if(!document.getElementById('step-3').classList.contains('hidden')){
+    if(stepBlocks[3] && !stepBlocks[3].classList.contains('hidden')){
       buildPerServicePickers();
     }
-    // بعد از حذف از آرایه
-selectedServices.splice(idx,1);
-perServiceSelections.splice(idx,1);
-window.selectedServices = selectedServices;
-try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices)); } catch(e){}
-
-    
+    try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices)); } catch(e){}
+    console.log('[removeServiceAt] now selectedServices =', selectedServices);
   }
 
   function renderSelectedList(){
+    if(!selectedListEl) return;
     selectedListEl.innerHTML='';
     selectedServices.forEach((s, idx)=>{
       const li=document.createElement('li');
       const left=document.createElement('div'); left.style.maxWidth='70%';
-      left.innerHTML=`<strong>${s.name}</strong><div style="font-size:12px;color:#ffdff4">${(CATEGORY_LABELS[s.category]||s.category).replace(/_/g,' ')}</div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:6px">Duração: ${s.durationMinutes || 30} min${s.paddingMinutes? ' • padding '+s.paddingMinutes+'min':''}</div>`;
+      left.innerHTML=`<strong>${s.name}</strong><div style="font-size:12px;color:#ffdff4">${(CATEGORY_LABELS && (CATEGORY_LABELS[s.category]||s.category) ) ? (CATEGORY_LABELS[s.category]||s.category) : s.category}</div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:6px">Duração: ${s.durationMinutes || 30} min${s.paddingMinutes? ' • padding '+s.paddingMinutes+'min':''}</div>`;
       const right=document.createElement('div'); right.style.display='flex'; right.style.alignItems='center';
       const price=document.createElement('div'); price.style.marginRight='10px'; price.style.fontWeight='700'; price.style.color='#ffd6f6'; price.textContent=s.price||'';
       const rem=document.createElement('button'); rem.className='remove-small'; rem.textContent='Remover';
@@ -594,20 +573,13 @@ try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices))
       right.appendChild(price); right.appendChild(rem);
       li.appendChild(left); li.appendChild(right);
       selectedListEl.appendChild(li);
-      
     });
-    countSelected.textContent = selectedServices.length;
-    calcTotal();
+    try { if(countSelected) countSelected.textContent = selectedServices.length; }catch(e){}
+    try { if(typeof calcTotal === 'function') calcTotal(); }catch(e){}
     updateConfirmEnabled();
     if(selectedServices.length>0 || (clientData && (clientData.name || clientData.code))) showResumo();
-    // انتهای renderSelectedList (بعد از update count, price ...)
-countSelected.textContent = selectedServices.length;
-calcTotal();
-
-window.selectedServices = selectedServices;
-try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices)); } catch(e){ console.warn('localStorage write failed in renderSelectedList', e); }
-console.log('[renderSelectedList] now selectedServices =', selectedServices);
-
+    try { localStorage.setItem('selectedServices', JSON.stringify(selectedServices)); } catch(e){ console.warn('localStorage write failed in renderSelectedList', e); }
+    console.log('[renderSelectedList] now selectedServices =', selectedServices);
   }
 
   function flashServiceRow(name){
@@ -618,106 +590,92 @@ console.log('[renderSelectedList] now selectedServices =', selectedServices);
     setTimeout(()=> row.style.boxShadow='',360);
   }
 
-  branchRadios.forEach(r=>r.addEventListener('change', (e)=>{ selectedBranch = e.target.value; initCategories(); enableClientNext(); }));
-  clientTypeRadios.forEach(r=>r.addEventListener('change', enableClientNext));
-  clientNextBtn.addEventListener('click', ()=>{
+  // ------------------------------
+  // events wiring
+  // ------------------------------
+  branchRadios && branchRadios.forEach(r=>r.addEventListener('change', (e)=>{ selectedBranch = e.target.value; initCategories(); enableClientNext(); }));
+  clientTypeRadios && clientTypeRadios.forEach(r=>r.addEventListener('change', enableClientNext));
+  clientNextBtn && clientNextBtn.addEventListener('click', ()=>{
     const val=document.querySelector('input[name="clientType"]:checked')?.value;
     if(!val||!selectedBranch) return alert('Escolha a filial e tipo de cliente.');
     isOldClient = val==='old';
-    if(isOldClient){ oldCodeBox.classList.remove('hidden'); newClientBox.classList.add('hidden'); }
-    else { newClientBox.classList.remove('hidden'); oldCodeBox.classList.add('hidden'); }
+    if(isOldClient){ oldCodeBox && oldCodeBox.classList.remove('hidden'); newClientBox && newClientBox.classList.add('hidden'); }
+    else { newClientBox && newClientBox.classList.remove('hidden'); oldCodeBox && oldCodeBox.classList.add('hidden'); }
   });
 
-  backToClientType1.addEventListener('click', ()=>{
-    oldCodeBox.classList.add('hidden');
+  backToClientType1 && backToClientType1.addEventListener('click', ()=>{
+    oldCodeBox && oldCodeBox.classList.add('hidden');
     try { const el = document.querySelector('input[name="clientType"]:checked'); if(el) el.checked=false; } catch(e){}
-    clientNextBtn.disabled = true;
+    clientNextBtn && (clientNextBtn.disabled = true);
     hideResumoAndClear();
   });
-  backToClientType2.addEventListener('click', ()=>{ newClientBox.classList.add('hidden'); try { const el = document.querySelector('input[name="clientType"]:checked'); if(el) el.checked=false; } catch(e){} clientNextBtn.disabled=true; });
+  backToClientType2 && backToClientType2.addEventListener('click', ()=>{ newClientBox && newClientBox.classList.add('hidden'); try { const el = document.querySelector('input[name="clientType"]:checked'); if(el) el.checked=false; } catch(e){} clientNextBtn && (clientNextBtn.disabled=true); });
 
-  validateCodeBtn.addEventListener('click', async ()=>{
-    const code = clientCodeInput.value.trim();
-    if(!code){ codeMsg.textContent='Insira o código.'; return; }
-    codeMsg.textContent='Validando...';
+  validateCodeBtn && validateCodeBtn.addEventListener('click', async ()=>{
+    const code = (clientCodeInput && clientCodeInput.value) ? clientCodeInput.value.trim() : '';
+    if(!code){ codeMsg && (codeMsg.textContent='Insira o código.'); return; }
+    codeMsg && (codeMsg.textContent='Validando...');
     try {
       const res = await fetch(WEBHOOK_VALIDATE, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code, branch: selectedBranch }) });
       const data = await res.json();
       if(data && data.success){
         clientData = data.client||{};
         clientData.code = code;
-        codeMsg.textContent='Código válido. A seguir para serviços.';
+        codeMsg && (codeMsg.textContent='Código válido. A seguir para serviços.');
         setSummaryClientText();
         showStep(2);
         showResumo();
-      } else { codeMsg.textContent='Código inválido.'; }
-    } catch(e){ console.error(e); codeMsg.textContent='Erro de rede ao validar.'; }
+      } else { codeMsg && (codeMsg.textContent='Código inválido.'); }
+    } catch(e){ console.error(e); codeMsg && (codeMsg.textContent='Erro de rede ao validar.'); }
   });
 
-  newClientNext.addEventListener('click', ()=>{
-    const name=document.getElementById('name').value.trim();
-    const email=document.getElementById('email').value.trim();
-    const phone=document.getElementById('phone').value.trim();
-    const birth=document.getElementById('birth').value;
+  newClientNext && newClientNext.addEventListener('click', ()=>{
+    const name=document.getElementById('name')?.value?.trim();
+    const email=document.getElementById('email')?.value?.trim();
+    const phone=document.getElementById('phone')?.value?.trim();
+    const birth=document.getElementById('birth')?.value;
     if(!selectedBranch){ alert('Escolha a filial antes de continuar.'); return; }
     if(!name||!email||!phone||!birth){ alert('Preencha todos os campos.'); return; }
-    clientData = { name, email, phone, birth, favService: document.getElementById('favService').value, code: 'VIP-'+Math.floor(100000+Math.random()*900000) };
-    setSummaryClientText(); initCategories(); showStep(2);
-    showResumo();
+    clientData = { name, email, phone, birth, favService: document.getElementById('favService')?.value, code: 'VIP-'+Math.floor(100000+Math.random()*900000) };
+    setSummaryClientText(); initCategories(); showStep(2); showResumo();
   });
 
-  backToStep1From2.addEventListener('click', ()=> showStep(1));
-  toCalendarBtn.addEventListener('click', ()=>{
+  backToStep1From2 && backToStep1From2.addEventListener('click', ()=> showStep(1));
+  toCalendarBtn && toCalendarBtn.addEventListener('click', async ()=>{
     if(!selectedBranch){ alert('Escolha a filial.'); showStep(1); return; }
     if(selectedServices.length===0){ if(!confirm('Nenhum serviço selecionado. Deseja continuar?')) return; }
-    buildPerServicePickers(); showStep(3);
+
+    const allNoTime = selectedServices.length > 0 && selectedServices.every(s => s.noTimeRequired === true);
+
+    if(allNoTime){
+      await handleImmediateCheckout();
+      return;
+    }
+
+    buildPerServicePickers();
+    showStep(3);
   });
 
-  document.getElementById('backToStep2').addEventListener('click', ()=> showStep(2));
-  document.getElementById('backToStep3').addEventListener('click', ()=> showStep(3));
-  document.getElementById('backToStep1From2').addEventListener('click', ()=> showStep(1));
-
   // ------------------------------
-  // CONFIG + helpers: minimal changes required by your request
+  // isDateAllowedForService (single clean definition)
+  // - Rules required by you:
+  //   * amora: Monday closed
+  //   * amora + machine HIFU12D or HELENA => only last weekend of month allowed
   // ------------------------------
-  // You can edit SERVICE_DATE_RULES to match which branches/machines should have restricted dates.
-  const SERVICE_DATE_RULES = {
-    amora: {
-      machines: {
-        // machine name keys should match svc.machine values (case-sensitive)
-        HIFU12D: { type: 'lastWeekend' },Helena: { type: 'lastWeekend' },
-        Laser: { type: 'lastWeekend' },
-        naira: { type: 'specificRange', from: '2025-11-04', to: '2025-11-12' },
+  const BRANCH_CLOSED_WEEKDAYS = { amora: [1], braga: [] }; // (reused for clarity)
 
-      },
-      default: { type: 'always' }
-    },
-    // add more branches here if needed, e.g.:
-    // braga: { machines: { specialMachine: { type: 'specificDates', dates: ['2025-11-10'] } }, default: { type:'always' } }
-  };
-  // branch-level closed weekdays (0=Sun, 1=Mon, ..., 6=Sat)
-// Example: amora closed on Mondays
-const BRANCH_CLOSED_WEEKDAYS = {
-  amora: [1], // Monday closed
-  // braga: [0], // نمونه: اگر بخوای یک شعبه یکشنبه رو ببنده
-};
-
-
-  // helper: format date to YYYY-MM-DD
   function formatYMD(d){
+    if(!d) return '';
+    if(!(d instanceof Date)) d = new Date(d);
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
   function lastWeekdayOfMonth(year, monthZeroBased, weekday){
     const dt = new Date(year, monthZeroBased + 1, 0);
-    while(dt.getDay() !== weekday){
-      dt.setDate(dt.getDate() - 1);
-    }
+    while(dt.getDay() !== weekday) dt.setDate(dt.getDate() - 1);
     return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
   }
   function isLastWeekendOfMonth(date){
     if(!date || !(date instanceof Date)) return false;
-    const day = date.getDay();
-    if(day !== 5 && day !== 6) return false;
     const y = date.getFullYear(), m = date.getMonth();
     const lastFri = lastWeekdayOfMonth(y, m, 5);
     const lastSat = lastWeekdayOfMonth(y, m, 6);
@@ -725,57 +683,47 @@ const BRANCH_CLOSED_WEEKDAYS = {
     return ds === formatYMD(lastFri) || ds === formatYMD(lastSat);
   }
 
-  function isDateAllowedForService(date, svc){
-  if(!date || !(date instanceof Date)) return false;
-  // respect minDate
-  if(typeof getMinDate === 'function'){
-    const min = getMinDate();
-    const minNorm = new Date(min.getFullYear(), min.getMonth(), min.getDate());
-    const dateNorm = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    if(dateNorm < minNorm) return false;
-  }
-
-  // --------------- NEW: branch-level closed weekdays ---------------
-  const closed = BRANCH_CLOSED_WEEKDAYS && BRANCH_CLOSED_WEEKDAYS[selectedBranch];
-  if(Array.isArray(closed) && closed.includes(date.getDay())){
-    // this weekday is closed for the entire branch -> not allowed for any service
-    return false;
-  }
-  // ----------------------------------------------------------------
-
-  const branchRules = SERVICE_DATE_RULES[selectedBranch];
-  if(!branchRules) return true;
-
-  const machine = svc && svc.machine ? String(svc.machine) : null;
-  let rule = null;
-  if(machine && branchRules.machines && branchRules.machines[machine]){
-    rule = branchRules.machines[machine];
-  } else if(branchRules.default){
-    rule = branchRules.default;
-  } else {
-    rule = { type: 'always' };
-  }
-
-  if(rule.type === 'always') return true;
-  if(rule.type === 'lastWeekend') return isLastWeekendOfMonth(date);
-  if(rule.type === 'weekdays' && Array.isArray(rule.days)) return rule.days.includes(date.getDay());
-  if(rule.type === 'specificDates' && Array.isArray(rule.dates)){
+  function isDateAllowedForService(branch, svc, date){
+    // validation
+    if(!date || !(date instanceof Date)) return false;
     const ds = formatYMD(date);
-    return rule.dates.includes(ds);
+
+    // Normalize machine name
+    const machine = (svc && svc.machine) ? String(svc.machine).toUpperCase() : '';
+
+    // Branch-specific rules for amora
+    if(branch === 'amora'){
+      // Monday closed
+      if(date.getDay() === 1) return false;
+
+      // If machine is HIFU12D or HELENA -> only last weekend allowed
+      if(machine === 'HIFU12D' || machine === 'HELENA'){
+        return isLastWeekendOfMonth(date);
+      }
+    }
+
+    // Generic branch-level closed weekdays
+    if(BRANCH_CLOSED_WEEKDAYS[branch] && BRANCH_CLOSED_WEEKDAYS[branch].includes(date.getDay())) return false;
+
+    // Fallback to SERVICE_DATE_RULES if defined
+    const rule = SERVICE_DATE_RULES[branch]?.machines?.[svc?.machine] || SERVICE_DATE_RULES[branch]?.default || { type: 'always' };
+    if(rule.type === 'always') return true;
+    if(rule.type === 'specificRange' && rule.from && rule.to) return ds >= rule.from && ds <= rule.to;
+    if(rule.type === 'closedRange' && rule.from && rule.to) return !(ds >= rule.from && ds <= rule.to);
+    if(rule.type === 'lastWeekend') return isLastWeekendOfMonth(date);
+
+    return true;
   }
-  return true;
-  }
-  // ------------------------------
 
   // ------------------------------
-  // buildPerServicePickers (unchanged API but uses new helpers)
+  // buildPerServicePickers (Pikaday disableDayFn uses correct signature)
   // ------------------------------
   function buildPerServicePickers(){
     const oldSelections = perServiceSelections.slice();
     perServiceSelections = selectedServices.map((s,i)=> oldSelections[i] ? { date: oldSelections[i].date, hour: oldSelections[i].hour } : { date:null, hour:null });
     Object.keys(pikadayInstances).forEach(k=>{ try{ pikadayInstances[k].destroy(); }catch(e){} });
     pikadayInstances = {};
-    servicePickersWrap.innerHTML = '';
+    if(servicePickersWrap) servicePickersWrap.innerHTML = '';
 
     selectedServices.forEach((svc, idx)=>{
       const wrap = document.createElement('div'); wrap.className='service-picker'; wrap.dataset.idx = idx;
@@ -797,10 +745,10 @@ const BRANCH_CLOSED_WEEKDAYS = {
         field: dateInput,
         format: 'YYYY-MM-DD',
         minDate: getMinDate(),
-        // disableDayFn: return true to DISABLE a date
         disableDayFn: function(date){
           try {
-            return !isDateAllowedForService(date, svc);
+            // pass correct signature
+            return !isDateAllowedForService(selectedBranch, svc, date);
           } catch(e){
             console.error('disableDayFn error', e);
             return false;
@@ -818,10 +766,10 @@ const BRANCH_CLOSED_WEEKDAYS = {
       });
       pikadayInstances[idx] = pik;
 
-      // clear any previously chosen date if now invalid under the rules
+      // validate previous selection if any
       if(perServiceSelections[idx] && perServiceSelections[idx].date){
         const preDate = new Date(perServiceSelections[idx].date + 'T00:00:00');
-        if(!isDateAllowedForService(preDate, svc)){
+        if(!isDateAllowedForService(selectedBranch, svc, preDate)){
           perServiceSelections[idx].date = null;
           perServiceSelections[idx].hour = null;
           dateInput.value = '';
@@ -831,7 +779,6 @@ const BRANCH_CLOSED_WEEKDAYS = {
 
       if(perServiceSelections[idx] && perServiceSelections[idx].date){
         dateInput.value = perServiceSelections[idx].date;
-        // fetch and render existing selection
         fetchAvailableSlotsForService(perServiceSelections[idx].date, idx).then(()=>{ updateConfirmEnabled(); });
       } else {
         renderTimeSlotsForService(idx, []);
@@ -842,7 +789,8 @@ const BRANCH_CLOSED_WEEKDAYS = {
   }
 
   // ------------------------------
-  // renderTimeSlotsForService now considers needed consecutive slots
+  // renderTimeSlotsForService, normalizeUnavailable, fetchAvailableSlotsForService
+  // (kept as in your original but with safe webhook selection)
   // ------------------------------
   function renderTimeSlotsForService(idx, unavailable=[]){
     const slotsEl = document.getElementById(`svc-slots-${idx}`); if(!slotsEl) return;
@@ -855,9 +803,6 @@ const BRANCH_CLOSED_WEEKDAYS = {
     const slotInterval = computeSlotIntervalMinutes(slotOrder);
     const svc = selectedServices[idx] || { durationMinutes:30, paddingMinutes:0 };
     const neededSlots = slotsNeededForDuration(svc.durationMinutes || 30, slotInterval);
-
-    // If service has paddingMinutes, we've already expanded unavailable before calling this
-    // (fetchAvailableSlotsForService does expansion). But just in case, we won't re-expand here.
 
     HOURS.forEach(h=>{
       const btn = document.createElement('button'); btn.type='button'; btn.className='slot-button'; btn.textContent=h;
@@ -904,26 +849,27 @@ const BRANCH_CLOSED_WEEKDAYS = {
     return [...ordered, ...extras];
   }
 
-  // ------------------------------
-  // fetchAvailableSlotsForService: now sends duration/padding and expands unavailable locally
-  // ------------------------------
   async function fetchAvailableSlotsForService(date, serviceIdx){
     if(!date) return;
     if(typeof serviceIdx === 'undefined' || !selectedServices[serviceIdx]){ console.error('serviceIdx inválido', serviceIdx); return; }
     const svc = selectedServices[serviceIdx];
-    calendarMsg.textContent = `Verificando horários para "${svc.name}"...`;
+    if(calendarMsg) calendarMsg.textContent = `Verificando horários para "${svc.name}"...`;
     const payload = { date, service: { name: svc.name, category: svc.category, price: svc.price, machine: svc.machine || null, durationMinutes: svc.durationMinutes || 30, paddingMinutes: svc.paddingMinutes || 0 }, branch: selectedBranch };
     const webhook = selectedBranch === 'braga' ? WEBHOOK_AVAILABLE_BRAGA : WEBHOOK_AVAILABLE_AMORA;
+    if(!webhook){
+      if(calendarMsg) calendarMsg.textContent = 'Webhook de disponibilidade não configurado.';
+      renderTimeSlotsForService(serviceIdx, []);
+      return;
+    }
     try {
       const res = await fetch(webhook, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      if(!res.ok){ calendarMsg.textContent = 'Erro ao consultar horários (status ' + res.status + ').'; renderTimeSlotsForService(serviceIdx, []); return; }
+      if(!res.ok){ if(calendarMsg) calendarMsg.textContent = 'Erro ao consultar horários (status ' + res.status + ').'; renderTimeSlotsForService(serviceIdx, []); return; }
       let data;
       try { data = await res.json(); } catch(e){
         const txt = await res.text();
         try { data = JSON.parse(txt); } catch(err){ data = txt.includes(':') ? { unavailableHours: txt.split(',').map(s=>s.trim()).filter(Boolean) } : {}; }
       }
       let unavailable = normalizeUnavailable(data);
-      // local expansion using padding (so UI blocks surrounding slots if padding requested)
       const slotOrder = getHoursForBranch(selectedBranch);
       const slotInterval = computeSlotIntervalMinutes(slotOrder);
       const paddingSlots = Math.max(0, Math.ceil((svc.paddingMinutes||0)/slotInterval));
@@ -931,60 +877,40 @@ const BRANCH_CLOSED_WEEKDAYS = {
         unavailable = expandUnavailableSet(unavailable, slotOrder, paddingSlots);
       }
       renderTimeSlotsForService(serviceIdx, unavailable);
-      calendarMsg.textContent = '';
-    } catch(e){ console.error(e); calendarMsg.textContent = 'Erro de conexão — verifique CORS / webhook.'; renderTimeSlotsForService(serviceIdx, []); }
+      if(calendarMsg) calendarMsg.textContent = '';
+    } catch(e){ console.error(e); if(calendarMsg) calendarMsg.textContent = 'Erro de conexão — verifique CORS / webhook.'; renderTimeSlotsForService(serviceIdx, []); }
   }
 
+  // ------------------------------
+  // confirm/reserve & checkout (kept)
+  // ------------------------------
   function updateConfirmEnabled(){
-    if(selectedServices.length === 0){ confirmBtn.disabled = false; confirmBtn.setAttribute('aria-disabled','false'); return; }
+    if(selectedServices.length === 0){ if(confirmBtn){ confirmBtn.disabled = false; confirmBtn.setAttribute('aria-disabled','false'); } return; }
     const allSelected = perServiceSelections.length === selectedServices.length && perServiceSelections.every(s => s.date && s.hour);
-    confirmBtn.disabled = !allSelected;
-    confirmBtn.setAttribute('aria-disabled', String(confirmBtn.disabled));
+    if(confirmBtn){ confirmBtn.disabled = !allSelected; confirmBtn.setAttribute('aria-disabled', String(confirmBtn.disabled)); }
   }
 
-  // ------------------------------
-  // confirm/reserve: build occupiedSlots per service and send them
-  // ------------------------------
-  confirmBtn.addEventListener('click', async ()=>{
-    if(selectedServices.length>0){
-      const incomplete = perServiceSelections.some(s=>!s.date || !s.hour);
-      if(incomplete){ alert('Por favor selecione data e hora para todos os serviços.'); return; }
-    } else { alert('Nenhum serviço selecionado — procedendo sem serviços.'); }
-
-    // Build services payload with precise occupied slots (use slotInterval to generate consecutive times)
-    const slotOrder = getHoursForBranch(selectedBranch);
-    const slotInterval = computeSlotIntervalMinutes(slotOrder);
- 
+  async function handleImmediateCheckout(){
+    if(selectedServices.length === 0){
+      alert('Nenhum serviço selecionado para checkout.');
+      return;
+    }
+    if(calendarMsg) calendarMsg.textContent = 'Preparando pagamento...';
     const params = new URLSearchParams(window.location.search);
-  let ref = params.get("ref") || localStorage.getItem("refCode");
-  if (ref) {
-    const refField = document.getElementById("refField");
-    if (refField) refField.value = ref;
-  }
+    let ref = params.get("ref") || localStorage.getItem("refCode");
 
-    const servicesPayload = selectedServices.map((s, idx)=>{
-      const start = perServiceSelections[idx]?.hour || null;
-      const date = perServiceSelections[idx]?.date || null;
-      const neededSlots = slotsNeededForDuration(s.durationMinutes||30, slotInterval);
-      const startIndex = slotOrder.indexOf(start);
-      const occupiedSlots = [];
-      for(let k=0;k<neededSlots;k++){
-        const t = slotOrder[startIndex + k];
-        if(t) occupiedSlots.push(t);
-      }
-      return {
-        name: s.name,
-        category: s.category,
-        price: s.price,
-        machine: s.machine || null,
-        date,
-        startHour: start,
-        durationMinutes: s.durationMinutes || 30,
-        paddingMinutes: s.paddingMinutes || 0,
-        occupiedSlots ,// list of time strings that should be marked blocked in external systems
-        ref
-      };
-    });
+    const servicesPayload = selectedServices.map(s => ({
+      name: s.name,
+      category: s.category,
+      price: s.price,
+      machine: s.machine || null,
+      durationMinutes: s.durationMinutes || 0,
+      paddingMinutes: s.paddingMinutes || 0,
+      date: null,
+      startHour: null,
+      occupiedSlots: [],
+      ref
+    }));
 
     const payload = {
       client: clientData,
@@ -995,37 +921,175 @@ const BRANCH_CLOSED_WEEKDAYS = {
       ref
     };
 
-    const webhook = selectedBranch === 'braga' ? WEBHOOK_RESERVE_BRAGA : WEBHOOK_RESERVE_AMORA;
-    calendarMsg.textContent = 'Enviando reserva...';
+    const checkoutWebhook = selectedBranch === 'braga' ? (typeof WEBHOOK_CHECKOUT_BRAGA !== 'undefined' ? WEBHOOK_CHECKOUT_BRAGA : (typeof WEBHOOK_RESERVE_BRAGA !== 'undefined' ? WEBHOOK_RESERVE_BRAGA : null))
+                                                       : (typeof WEBHOOK_CHECKOUT_AMORA !== 'undefined' ? WEBHOOK_CHECKOUT_AMORA : (typeof WEBHOOK_RESERVE_AMORA !== 'undefined' ? WEBHOOK_RESERVE_AMORA : null));
+
+    if(!checkoutWebhook){
+      if(calendarMsg) calendarMsg.textContent = '';
+      alert('Checkout webhook não configurado para esta filial.');
+      return;
+    }
 
     try {
-      await fetch(webhook, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const res = await fetch(checkoutWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-      if(resumoBox) resumoBox.style.display = 'none';
-      const serviceNames = selectedServices.map(s => s.name).join(', ');
-      document.getElementById('finalMsg').textContent = `✅ Reserva confirmada para: ${serviceNames}. Você receberá confirmação por e-mail/SMS.`;
-      showStep(4);
-      calendarMsg.textContent = '';
+      if(!res.ok){
+        if(calendarMsg) calendarMsg.textContent = 'Erro no checkout: ' + res.status;
+        const txt = await res.text();
+        console.error('checkout error text:', txt);
+        alert('Erro ao iniciar pagamento.');
+        return;
+      }
+
+      let data;
+      try { data = await res.json(); } catch(e){ data = { checkoutUrl: await res.text() }; }
+
+      const checkoutUrl = (data && (data.checkoutUrl || data.checkout_url || data.url)) || null;
+      if(checkoutUrl){
+        try {
+          const voucherCode = 'PENDING-' + Date.now();
+          try { localStorage.setItem('pendingReservation_' + voucherCode, JSON.stringify({ payload, created: new Date().toISOString() })); } catch(e){}
+          const urlObj = new URL(checkoutUrl, window.location.origin);
+          if(ref) urlObj.searchParams.set('ref', ref);
+          window.open(urlObj.toString(), '_blank');
+          if(calendarMsg) calendarMsg.textContent = '';
+          const finalMsgEl = document.getElementById('finalMsg');
+          finalMsgEl && (finalMsgEl.textContent = `➡️ Abrindo pagamento para: ${selectedServices.map(s=>s.name).join(', ')}`);
+          showStep(4);
+        } catch(e){
+          console.error(e);
+          alert('Erro ao abrir pagamento.');
+          if(calendarMsg) calendarMsg.textContent = '';
+        }
+      } else {
+        if(calendarMsg) calendarMsg.textContent = '';
+        alert('O webhook não retornou um checkoutUrl.');
+        console.error('checkout response no url:', data);
+      }
     } catch(e){
       console.error(e);
-      calendarMsg.textContent = 'Erro ao enviar reserva. Tente novamente mais tarde.';
+      if(calendarMsg) calendarMsg.textContent = 'Erro de conexão ao iniciar checkout.';
+      alert('Erro de rede ao iniciar pagamento. Tente novamente.');
     }
-  });
+  }
 
-  document.getElementById('finishBtn').addEventListener('click', ()=>{
+  if(confirmBtn){
+    confirmBtn.addEventListener('click', async ()=>{
+      if(selectedServices.length>0){
+        const incomplete = perServiceSelections.some(s=>!s.date || !s.hour);
+        if(incomplete){ alert('Por favor selecione data e hora para todos os serviços.'); return; }
+      } else { alert('Nenhum serviço selecionado — procedendo sem serviços.'); }
+
+      const slotOrder = getHoursForBranch(selectedBranch);
+      const slotInterval = computeSlotIntervalMinutes(slotOrder);
+
+      const params = new URLSearchParams(window.location.search);
+      let ref = params.get("ref") || localStorage.getItem("refCode");
+      if (ref) {
+        const refField = document.getElementById("refField");
+        if (refField) refField.value = ref;
+      }
+
+      const servicesPayload = selectedServices.map((s, idx)=>{
+        const start = perServiceSelections[idx]?.hour || null;
+        const date = perServiceSelections[idx]?.date || null;
+        const neededSlots = slotsNeededForDuration(s.durationMinutes||30, slotInterval);
+        const startIndex = slotOrder.indexOf(start);
+        const occupiedSlots = [];
+        for(let k=0;k<neededSlots;k++){
+          const t = slotOrder[startIndex + k];
+          if(t) occupiedSlots.push(t);
+        }
+        return {
+          name: s.name,
+          category: s.category,
+          price: s.price,
+          machine: s.machine || null,
+          date,
+          startHour: start,
+          durationMinutes: s.durationMinutes || 30,
+          paddingMinutes: s.paddingMinutes || 0,
+          occupiedSlots,
+          ref
+        };
+      });
+
+      const payload = {
+        client: clientData,
+        services: servicesPayload,
+        voucher: voucherEl ? voucherEl.value.trim() : '',
+        branch: selectedBranch,
+        oldClient: isOldClient,
+        ref
+      };
+
+      const webhook = selectedBranch === 'braga' ? WEBHOOK_RESERVE_BRAGA : WEBHOOK_RESERVE_AMORA;
+      if(calendarMsg) calendarMsg.textContent = 'Enviando reserva...';
+
+      try {
+        if(!webhook) throw new Error('Webhook de reserva não configurado para esta filial.');
+        const res = await fetch(webhook, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        if(!res.ok) throw new Error('Reserva falhou: status ' + res.status);
+
+        if(resumoBox) resumoBox.style.display = 'none';
+        const serviceNames = selectedServices.map(s => s.name).join(', ');
+        const finalMsgEl = document.getElementById('finalMsg');
+        if(finalMsgEl) finalMsgEl.textContent = `✅ Reserva confirmada para: ${serviceNames}. Você receberá confirmação por e-mail/SMS.`;
+        showStep(4);
+        if(calendarMsg) calendarMsg.textContent = '';
+      } catch(e){
+        console.error(e);
+        if(calendarMsg) calendarMsg.textContent = 'Erro ao enviar reserva. Tente novamente mais tarde.';
+        alert('Erro ao enviar reserva: ' + (e.message || 'ver console'));
+      }
+    });
+  }
+
+  const finishBtn = document.getElementById('finishBtn');
+  finishBtn && finishBtn.addEventListener('click', ()=>{
     hideResumoAndClear();
     selectedBranch=null; isOldClient=false; clientData={}; selectedCategoryKey=null;
     perServiceSelections=[]; Object.keys(pikadayInstances).forEach(k=>{ try{ pikadayInstances[k].destroy(); }catch(e){} });
     pikadayInstances={}; document.querySelectorAll('input[name="branch"]').forEach(i=>i.checked=false); document.querySelectorAll('input[name="clientType"]').forEach(i=>i.checked=false);
-    document.getElementById('clientCode').value=''; document.getElementById('codeMsg').textContent=''; document.getElementById('name').value=''; document.getElementById('email').value=''; document.getElementById('phone').value=''; document.getElementById('birth').value='';
-    if(voucherEl) voucherEl.value=''; renderSelectedList(); setSummaryClientText(); showStep(1); initCategories(); oldCodeBox.classList.add('hidden'); newClientBox.classList.add('hidden'); calendarMsg.textContent='';
+    try { document.getElementById('clientCode').value=''; document.getElementById('codeMsg').textContent=''; document.getElementById('name').value=''; document.getElementById('email').value=''; document.getElementById('phone').value=''; document.getElementById('birth').value=''; }catch(e){}
+    if(voucherEl) voucherEl.value=''; renderSelectedList(); setSummaryClientText(); showStep(1); initCategories(); oldCodeBox && oldCodeBox.classList.add('hidden'); newClientBox && newClientBox.classList.add('hidden'); if(calendarMsg) calendarMsg.textContent='';
   });
 
-  function bootstrap(){ initCategories(); renderSelectedList(); showStep(1); confirmBtn.disabled=true; }
+  function bootstrap(){ initCategories(); renderSelectedList(); showStep(1); if(confirmBtn) confirmBtn.disabled=true; }
   bootstrap();
 
-})();
+  // Optional: keep URL ref handling (as you had)
+  (function() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+      if (ref) localStorage.setItem("refCode", ref);
+      const savedRef = localStorage.getItem("refCode");
+      if (savedRef) {
+        document.querySelectorAll("a[href]").forEach(link => {
+          try {
+            const href = link.getAttribute("href");
+            if (!href || href.startsWith("javascript:") || href.startsWith("#")) return;
+            const url = new URL(href, window.location.origin);
+            if (!url.searchParams.has("ref")) {
+              url.searchParams.set("ref", savedRef);
+              link.href = url.toString();
+            }
+          } catch(e){}
+        });
+      }
+    } catch (err) {
+      console.error("Ref handler error:", err);
+    }
+  })();
+
+})(); // end IIFE
 </script>
+
 <script>
   (function() {
     try {

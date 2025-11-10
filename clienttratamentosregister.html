@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Registro de Cliente - Beauty Salon</title>
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#ffe8f3;
+  padding:40px;
+  color:#444;
+}
+.container{
+  width:100%;
+  max-width:600px;
+  margin:auto;
+  background:white;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 8px 30px rgba(255,0,100,0.18);
+}
+h2{ color:#e91e63; margin-bottom:18px; }
+label{ display:block; margin-top:14px; color:#e91e63; font-weight:bold; }
+input, textarea{
+  width:100%;
+  margin-top:6px;
+  padding:10px;
+  border:1px solid #f8b6d0;
+  border-radius:10px;
+  font-size:15px;
+}
+button{
+  margin-top:20px;
+  background:#e91e63;
+  color:white;
+  padding:14px 24px;
+  border:0; border-radius:10px;
+  cursor:pointer;
+  width:100%;
+  font-size:16px;
+  font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>Registrar Cliente</h2>
+
+<form id="registerForm">
+  <label>Nome</label>
+  <input name="Name" required>
+
+  <label>Código do Cliente</label>
+  <input name="ClientCode" required>
+
+  <label>Notas</label>
+  <textarea name="Notes" rows="3"></textarea>
+
+  <label>Enviar Fotos (várias)</label>
+  <input type="file" name="images" id="images" multiple accept="image/*">
+
+  <button type="submit">Guardar</button>
+</form>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwN9mekcXEX4Eo4n6DOqEJMBJur-XywnUTZ-UOa7540oNshPDEAPKHz6QasZchsQllu/exec";
+
+document.getElementById("registerForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  let fd = new FormData(document.getElementById("registerForm"));
+
+  // اضافه کردن فایل‌ها
+  const files = document.getElementById("images").files;
+  for (let i=0; i<files.length; i++){
+    fd.append("file"+i, files[i]);
+  }
+
+  const res = await fetch(WEB_APP_URL, { method:"POST", body:fd });
+
+  alert("Cliente registrado com sucesso!");
+  document.getElementById("registerForm").reset();
+});
+</script>
+</body>
+</html>

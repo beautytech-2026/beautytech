@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> combo tratamentos  braga retail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+  <style>
+     body {
+  background: linear-gradient(to bottom right, #dd0583, #8e2de2);
+  font-family: 'Vazirmatn', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+  overflow-x: hidden;
+  position: relative;
+  
+}
+    .container {
+      background: rgba(255, 255, 255, 0.33);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 25px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 0 20px #e178f4;
+      color: white;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    img {
+      width: 100%;
+      max-height: 800px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #c02190;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #f4e9f0;
+      color: rgb(172, 12, 148);
+    }
+    .comments-section {
+      margin-top: 30px;
+    }
+    .comment {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .stars {
+      color: gold;
+      margin-bottom: 5px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #c13a8f;
+    }
+    .card-video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      button {
+        font-size: 15px;
+      }
+    }
+
+    .logo {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
+
+
+
+.logo img {
+  max-height: 200px;
+  width: auto;
+}
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Hamburger button */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Glass menu container */
+.glass-menu {
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  padding: 80px 20px 30px;
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: top 0.5s ease-in-out;
+  z-index: 1000;
+}
+
+.glass-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.glass-menu li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.glass-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu {
+  display: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  font-size: 16px;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+/* Show menu */
+.glass-menu.open {
+  top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .glass-menu {
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+.price-section {
+  margin-bottom: 25px;
+}
+
+.price-section h3 {
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.category {
+  color: #f48ee0;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.price-row span:first-child {
+  flex: 1;
+}
+
+.mini-btn {
+  background: #dc059f;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s ease;
+}
+
+.mini-btn:hover {
+  background: #f1e6ef;
+  color: rgb(222, 20, 158);
+}
+
+
+
+  </style>
+</head>
+<body>
+  
+    <div id="menu-placeholder"></div>
+
+<script>
+  // بارگذاری فایل منو
+  fetch("menubraga.html")
+    .then(res => res.text())
+    .then(html => {
+      const placeholder = document.getElementById("menu-placeholder");
+      placeholder.innerHTML = html;
+
+      // حالا اسکریپت‌های داخل menu.html رو پیدا و اجرا می‌کنیم
+      const scripts = placeholder.querySelectorAll("script");
+      scripts.forEach(script => {
+        const newScript = document.createElement("script");
+        if (script.src) {
+          newScript.src = script.src;
+        } else {
+          newScript.textContent = script.textContent;
+        }
+        document.body.appendChild(newScript);
+      });
+    });
+</script>
+
+
+
+<!-- محتواهای داینامیک -->
+
+  <div id="detox" class="tab-section" style="display:block;">
+  <div class="container">
+   
+    
+    <!-- عکس embed -->
+    <img src="images/Screenshot 2025-11-09 at 13.17.36.png" alt="Programa Modeladora" />
+
+   
+     
+    
+  
+
+    <img src="images/Screenshot 2025-11-09 at 13.17.44.png" alt="JUST4YOU" />
+    
+
+    <img src="images/Screenshot 2025-11-09 at 13.17.55.png" alt="PURE FACIAL" />
+   
+
+    <img src="images/Screenshot 2025-11-09 at 13.18.01.png" alt="APLICAÇÃO DE FIOS DE SEDA" />
+  
+
+    <img src="images/Screenshot 2025-11-09 at 13.18.09.png" alt="BOOSTER COM DERMAPEN" />
+   
+
+  
+      
+      
+ 
+      
+    
+    
+  
+      
+  <div class="price-section">
+   
+    <button class="reserve-btn" onclick="reserve('FACE DESIGN TECH')">AGENDAR AGORA</button>
+ 
+ 
+</div>
+
+
+<script>
+function reserve(servico) {
+const params = new URLSearchParams();
+params.set('service', servico);
+window.location.href = `reservegeneral.html?${params.toString()}`;
+}
+</script>
+
+
+     
+      
+   
+    
+    <script>
+    function reserve(servico) {
+      const params = new URLSearchParams();
+      params.set('service', servico);
+      window.location.href = `reservegeneral.html?${params.toString()}`;
+    }
+    </script>
+    
+  
+  
+  <script>
+    function goToPageWithParams(page, servico) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get("ref");
+  
+      const newParams = new URLSearchParams();
+      newParams.set("service", servico);
+      if (ref) newParams.set("ref", ref);
+  
+      window.location.href = `${page}?${newParams.toString()}`;
+    }
+  </script>
+  
+
+  
+
+   
+
+</div>
+
+
+
+  
+
+
+
+  <script>
+     function goToPageWithParams(page, servico) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get("ref");
+
+  const newParams = new URLSearchParams();
+  newParams.set("service", servico);
+  if (ref) newParams.set("ref", ref);
+
+  window.location.href = `${page}?${newParams.toString()}`;
+}
+    document.getElementById("commentForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const stars = document.getElementById("stars").value;
+      const commentText = document.getElementById("comment").value;
+
+      const newComment = document.createElement("div");
+      newComment.classList.add("comment");
+      newComment.innerHTML = `
+        <div class="stars">${"⭐".repeat(stars)}</div>
+        <p>${commentText}</p>
+      `;
+      document.querySelector(".comments-section").insertBefore(newComment, document.getElementById("commentForm"));
+
+      this.reset();
+    });
+  </script>
+ <script>
+  (function() {
+    try {
+      // ref را از URL بگیر
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+  
+      // اگر وجود داشت، ذخیره کن
+      if (ref) {
+        console.log("🔹 Ref detected in URL:", ref);
+        localStorage.setItem("refCode", ref);
+      } else {
+        console.log("ℹ️ No ref in URL. Using saved value:", localStorage.getItem("refCode"));
+      }
+  
+      // اگر هنوز در لینک‌ها نبود، اضافه کن
+      const savedRef = localStorage.getItem("refCode");
+      if (savedRef) {
+        document.querySelectorAll("a[href]").forEach(link => {
+          try {
+            const href = link.getAttribute("href");
+            if (!href || href.startsWith("javascript:") || href.startsWith("#")) return;
+            const url = new URL(href, window.location.origin);
+            if (!url.searchParams.has("ref")) {
+              url.searchParams.set("ref", savedRef);
+              link.href = url.toString();
+            }
+          } catch(e){}
+        });
+      }
+  
+      // جلوگیری از ارورهای اسکریپت‌های دیگه (مثلاً slider)
+      window.addEventListener("error", e => {
+        console.warn("⚠️ JS error ignored:", e.message);
+        e.preventDefault();
+      });
+  
+    } catch (err) {
+      console.error("Ref handler error:", err);
+    }
+  })();
+  </script>
+  
+</body>
+</html>

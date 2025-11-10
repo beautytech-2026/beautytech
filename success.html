@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pagamento - Sucesso</title>
+<style>
+/* (usei exactamente o seu CSS fornecido) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+:root{ --bg1:#d62f91; --bg2:#980370; --card: rgba(255,255,255,0.06); --accent:#ff71b8; --accent-2:#a56bff; --muted: rgba(255,255,255,0.88); --muted-2: rgba(255,255,255,0.78); --input-bg: rgba(255,255,255,0.06); --glass: rgba(255,255,255,0.04); --success:#5ce6a6; --danger:#ff7a7a; --shadow: rgba(0,0,0,0.35); --radius: 12px; --font-family: "Poppins", "Vazirmatn", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+*{box-sizing:border-box} html,body{height:100%} html { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } body{ margin:0; font-family: var(--font-family); min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:28px; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:#fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; line-height:1.45; font-size:16px; }
+.card{ width:100%; max-width:980px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.06); border-radius:16px; padding:28px; backdrop-filter: blur(10px) saturate(1.05); box-shadow:0 18px 50px var(--shadow); margin-bottom: 40px; }
+h1{ margin:0 0 8px 0; font-size:clamp(20px, 2.6vw, 30px); line-height:1.05; text-align:center; font-weight:800; letter-spacing:0.2px; background: linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 6px 18px rgba(243, 242, 245, 0.88); font-family: "Poppins", sans-serif; }
+p.lead{ margin:6px 0 16px; text-align:center; color: rgba(255,255,255,0.92); font-weight:500; font-size:14px; }
+.steps{display:flex;gap:10px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;} .step{padding:8px 12px;border-radius:999px;background: rgba(255,255,255,0.03);font-size:11px;color: rgba(255,255,255,0.85);font-weight:700;border: 1px solid rgba(255,255,255,0.03);} .step.active{background: linear-gradient(90deg, rgba(255,113,184,0.18), rgba(165,107,255,0.12));color: #fff;transform:translateY(-2px) scale(1.03);box-shadow: 0 10px 30px rgba(165,107,255,0.12);}
+.layout{display:grid;grid-template-columns: 1fr 380px;gap:20px;align-items:start;} @media(max-width:980px){ .layout{grid-template-columns:1fr} }
+.flow-section{padding:14px;border-radius:var(--radius);background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));border: 1px solid rgba(255,255,255,0.03);}
+label{display:block;margin:10px 0 8px;font-weight:700;color: #fff;font-size:14px;letter-spacing:0.2px;}
+input[type="text"], input[type="email"], input[type="date"], select { width:100%; padding:12px 14px; border-radius:10px; border: 1px solid rgba(255,255,255,0.06); background: var(--input-bg); color: #fff; outline:none; transition: all .18s ease; font-size:14px; }
+input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus, select:focus { box-shadow: 0 8px 30px rgba(165,107,255,0.08); border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.08); }
+::placeholder{ color: rgba(255,255,255,0.7); font-weight:500 }
+.small-btn{display:inline-block;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;background: linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;letter-spacing:0.3px;box-shadow: 0 8px 24px rgba(197,92,168,0.12);} .muted{ color: var(--muted-2); font-size:13px }
+.categories{ display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px } .cat{ padding:10px 14px; border-radius:12px; cursor:pointer; background: linear-gradient(180deg, rgba(142, 18, 121, 0.78), rgba(177, 15, 142, 0.75)); font-weight:700; font-size:13px; color: #f9f6f8; border: 1px solid rgba(201, 21, 138, 0.695); transition: transform .12s ease, box-shadow .12s ease; } .cat:hover{ transform: translateY(-3px); box-shadow: 0 8px 26px rgba(0,0,0,0.18) } .cat.active{ background: linear-gradient(90deg, rgba(225, 170, 198, 0.82), rgba(165,107,255,0.12)); color: #831258; box-shadow: 0 10px 30px rgba(165,107,255,0.09); border-color: rgba(149, 20, 129, 0.27); }
+.services-list{ max-height:380px; overflow:auto; padding:10px; border-radius:12px; background: rgba(0,0,0,0.06); border: 1px dashed rgba(255,255,255,0.02); } .service-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 10px; border-bottom:1px solid rgba(255,255,255,0.03); } .service-row:last-child{ border-bottom:none } .service-name{ font-weight:700; color:#fff; font-size:15px; line-height:1.2 } .service-price{ color: #ffd6f6; min-width:96px; text-align:right; font-weight:800; font-size:14px } .add-btn{ background: transparent; border: 1px solid rgba(255, 255, 255, 0.805); color: #fff; padding:8px 12px; border-radius:10px; font-weight:800; cursor:pointer; transition: all .12s ease; } .add-btn:hover{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); border-color: rgba(255, 255, 255, 0.76); box-shadow: 0 10px 30px rgba(165,107,255,0.08); }
+.summary{ padding:16px; border-radius:12px; background: linear-gradient(180deg, rgba(89, 3, 73, 0.45), rgba(0,0,0,0.06)); border: 1px solid rgba(255,255,255,0.03); min-height:160px; } .summary h4{ margin:0 0 8px; font-size:16px; color:#fff; font-weight:800 } .selected-list{ list-style:none; padding:0; margin:6px 0 0 0; max-height:320px; overflow:auto } .selected-list li{ display:flex; justify-content:space-between; align-items:center; padding:10px 8px; border-radius:10px; background: linear-gradient(180deg, rgba(213, 86, 192, 0.18), rgba(0,0,0,0.02)); margin-bottom:10px; border: 1px solid rgba(158, 55, 124, 0.18); } .selected-list li strong{ font-size:14px; display:block; margin-bottom:4px } .remove-small{ background: rgba(0,0,0,0.45); color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:700; }
+input[type="radio"]{ width:20px; height:20px; margin-right:8px; accent-color: var(--accent); vertical-align:middle; cursor:pointer; } label > input[type="radio"] + span, label { font-size:15px; color:rgba(238, 216, 232, 0.948); display:inline-flex; align-items:center; gap:8px } label[style] { font-weight:700 }
+#datepicker{ cursor:pointer; background: linear-gradient(180deg, rgba(226, 171, 221, 0.28), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.06); padding:12px 14px; border-radius:10px; color:#dba9ea; font-weight:600; }
+.slots{ margin-top:12px } .slot-button{ display:inline-block; padding:10px 12px; border-radius:10px; border: 1px solid rgba(0,0,0,0.06); margin:6px 6px 0 0; background: linear-gradient(180deg, #fff, #fff); color: var(--accent-2); font-weight:700; cursor:pointer; transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease; font-size:14px; } .slot-button:hover{ transform:translateY(-4px); box-shadow:0 12px 30px rgba(165,107,255,0.08) } .slot-button.selected{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; box-shadow:0 12px 36px rgba(165,107,255,0.16); } .slot-button[disabled]{ opacity:0.52; cursor:not-allowed; transform:none; background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9)); color: rgba(140,85,198,0.35); }
+.btn-primary{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; padding:12px 18px; border-radius:12px; border:none; font-weight:800; cursor:pointer; box-shadow: 0 12px 36px rgba(165,107,255,0.12); } .btn-ghost{ background:transparent; border:1px solid rgba(255,255,255,0.06); padding:10px 14px; border-radius:10px; color:#fff; cursor:pointer; }
+.note{ font-size:13px; color: rgba(255,255,255,0.88); margin-top:12px; text-align:center } .service-picker{ background: rgba(255,255,255,0.02); padding:12px; border-radius:12px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.02) } .service-picker h4{ margin:0 0 8px 0; font-size:15px; font-weight:800 }
+.hidden{ display:none } .pika-single{ border-radius:12px !important; box-shadow: 0 18px 50px rgba(0,0,0,0.45); border: none; overflow:hidden; } .pika-single .pika-title{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; font-weight:800; padding:12px 14px } .pika-table th{ color: rgba(255,255,255,0.85); font-weight:700; background: transparent; } .pika-table td{ background: transparent; border-radius:8px; } .pika-button{ color: #222; } .pika-day.is-today{ box-shadow: inset 0 0 0 2px rgba(255,255,255,0.06); } .pika-day.is-selected{ background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; border-radius:8px; box-shadow: 0 8px 26px rgba(165,107,255,0.12); }
+.back-button { position: fixed; top: 18px; left: 18px; width: 46px; height: 46px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 999; transition: background 0.3s ease; } .back-button:hover { background: rgba(255, 255, 255, 0.3); }
+.info-icon { display: inline-block; margin-left: 6px; background: rgba(255, 255, 255, 0.476); border-radius: 50%; width: 18px; height: 18px; text-align: center; line-height: 18px; font-size: 12px; cursor: pointer; color: #ffffff; } .info-icon:hover { background: rgba(255,255,255,0.25); }
+.info-box { margin-top: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted); line-height: 1.5; transition: all 0.3s ease; }
+.logo { margin-top: 6px; margin-bottom: 18px; display: flex; justify-content: center; align-items: center; } .logo img { max-height: 84px; height: auto; width: auto; }
+@media (max-width: 780px) { body { padding:16px; } .card { padding:18px; } .logo img { max-height:72px; } .service-price { min-width:72px; font-size:13px; } .service-name { font-size:14px; } .service-row { padding:10px 6px; gap:8px; } .steps { gap:6px; } .step { padding:6px 10px; font-size:11px; } }
+@media (max-width: 560px) { .card { padding:14px; border-radius:14px; } .layout{gap:12px} .slot-button { padding:8px 10px; font-size:13px; border-radius:10px; } .small-btn, .btn-primary { padding:10px 14px; font-size:14px; } input[type="text"], input[type="email"], select { font-size:15px; padding:12px; } .selected-list li { flex-direction:column; align-items:flex-start; gap:8px; } .selected-list li > div, .selected-list li button { width:100%; } .service-price { text-align:left; color:#ffd6f6; margin-top:6px; font-weight:700; } .summary { min-height:140px; padding:12px; } }
+@media (max-width:420px) { body { font-size:15px; } h1 { font-size:20px; } .back-button { top:12px; left:12px; width:44px; height:44px; } .logo img { max-height:60px; } .service-name { font-size:13px; } .service-price { min-width:60px; font-size:13px; } .slot-button { padding:7px 8px; font-size:12px; } .muted { font-size:12px; } }
+.services-list .service-price { display: none !important; }
+
+/* estilos específicos para a página de sucesso */
+.success-graphic {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:96px;
+  height:96px;
+  border-radius:24px;
+  background: linear-gradient(90deg,var(--success), rgba(92,230,166,0.95));
+  box-shadow: 0 12px 40px rgba(92,230,166,0.12);
+  margin: 10px auto 18px;
+}
+.success-graphic svg { width:48px; height:48px; display:block; }
+.center { text-align:center }
+.info-email { background: rgba(255,255,255,0.03); padding:12px 14px; border-radius:10px; display:inline-block; margin-top:10px; border:1px solid rgba(255,255,255,0.04); font-weight:700; color:#fff; }
+.actions { display:flex; gap:12px; justify-content:center; margin-top:18px; flex-wrap:wrap; }
+.secondary-small { padding:10px 14px; border-radius:10px; background:transparent; border:1px solid rgba(255,255,255,0.12); color:#fff; font-weight:700; cursor:pointer; }
+</style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="title">
+    <div class="logo" aria-hidden="true">
+      <!-- Coloque a sua logo aqui se quiser -->
+     <img src="iconlogo.png" alt="Logo">
+    </div>
+
+    <div class="center">
+      <div class="success-graphic" aria-hidden="true">
+        <!-- ícone check -->
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path d="M20 6L9 17l-5-5" stroke="#063" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <h1 id="title">Pagamento efetuado com sucesso!</h1>
+      <p class="lead">Obrigado — recebemos o seu pagamento com sucesso.</p>
+
+      <div class="info-box" id="confirmation-box" role="status" aria-live="polite" style="max-width:720px;margin:10px auto;">
+        <p style="margin:0; font-weight:700; color:var(--muted);">
+          Enviámos um email de confirmação 
+        </p>
+       
+        <p class="muted" style="margin-top:10px;">Verifique a sua caixa de entrada e a pasta de spam. Se não receber, contacte o suporte.</p>
+      </div>
+
+      <div class="actions">
+        <a id="back-btn" class="btn-primary" href="reservegeneral.html">Voltar à página principal</a>
+        
+      </div>
+
+      <p class="note">Se quiser, pode fechar esta janela — o seu email já foi enviado.</p>
+    </div>
+  </div>
+
+<script>
+  // Lê email de query string ?email=... ou de localStorage.userEmail (fallback)
+  function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+
+  const emailFromQuery = getQueryParam('email');
+  const emailFromStorage = localStorage.getItem('userEmail');
+  const email = (emailFromQuery && emailFromQuery.trim()) || (emailFromStorage && emailFromStorage.trim()) || '';
+
+
+
+  // Copiar email para área de transferência
+  document.getElementById('copy-email').addEventListener('click', function(){
+    const text = emailEl.textContent || '';
+    if (!text) return;
+    navigator.clipboard?.writeText(text).then(() => {
+      this.textContent = 'Copiado!';
+      setTimeout(()=> this.textContent = 'Copiar email', 1800);
+    }).catch(()=> {
+      alert('Não foi possível copiar. Seleccione e copie manualmente.');
+    });
+  });
+
+  // Opcional: limpar dados sensíveis da sessão (por exemplo cart) se necessário
+  // localStorage.removeItem('checkoutCart');
+
+  // Aceder automaticamente ao back-btn se necessário (ex: depois de 6s)
+  // setTimeout(()=> document.getElementById('back-btn').focus(), 400);
+</script>
+</body>
+</html>

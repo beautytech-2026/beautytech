@@ -555,7 +555,11 @@
     // Read duration/padding from svc if provided, otherwise defaults:
     const durationMinutes = typeof svc.durationMinutes !== 'undefined' ? svc.durationMinutes : 30;
     const paddingMinutes = typeof svc.paddingMinutes !== 'undefined' ? svc.paddingMinutes : 0;
-    selectedServices.push({ category, name: svcName, price: svc.price || '', machine: svc.machine || null, durationMinutes, paddingMinutes });
+    selectedServices.push({
+  ...service, // 👈 این باعث میشه همه‌ی ویژگی‌ها (مثل noTimeRequired) منتقل بشن
+  category: categoryName
+});
+
     perServiceSelections = selectedServices.map((s,i)=> perServiceSelections[i] ? perServiceSelections[i] : {date:null,hour:null});
     renderSelectedList();
     // DEBUG + sync to global + persist
