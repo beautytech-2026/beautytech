@@ -1,88 +1,149 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-<meta charset="UTF-8">
-<title>Registro de Cliente - Beauty Salon</title>
-<style>
-body{
-  font-family: Arial, sans-serif;
-  background:#ffe8f3;
-  padding:40px;
-  color:#444;
-}
-.container{
-  width:100%;
-  max-width:600px;
-  margin:auto;
-  background:white;
-  padding:30px;
-  border-radius:14px;
-  box-shadow:0 8px 30px rgba(255,0,100,0.18);
-}
-h2{ color:#e91e63; margin-bottom:18px; }
-label{ display:block; margin-top:14px; color:#e91e63; font-weight:bold; }
-input, textarea{
-  width:100%;
-  margin-top:6px;
-  padding:10px;
-  border:1px solid #f8b6d0;
-  border-radius:10px;
-  font-size:15px;
-}
-button{
-  margin-top:20px;
-  background:#e91e63;
-  color:white;
-  padding:14px 24px;
-  border:0; border-radius:10px;
-  cursor:pointer;
-  width:100%;
-  font-size:16px;
-  font-weight:bold;
-}
-</style>
-</head>
-<body>
+<!doctype html>
+<html>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="font-family:Arial,Helvetica,sans-serif;padding:18px;">
+<h1>Clientes — Search & Edit (simple)</h1>
 
-<div class="container">
-<h2>Registrar Cliente</h2>
+<input id="q" placeholder="Nome ou código..." style="padding:8px;width:60%"><button id="btnSearch">Pesquisar</button>
+<div id="results"></div>
 
-<form id="registerForm">
-  <label>Nome</label>
-  <input name="Name" required>
-
-  <label>Código do Cliente</label>
-  <input name="ClientCode" required>
-
-  <label>Notas</label>
-  <textarea name="Notes" rows="3"></textarea>
-
-  <label>Enviar Fotos (várias)</label>
-  <input type="file" name="images" id="images" multiple accept="image/*">
-
-  <button type="submit">Guardar</button>
-</form>
+<!-- edit modal-ish -->
+<div id="edit" style="display:none;border:1px solid #ccc;padding:12px;margin-top:12px">
+  <div>Row: <span id="rowIndex"></span></div>
+  <div><label>Name</label><input id="ename"></div>
+  <div><label>Code</label><input id="ecode"></div>
+  <div><label>Append Notes</label><textarea id="enotes" rows="3"></textarea></div>
+  <div><label>Current Images</label><div id="curImgs"></div></div>
+  <div>
+    <label>New images</label><input id="newFiles" type="file" multiple accept="image/*">
+    <div id="newPreview"></div>
+  </div>
+  <button id="save">Save</button> <button id="cancel">Cancel</button>
+  <div id="status"></div>
 </div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwN9mekcXEX4Eo4n6DOqEJMBJur-XywnUTZ-UOa7540oNshPDEAPKHz6QasZchsQllu/exec";
+const API_BASE = 'https://script.google.com/macros/s/AKfycbyhAhP2JF2ftORmDNALlL_S2XvejRMkqRvtNdbxjUafA3RhDO7MdFjqeECZvXhAbRl6iw/exec'; // e.g. https://script.google.com/macros/s/XXX/exec
 
-document.getElementById("registerForm").addEventListener("submit", async (e)=>{
-  e.preventDefault();
+/* utility: convert file -> base64 (without data: prefix) */
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const fr = new FileReader();
+    fr.onload = ()=> {
+      const s = fr.result.split(',')[1]; // remove data:*/*;base64,
+      res({ filename: file.name, mimeType: file.type, base64: s });
+    };
+    fr.onerror = e=> rej(e);
+    fr.readAsDataURL(file);
+  });
+}
 
-  let fd = new FormData(document.getElementById("registerForm"));
+async function doSearch(){
+  const q = document.getElementById('q').value.trim();
+  const r = document.getElementById('results'); r.innerHTML = 'Loading...';
+  const url = API_BASE + '?action=search&q=' + encodeURIComponent(q);
+  const res = await fetch(url);
+  const data = await res.json();
+  if(!data || data.length===0){ r.innerHTML = 'Nenhum resultado'; return; }
+  r.innerHTML = '';
+  data.forEach(it=>{
+    const d = document.createElement('div');
+    d.style.border='1px solid #eee'; d.style.padding='8px'; d.style.margin='8px 0';
+    d.innerHTML = `<b>${it.name}</b> (${it.code})<br><small>${it.timestamp}</small><div>${(it.imageUrls||[]).map(u=>'<img src="'+u+'" style="height:60px;margin:4px">').join('')}</div>
+      <div>${it.notes||''}</div>
+      <button class="open" data-row='${it.rowIndex}' data-item='${encodeURIComponent(JSON.stringify(it))}'>Abrir / Editar</button>`;
+    r.appendChild(d);
+  });
 
-  // اضافه کردن فایل‌ها
-  const files = document.getElementById("images").files;
-  for (let i=0; i<files.length; i++){
-    fd.append("file"+i, files[i]);
+  document.querySelectorAll('.open').forEach(btn=>{
+    btn.onclick = e=>{
+      const it = JSON.parse(decodeURIComponent(btn.dataset.item));
+      openEdit(it);
+    };
+  });
+}
+
+document.getElementById('btnSearch').onclick = doSearch;
+
+/* EDIT logic */
+let currentItem = null;
+function openEdit(it){
+  currentItem = it;
+  document.getElementById('edit').style.display = 'block';
+  document.getElementById('rowIndex').textContent = it.rowIndex;
+  document.getElementById('ename').value = it.name;
+  document.getElementById('ecode').value = it.code;
+  document.getElementById('enotes').value = '';
+  renderCurImgs(it.imageUrls || []);
+  document.getElementById('newPreview').innerHTML = '';
+}
+
+function renderCurImgs(arr){
+  const box = document.getElementById('curImgs'); box.innerHTML = '';
+  (arr||[]).forEach(u=>{
+    const img = document.createElement('img'); img.src = u; img.style.height='60px'; img.style.margin='4px';
+    const btn = document.createElement('button'); btn.textContent='Remove'; btn.style.marginLeft='6px';
+    const wrap = document.createElement('div'); wrap.appendChild(img); wrap.appendChild(btn);
+    btn.onclick = ()=> {
+      // remove from currentItem.imageUrls
+      currentItem.imageUrls = (currentItem.imageUrls||[]).filter(x=>x!==u);
+      renderCurImgs(currentItem.imageUrls);
+    };
+    box.appendChild(wrap);
+  });
+}
+
+/* preview new files */
+document.getElementById('newFiles').addEventListener('change', async (e)=>{
+  const files = Array.from(e.target.files || []);
+  const pr = document.getElementById('newPreview'); pr.innerHTML = '';
+  for(const f of files){
+    const img = document.createElement('img'); img.style.height='60px'; img.style.margin='4px';
+    const url = URL.createObjectURL(f);
+    img.src = url; pr.appendChild(img);
+  }
+});
+
+/* Save: upload new files (convert base64) then POST to doPost */
+document.getElementById('save').onclick = async ()=>{
+  if(!currentItem) return;
+  const status = document.getElementById('status'); status.textContent = 'Saving...';
+  const name = document.getElementById('ename').value.trim();
+  const code = document.getElementById('ecode').value.trim();
+  const notesAppend = document.getElementById('enotes').value.trim();
+
+  // gather new files, convert to base64
+  const files = Array.from(document.getElementById('newFiles').files || []);
+  const newImages = [];
+  for(const f of files){
+    const b = await fileToBase64(f);
+    newImages.push(b);
   }
 
-  const res = await fetch(WEB_APP_URL, { method:"POST", body:fd });
+  // payload for update
+  const payload = {
+    action: 'update',
+    rowIndex: currentItem.rowIndex,
+    name, code, notesAppend,
+    retainImageUrls: currentItem.imageUrls || [],
+    newImages // array of { filename, mimeType, base64 }
+  };
 
-  alert("Cliente registrado com sucesso!");
-  document.getElementById("registerForm").reset();
-});
+  try{
+    const res = await fetch(API_BASE, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
+    const j = await res.json();
+    if(j.success){
+      status.textContent = 'Saved';
+      setTimeout(()=>{ status.textContent=''; document.getElementById('edit').style.display='none'; doSearch(); }, 800);
+    } else {
+      status.textContent = 'Error: ' + (j.error||'unknown');
+    }
+  }catch(err){
+    status.textContent = 'Error: ' + err.message;
+  }
+};
+
+document.getElementById('cancel').onclick = ()=> { document.getElementById('edit').style.display='none'; };
 </script>
 </body>
 </html>

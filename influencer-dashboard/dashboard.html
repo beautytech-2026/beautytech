@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+<style>
+  body{background:linear-gradient(135deg,#dd0583,#8e2de2);font-family:'Vazirmatn',sans-serif;margin:0;padding:24px;color:#fff;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:920px}
+  .panel{background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);border-radius:12px;padding:18px;margin-bottom:16px}
+  h1,h2{margin:0 0 12px 0}
+  table{width:100%;border-collapse:separate;border-spacing:0 10px}
+  th,td{padding:10px;text-align:center;border-radius:8px}
+  th{background:rgba(255,255,255,0.14);font-weight:700}
+  td{background:rgba(255,255,255,0.06);color:#ffeef9}
+  .totals{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .btn{background:#c02190;border:none;color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+  .muted{color:rgba(255,255,255,0.85)}
+  .err{color:#ffb5b5;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel">
+    <h1>Influencer Dashboard</h1>
+    <p class="muted" id="userInfo">Loading...</p>
+  </div>
+
+  <div class="panel" id="bragaPanel">
+    <h2>Braga</h2>
+    <table id="bragaTable">
+      <thead><tr><th>Ref</th><th>Total Sales (€)</th><th>Reservations</th><th>Commission (€)</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="err" id="bragaErr"></p>
+  </div>
+
+  <div class="panel" id="amoraPanel">
+    <h2>Amora</h2>
+    <table id="amoraTable">
+      <thead><tr><th>Ref</th><th>Total Sales (€)</th><th>Reservations</th><th>Commission (€)</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="err" id="amoraErr"></p>
+  </div>
+
+  <div class="panel totals">
+    <div>
+      <p class="muted">Combined totals across branches</p>
+      <p style="font-weight:800">Reservations: <span id="totalReservations">0</span></p>
+      <p style="font-weight:800">Commission (€): <span id="totalCommission">0.00</span></p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end">
+      <button class="btn" onclick="refreshAll()">Refresh</button>
+      <button class="btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* URLs (already provided by you) */
+const AMORA_URL = "https://script.google.com/macros/s/AKfycbwgWcyLznRoSbSd6e9Z8Ne038EEuSqDlT2SxO4-Q-KLd34lcnzYC9juHnW7ZDdH-dFy/exec";
+const BRAGA_URL = "https://script.google.com/macros/s/AKfycbxFDb54b8XGHb9aCvJJJXepaOAazb38t9SpnxauT8Q7qbU5AgnwtAlV3BtWXprCeZ4M/exec";
+
+/* helpers */
+function safeNum(v){
+  if (v === null || v === undefined) return 0;
+  if (typeof v === 'number') return v;
+  let s = String(v).replace(/€/g,'').replace(/\s+/g,'');
+  if (s.indexOf('.') !== -1 && s.indexOf(',') !== -1) s = s.replace(/\./g,'').replace(/,/g,'.');
+  else s = s.replace(/,/g,'.');
+  s = s.replace(/[^0-9.\-]/g,'');
+  const n = parseFloat(s);
+  return isNaN(n) ? 0 : n;
+}
+
+async function fetchState(url, ref){
+  try {
+    const r = await fetch(`${url}?ref=${encodeURIComponent(ref)}`);
+    const txt = await r.text();
+    console.log('raw from', url, txt);
+    const json = JSON.parse(txt);
+    if (!json.ok && !json.data && !json.state) {
+      // support older shape {data: {...}} or {ok:true,data:...}
+      // but continue: attempt to find data property
+    }
+    const payload = json.data || json.state || json || {};
+    // If payload is empty object -> return zeros
+    if (!payload || Object.keys(payload).length === 0) {
+      return { ok:true, data:{ Ref: ref, totalSales:0, reservations:0, commission:0 } };
+    }
+    // normalize: if payload has "Total Sales (€)" or "totalSales"
+    const total = payload["Total Sales (€)"] ?? payload.totalSales ?? payload["total sales"] ?? payload["TotalSales"] ?? 0;
+    const reservations = payload["Reservations"] ?? payload.reservations ?? 0;
+    const commission = payload["Commission (€)"] ?? payload.commission ?? payload["commission"] ?? 0;
+    const refVal = payload["Ref"] ?? payload.ref ?? ref;
+    return { ok:true, data: { Ref: refVal, totalSales: safeNum(total), reservations: Math.round(safeNum(reservations)), commission: safeNum(commission) } };
+  } catch (err) {
+    console.error('fetch error', err);
+    return { ok:false, error: err.message || 'fetch error' };
+  }
+}
+
+async function loadAll(){
+  const rawUser = localStorage.getItem('userData');
+  const rawRef = localStorage.getItem('userRef');
+  const user = rawUser ? JSON.parse(rawUser) : null;
+  const ref = rawRef || (user ? (user.Ref || user.ref) : null);
+  if(!ref) { window.location.href = 'login.html'; return; }
+
+  document.getElementById('userInfo').textContent = `Logged in: ${user?.name || user?.Name || user?.email || '—'}  — ref: ${ref}`;
+
+  // clear tables
+  document.querySelector('#bragaTable tbody').innerHTML = '';
+  document.querySelector('#amoraTable tbody').innerHTML = '';
+  document.getElementById('bragaErr').textContent = '';
+  document.getElementById('amoraErr').textContent = '';
+
+  // fetch parallel
+  const [bragaRes, amoraRes] = await Promise.all([
+    fetchState(BRAGA_URL, ref),
+    fetchState(AMORA_URL, ref)
+  ]);
+
+  let totReservations = 0;
+  let totCommission = 0;
+
+  // Braga
+  if (bragaRes.ok) {
+    const d = bragaRes.data;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.Ref}</td><td>${d.totalSales}</td><td>${d.reservations}</td><td>${d.commission}</td>`;
+    document.querySelector('#bragaTable tbody').appendChild(tr);
+    totReservations += d.reservations;
+    totCommission += d.commission;
+  } else {
+    document.getElementById('bragaErr').textContent = 'Could not fetch Braga: ' + (bragaRes.error||'');
+    const tr = document.createElement('tr'); tr.innerHTML = `<td>${ref}</td><td>0</td><td>0</td><td>0</td>`; document.querySelector('#bragaTable tbody').appendChild(tr);
+  }
+
+  // Amora
+  if (amoraRes.ok) {
+    const d = amoraRes.data;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.Ref}</td><td>${d.totalSales}</td><td>${d.reservations}</td><td>${d.commission}</td>`;
+    document.querySelector('#amoraTable tbody').appendChild(tr);
+    totReservations += d.reservations;
+    totCommission += d.commission;
+  } else {
+    document.getElementById('amoraErr').textContent = 'Could not fetch Amora: ' + (amoraRes.error||'');
+    const tr = document.createElement('tr'); tr.innerHTML = `<td>${ref}</td><td>0</td><td>0</td><td>0</td>`; document.querySelector('#amoraTable tbody').appendChild(tr);
+  }
+
+  document.getElementById('totalReservations').textContent = totReservations;
+  document.getElementById('totalCommission').textContent = totCommission.toFixed(2);
+}
+
+function logout(){
+  localStorage.removeItem('userData');
+  localStorage.removeItem('userRef');
+  window.location.href = 'index.html';
+}
+function refreshAll(){ loadAll(); }
+
+window.addEventListener('DOMContentLoaded', loadAll);
+</script>
+</body>
+</html>

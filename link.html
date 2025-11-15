@@ -239,24 +239,6 @@
   
   <!-- Drop-down Menu -->
   
-  
-  <script>
-    function toggleMenu() {
-      document.getElementById('glassMenu').classList.toggle('open');
-    }
-  
-    function toggleSubMenu(item) {
-      const submenu = item.querySelector('.submenu');
-      if (submenu) {
-        submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-      }
-    }
-  </script>
-  
-  <img class="butterfly" src="https://cdn-icons-png.flaticon.com/128/11251/11251203.png" alt="Borboleta">
-  <img class="butterfly" src="https://cdn-icons-png.flaticon.com/128/11251/11251203.png" alt="Borboleta">
-  <img class="butterfly" src="https://cdn-icons-png.flaticon.com/128/11251/11251203.png" alt="Borboleta">
-
   <div class="container">
     <h2>Seu Link de Indicação</h2>
     <input type="text" id="name" placeholder="Seu nome" required />
@@ -267,46 +249,63 @@
   </div>
   
   <script>
-  function generateLink() {
-    const name = document.getElementById("name").value.trim();
-    const number = document.getElementById("number").value.trim();
-    const email = document.getElementById("email").value.trim();
-  
-    if (!name || !number || !email) {
-      return alert("Por favor, preencha todos os campos.");
-    }
-  
-    const hash = btoa(email).replace(/=/g, ""); // simple encoding
-    const link = `https://beautytech.salon/?ref=${hash}`;
-  
-    document.getElementById("result").innerHTML = `
-      <p><strong>Link de Indicação:</strong><br><a href="${link}" target="_blank" style="color:#fff">${link}</a></p>
-      <p>Compartilhe este link com seus amigos. Quando eles reservarem usando o seu link, sua indicação será registrada!</p>
-    `;
-  
-    // Enviar dados para webhook
-    fetch("https://hook.eu2.make.com/lmndpkpdqus9ngpx53abmkhpd1er4fa5", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        number: number,
-        email: email,
-        referralLink: link,
-      }),
-    })
-    .then(response => {
-      if (response.ok) {
-        console.log("Dados enviados com sucesso!");
-      } else {
-        console.error("Erro ao enviar dados.");
+  function generateReferralCode(length = 6) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let code = '';
+      for (let i = 0; i < length; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-    })
-    .catch(error => {
-      console.error("Erro de rede:", error);
-    });
+      return code;
+  }
+  
+  function generatePassword(length = 8) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let pass = '';
+      for (let i = 0; i < length; i++) {
+          pass += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return pass;
+  }
+  
+  function generateLink() {
+      const name = document.getElementById("name").value.trim();
+      const number = document.getElementById("number").value.trim();
+      const email = document.getElementById("email").value.trim();
+  
+      if (!name || !number || !email) {
+          return alert("Por favor, preencha todos os campos.");
+      }
+  
+      const referralCode = generateReferralCode(6);
+      const password = generatePassword(8);
+      const link = `https://beautytech.salon/?ref=${referralCode}`;
+  
+      // نمایش لینک و رمز
+      document.getElementById("result").innerHTML = `
+        <p><strong>Link de Indicação:</strong><br><a href="${link}" target="_blank" style="color:#fff">${link}</a></p>
+        <p><strong>Referral Code:</strong> ${referralCode}</p>
+        <p><strong>Password:</strong> ${password}</p>
+        <p>Compartilhe este link com seus amigos. Quando eles reservarem usando o seu link, sua indicação será registrada!</p>
+      `;
+  
+      // ارسال به webhook
+      fetch("https://hook.eu2.make.com/lmndpkpdqus9ngpx53abmkhpd1er4fa5", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          number: number,
+          email: email,
+          referralLink: link,
+          referralCode: referralCode,
+          password: password
+        })
+      })
+      .then(response => {
+          if(response.ok) console.log("Dados enviados com sucesso!");
+          else console.error("Erro ao enviar dados.");
+      })
+      .catch(error => console.error("Erro de rede:", error));
   }
   </script>
   
