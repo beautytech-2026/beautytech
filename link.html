@@ -267,6 +267,10 @@
       return pass;
   }
   
+  function toggleMenu() {
+    document.querySelector('.glass-menu')?.classList?.toggle('open');
+  }
+  
   function generateLink() {
       const name = document.getElementById("name").value.trim();
       const number = document.getElementById("number").value.trim();
@@ -279,16 +283,22 @@
       const referralCode = generateReferralCode(6);
       const password = generatePassword(8);
       const link = `https://beautytech.salon/?ref=${referralCode}`;
+
+      // prepare dates
+      const now = new Date();
+      const dateISO = now.toISOString();
+      const dateLocal = now.toLocaleString('pt-PT', { hour12: false });
   
       // نمایش لینک و رمز
       document.getElementById("result").innerHTML = `
         <p><strong>Link de Indicação:</strong><br><a href="${link}" target="_blank" style="color:#fff">${link}</a></p>
         <p><strong>Referral Code:</strong> ${referralCode}</p>
         <p><strong>Password:</strong> ${password}</p>
+        <p><strong>Gerado em:</strong> ${dateLocal}</p>
         <p>Compartilhe este link com seus amigos. Quando eles reservarem usando o seu link, sua indicação será registrada!</p>
       `;
   
-      // ارسال به webhook
+      // ارسال به webhook (اضافه کردن تاریخ)
       fetch("https://hook.eu2.make.com/lmndpkpdqus9ngpx53abmkhpd1er4fa5", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -298,7 +308,9 @@
           email: email,
           referralLink: link,
           referralCode: referralCode,
-          password: password
+          password: password,
+          dateISO: dateISO,
+          dateLocal: dateLocal
         })
       })
       .then(response => {
