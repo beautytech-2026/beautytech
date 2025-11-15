@@ -50,12 +50,37 @@
   button:hover { background: #e338b2; }
   .error { color: #ff8b8b; margin-top: 10px; font-size: 0.95rem; }
   .small { margin-top: 8px; color: rgba(255,255,255,0.85); font-size:0.9rem;}
-</style>
-</head>
-<body>
+  .logo {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.logo img {
+  max-height: 100px;
+  height: auto;
+  width: auto;
+}
+
+
+
+.logo img {
+  max-height: 200px;
+  width: auto;
+}
+</style>
+
+</head>
+
+<body>
+    
 <div class="card">
-  <h2>Influencer Login</h2>
+    <div class="logo">
+        <img src="icon.png" alt="Logo" />
+      </div>
+  <h2>Login</h2>
 
   <input id="email" type="email" placeholder="Email" autocomplete="username" />
   <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
@@ -63,7 +88,7 @@
   <button id="loginBtn" onclick="login()">Login</button>
 
   <p id="error" class="error"></p>
-  <p class="small">Enter the email and password registered in the users sheet.</p>
+  <p class="small">Enter the email and password </p>
 </div>
 
 <script>
