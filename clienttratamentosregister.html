@@ -1,149 +1,35 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
-<body style="font-family:Arial,Helvetica,sans-serif;padding:18px;">
-<h1>Clientes — Search & Edit (simple)</h1>
+<style>
+  body{background:linear-gradient(135deg,#dd0583,#8e2de2);font-family:'Vazirmatn',sans-serif;margin:0;padding:24px;color:#fff;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:920px}
+  .panel{background:rgba(150, 148, 148, 0.385);backdrop-filter:blur(8px);border-radius:12px;padding:18px;margin-bottom:16px}
+  h1,h2{margin:0 0 12px 0}
+  table{width:100%;border-collapse:separate;border-spacing:0 10px}
+  th,td{padding:10px;text-align:center;border-radius:8px}
+  th{background:rgba(255, 255, 255, 0.919);font-weight:700}
+  td{background:rgba(255, 255, 255, 0.935);color:#ffeef9}
+  .totals{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .btn{background:#c02190;border:none;color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+  .muted{color:rgba(255,255,255,0.85)}
+  .err{color:#ffb5b5;margin-top:8px}
+  .logo {margin-top: 10px;margin-bottom: 20px;display: flex;justify-content: center;align-items: center;}
+  .logo img {max-height: 200px;width: auto;}
 
-<input id="q" placeholder="Nome ou código..." style="padding:8px;width:60%"><button id="btnSearch">Pesquisar</button>
-<div id="results"></div>
-
-<!-- edit modal-ish -->
-<div id="edit" style="display:none;border:1px solid #ccc;padding:12px;margin-top:12px">
-  <div>Row: <span id="rowIndex"></span></div>
-  <div><label>Name</label><input id="ename"></div>
-  <div><label>Code</label><input id="ecode"></div>
-  <div><label>Append Notes</label><textarea id="enotes" rows="3"></textarea></div>
-  <div><label>Current Images</label><div id="curImgs"></div></div>
-  <div>
-    <label>New images</label><input id="newFiles" type="file" multiple accept="image/*">
-    <div id="newPreview"></div>
-  </div>
-  <button id="save">Save</button> <button id="cancel">Cancel</button>
-  <div id="status"></div>
-</div>
-
-<script>
-const API_BASE = 'https://script.google.com/macros/s/AKfycbyhAhP2JF2ftORmDNALlL_S2XvejRMkqRvtNdbxjUafA3RhDO7MdFjqeECZvXhAbRl6iw/exec'; // e.g. https://script.google.com/macros/s/XXX/exec
-
-/* utility: convert file -> base64 (without data: prefix) */
-function fileToBase64(file){
-  return new Promise((res,rej)=>{
-    const fr = new FileReader();
-    fr.onload = ()=> {
-      const s = fr.result.split(',')[1]; // remove data:*/*;base64,
-      res({ filename: file.name, mimeType: file.type, base64: s });
-    };
-    fr.onerror = e=> rej(e);
-    fr.readAsDataURL(file);
-  });
-}
-
-async function doSearch(){
-  const q = document.getElementById('q').value.trim();
-  const r = document.getElementById('results'); r.innerHTML = 'Loading...';
-  const url = API_BASE + '?action=search&q=' + encodeURIComponent(q);
-  const res = await fetch(url);
-  const data = await res.json();
-  if(!data || data.length===0){ r.innerHTML = 'Nenhum resultado'; return; }
-  r.innerHTML = '';
-  data.forEach(it=>{
-    const d = document.createElement('div');
-    d.style.border='1px solid #eee'; d.style.padding='8px'; d.style.margin='8px 0';
-    d.innerHTML = `<b>${it.name}</b> (${it.code})<br><small>${it.timestamp}</small><div>${(it.imageUrls||[]).map(u=>'<img src="'+u+'" style="height:60px;margin:4px">').join('')}</div>
-      <div>${it.notes||''}</div>
-      <button class="open" data-row='${it.rowIndex}' data-item='${encodeURIComponent(JSON.stringify(it))}'>Abrir / Editar</button>`;
-    r.appendChild(d);
-  });
-
-  document.querySelectorAll('.open').forEach(btn=>{
-    btn.onclick = e=>{
-      const it = JSON.parse(decodeURIComponent(btn.dataset.item));
-      openEdit(it);
-    };
-  });
-}
-
-document.getElementById('btnSearch').onclick = doSearch;
-
-/* EDIT logic */
-let currentItem = null;
-function openEdit(it){
-  currentItem = it;
-  document.getElementById('edit').style.display = 'block';
-  document.getElementById('rowIndex').textContent = it.rowIndex;
-  document.getElementById('ename').value = it.name;
-  document.getElementById('ecode').value = it.code;
-  document.getElementById('enotes').value = '';
-  renderCurImgs(it.imageUrls || []);
-  document.getElementById('newPreview').innerHTML = '';
-}
-
-function renderCurImgs(arr){
-  const box = document.getElementById('curImgs'); box.innerHTML = '';
-  (arr||[]).forEach(u=>{
-    const img = document.createElement('img'); img.src = u; img.style.height='60px'; img.style.margin='4px';
-    const btn = document.createElement('button'); btn.textContent='Remove'; btn.style.marginLeft='6px';
-    const wrap = document.createElement('div'); wrap.appendChild(img); wrap.appendChild(btn);
-    btn.onclick = ()=> {
-      // remove from currentItem.imageUrls
-      currentItem.imageUrls = (currentItem.imageUrls||[]).filter(x=>x!==u);
-      renderCurImgs(currentItem.imageUrls);
-    };
-    box.appendChild(wrap);
-  });
-}
-
-/* preview new files */
-document.getElementById('newFiles').addEventListener('change', async (e)=>{
-  const files = Array.from(e.target.files || []);
-  const pr = document.getElementById('newPreview'); pr.innerHTML = '';
-  for(const f of files){
-    const img = document.createElement('img'); img.style.height='60px'; img.style.margin='4px';
-    const url = URL.createObjectURL(f);
-    img.src = url; pr.appendChild(img);
-  }
-});
-
-/* Save: upload new files (convert base64) then POST to doPost */
-document.getElementById('save').onclick = async ()=>{
-  if(!currentItem) return;
-  const status = document.getElementById('status'); status.textContent = 'Saving...';
-  const name = document.getElementById('ename').value.trim();
-  const code = document.getElementById('ecode').value.trim();
-  const notesAppend = document.getElementById('enotes').value.trim();
-
-  // gather new files, convert to base64
-  const files = Array.from(document.getElementById('newFiles').files || []);
-  const newImages = [];
-  for(const f of files){
-    const b = await fileToBase64(f);
-    newImages.push(b);
-  }
-
-  // payload for update
-  const payload = {
-    action: 'update',
-    rowIndex: currentItem.rowIndex,
-    name, code, notesAppend,
-    retainImageUrls: currentItem.imageUrls || [],
-    newImages // array of { filename, mimeType, base64 }
-  };
-
-  try{
-    const res = await fetch(API_BASE, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(payload) });
-    const j = await res.json();
-    if(j.success){
-      status.textContent = 'Saved';
-      setTimeout(()=>{ status.textContent=''; document.getElementById('edit').style.display='none'; doSearch(); }, 800);
-    } else {
-      status.textContent = 'Error: ' + (j.error||'unknown');
-    }
-  }catch(err){
-    status.textContent = 'Error: ' + err.message;
-  }
-};
-
-document.getElementById('cancel').onclick = ()=> { document.getElementById('edit').style.display='none'; };
-</script>
-</body>
-</html>
+  /* Componentes internos do app */
+  .form-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+  input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255, 255, 255, 0.917);background:transparent;color:#fff}
+  label{display:block;margin-bottom:6px;font-weight:700}
+  .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .thumb{width:100px;height:100px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;position:relative;background:#fff0}
+  .thumb img{max-width:100%;max-height:100%;object-fit:cover;cursor:pointer}
+  .small-btn{background:rgba(0,0,0,0.45);color:#fff;padding:6px 8px;border-radius:8px;font-size:13px;border:0;cursor:pointer}
+  .row-actions{display:flex;gap:8px;margin-top:8px}
+  .card-header{display:flex;justify-content:space-between;align-items:center}
+  .folder-link{display:inline-block;margin-top:6px;color:#ffeef9;text-decoration:underline}
+  .modal{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:999}
+  .modal-inner{background:linear-gradient(180deg, rgba(255,255,255,0.98), #fff);color:#111;border-radius:12px;padding:16px;max-width:92%;max-height:92%;overflow:auto}
+  .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .modal-header h3{margin:0}
+  .modal img{max-width:100%;max-height:75vh;display:block;margin:0 auto;border-radius:8px}
+  .meta-muted{color:#d6cfcf;font-size:13px;margin-top:6px}
+  .label-btn{background:#fff;color:#d8d2d2;padding:8px 10px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+</style>

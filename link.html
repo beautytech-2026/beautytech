@@ -249,77 +249,77 @@
   </div>
   
   <script>
-  function generateReferralCode(length = 6) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let code = '';
-      for (let i = 0; i < length; i++) {
-          code += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return code;
-  }
-  
-  function generatePassword(length = 8) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let pass = '';
-      for (let i = 0; i < length; i++) {
-          pass += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return pass;
-  }
-  
-  function toggleMenu() {
-    document.querySelector('.glass-menu')?.classList?.toggle('open');
-  }
-  
-  function generateLink() {
-      const name = document.getElementById("name").value.trim();
-      const number = document.getElementById("number").value.trim();
-      const email = document.getElementById("email").value.trim();
-  
-      if (!name || !number || !email) {
-          return alert("Por favor, preencha todos os campos.");
-      }
-  
-      const referralCode = generateReferralCode(6);
-      const password = generatePassword(8);
-      const link = `https://beautytech.salon/?ref=${referralCode}`;
-
-      // prepare dates
-      const now = new Date();
-      const dateISO = now.toISOString();
-      const dateLocal = now.toLocaleString('pt-PT', { hour12: false });
-  
-      // نمایش لینک و رمز
-      document.getElementById("result").innerHTML = `
-        <p><strong>Link de Indicação:</strong><br><a href="${link}" target="_blank" style="color:#fff">${link}</a></p>
-        <p><strong>Referral Code:</strong> ${referralCode}</p>
-        <p><strong>Password:</strong> ${password}</p>
-        <p><strong>Gerado em:</strong> ${dateLocal}</p>
-        <p>Compartilhe este link com seus amigos. Quando eles reservarem usando o seu link, sua indicação será registrada!</p>
-      `;
-  
-      // ارسال به webhook (اضافه کردن تاریخ)
-      fetch("https://hook.eu2.make.com/lmndpkpdqus9ngpx53abmkhpd1er4fa5", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name,
-          number: number,
-          email: email,
-          referralLink: link,
-          referralCode: referralCode,
-          password: password,
-          dateISO: dateISO,
-          dateLocal: dateLocal
+    function generateReferralCode(length = 6) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let code = '';
+        for (let i = 0; i < length; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+    }
+    
+    function toggleMenu() {
+      document.querySelector('.glass-menu')?.classList?.toggle('open');
+    }
+    
+    async function generateLink() {
+        const name = document.getElementById("name").value.trim();
+        const number = document.getElementById("number").value.trim();
+        const email = document.getElementById("email").value.trim();
+    
+        if (!name || !number || !email) {
+            return alert("Por favor, preencha todos os campos.");
+        }
+    
+        // بررسی localStorage برای ایمیل
+        let saved = localStorage.getItem("ref_" + email);
+        let referralCode;
+        if(saved){
+            referralCode = saved;
+            console.log("Este email já possui um código:", referralCode);
+        } else {
+            referralCode = generateReferralCode(6);
+            localStorage.setItem("ref_" + email, referralCode);
+        }
+    
+        const link = `https://beautytech.salon/?ref=${referralCode}`;
+        const now = new Date();
+        const dateISO = now.toISOString();
+        const dateLocal = now.toLocaleString('pt-PT', { hour12: false });
+    
+        // نمایش فقط لینک بدون رمز
+        document.getElementById("result").innerHTML = `
+          <p><strong>Link de Indicação:</strong><br><a href="${link}" target="_blank" style="color:#fff">${link}</a></p>
+          <p><strong>Referral Code:</strong> ${referralCode}</p>
+          <p><strong>Gerado em:</strong> ${dateLocal}</p>
+          <p>Compartilhe este link com seus amigos. Quando eles reservarem usando o seu link, sua indicação será registrada!</p>
+        `;
+    
+        // تولید رمز فقط برای وب‌هوک
+        const password = Array.from({length:8},()=> 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random()*62))).join('');
+    
+        // ارسال داده به وب‌هوک
+        fetch("https://hook.eu2.make.com/lmndpkpdqus9ngpx53abmkhpd1er4fa5", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name,
+            number: number,
+            email: email,
+            referralLink: link,
+            referralCode: referralCode,
+            password: password,
+            dateISO: dateISO,
+            dateLocal: dateLocal
+          })
         })
-      })
-      .then(response => {
-          if(response.ok) console.log("Dados enviados com sucesso!");
-          else console.error("Erro ao enviar dados.");
-      })
-      .catch(error => console.error("Erro de rede:", error));
-  }
-  </script>
-  
+        .then(response => {
+            if(response.ok) console.log("Dados enviados com sucesso!");
+            else console.error("Erro ao enviar dados.");
+        })
+        .catch(error => console.error("Erro de rede:", error));
+    }
+    </script>
+    
 </body>
 </html>
