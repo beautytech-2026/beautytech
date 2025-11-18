@@ -57,7 +57,7 @@
   </script>
 </head>
 <body>
-  <a href="#" class="back-button" title="Voltar" onclick="goBack(event)" aria-label="Voltar">
+  <a href="index.html" class="back-button" title="Voltar" onclick="goBack(event)" aria-label="Voltar">
     <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 8 8 12 12 16" />
@@ -395,7 +395,7 @@
   let perServiceSelections = [];
   let pikadayInstances = {};
 
-  const MIN_DAYS_AHEAD = 3;
+  const MIN_DAYS_AHEAD = 0;
   function getMinDate(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+MIN_DAYS_AHEAD); return d; }
 
   const branchRadios = document.querySelectorAll('input[name="branch"]');
@@ -663,58 +663,87 @@
   //   * amora: Monday closed
   //   * amora + machine HIFU12D or HELENA => only last weekend of month allowed
   // ------------------------------
-  const BRANCH_CLOSED_WEEKDAYS = { amora: [1], braga: [] }; // (reused for clarity)
+  const BRANCH_CLOSED_WEEKDAYS = { amora: [1], braga: [] }; // Monday closed for amora
 
-  function formatYMD(d){
-    if(!d) return '';
-    if(!(d instanceof Date)) d = new Date(d);
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function formatYMD(d){
+  if(!d) return '';
+  if(!(d instanceof Date)) d = new Date(d);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function lastWeekdayOfMonth(year, monthZeroBased, weekday){
+  const dt = new Date(year, monthZeroBased + 1, 0);
+  while(dt.getDay() !== weekday) dt.setDate(dt.getDate() - 1);
+  return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+}
+
+function isLastWeekendOfMonth(date){
+  if(!date || !(date instanceof Date)) return false;
+  const y = date.getFullYear(), m = date.getMonth();
+  const lastFri = lastWeekdayOfMonth(y, m, 5);
+  const lastSat = lastWeekdayOfMonth(y, m, 6);
+  const ds = formatYMD(date);
+  return ds === formatYMD(lastFri) || ds === formatYMD(lastSat);
+}
+
+// NEW → هفته سوم ماه
+function isThirdWeekOfMonth(date){
+  const day = date.getDate();
+  return day >= 15 && day <= 21; // روزهای هفته سوم ماه تقریباً این بازه هستند
+}
+
+function isDateAllowedForService(branch, svc, date){
+  if(!date || !(date instanceof Date)) return false;
+
+  const ds = formatYMD(date);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  // NEW → در شعبه Braga، minDate = 7 روز
+  if(branch === 'braga'){
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 7);
+    if(date < minDate) return false;
   }
-  function lastWeekdayOfMonth(year, monthZeroBased, weekday){
-    const dt = new Date(year, monthZeroBased + 1, 0);
-    while(dt.getDay() !== weekday) dt.setDate(dt.getDate() - 1);
-    return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
-  }
-  function isLastWeekendOfMonth(date){
-    if(!date || !(date instanceof Date)) return false;
-    const y = date.getFullYear(), m = date.getMonth();
-    const lastFri = lastWeekdayOfMonth(y, m, 5);
-    const lastSat = lastWeekdayOfMonth(y, m, 6);
-    const ds = formatYMD(date);
-    return ds === formatYMD(lastFri) || ds === formatYMD(lastSat);
-  }
 
-  function isDateAllowedForService(branch, svc, date){
-    // validation
-    if(!date || !(date instanceof Date)) return false;
-    const ds = formatYMD(date);
+  // Normalize machine/category
+  const machine = (svc && svc.machine) ? String(svc.machine).toUpperCase() : '';
+  const category = (svc && svc.category) ? String(svc.category).toUpperCase() : '';
 
-    // Normalize machine name
-    const machine = (svc && svc.machine) ? String(svc.machine).toUpperCase() : '';
+  // ----- RULES FOR AMORA -----
+  if(branch === 'amora'){
+    // Monday closed
+    if(date.getDay() === 1) return false;
 
-    // Branch-specific rules for amora
-    if(branch === 'amora'){
-      // Monday closed
-      if(date.getDay() === 1) return false;
-
-      // If machine is HIFU12D or HELENA -> only last weekend allowed
-      if(machine === 'HIFU12D' || machine === 'HELENA'){
-        return isLastWeekendOfMonth(date);
-      }
+    if(machine === 'HIFU12D' || machine === 'HELENA'){
+      return isLastWeekendOfMonth(date);
     }
-
-    // Generic branch-level closed weekdays
-    if(BRANCH_CLOSED_WEEKDAYS[branch] && BRANCH_CLOSED_WEEKDAYS[branch].includes(date.getDay())) return false;
-
-    // Fallback to SERVICE_DATE_RULES if defined
-    const rule = SERVICE_DATE_RULES[branch]?.machines?.[svc?.machine] || SERVICE_DATE_RULES[branch]?.default || { type: 'always' };
-    if(rule.type === 'always') return true;
-    if(rule.type === 'specificRange' && rule.from && rule.to) return ds >= rule.from && ds <= rule.to;
-    if(rule.type === 'closedRange' && rule.from && rule.to) return !(ds >= rule.from && ds <= rule.to);
-    if(rule.type === 'lastWeekend') return isLastWeekendOfMonth(date);
-
-    return true;
   }
+
+  // ----- RULES FOR BRAGA -----
+  if(branch === 'braga'){
+    // NEW → FACE_DESIGN_TECH فقط هفته سوم ماه
+    if(category === 'FACE_DESIGN_TECH'){
+      return isThirdWeekOfMonth(date);
+    }
+  }
+
+  // Generic branch-level closed weekdays
+  if(BRANCH_CLOSED_WEEKDAYS[branch] && BRANCH_CLOSED_WEEKDAYS[branch].includes(date.getDay())) 
+    return false;
+
+  // SERVICE_DATE_RULES fallback
+  const rule = SERVICE_DATE_RULES[branch]?.machines?.[svc?.machine] 
+            || SERVICE_DATE_RULES[branch]?.default 
+            || { type: 'always' };
+
+  if(rule.type === 'always') return true;
+  if(rule.type === 'specificRange' && rule.from && rule.to) return ds >= rule.from && ds <= rule.to;
+  if(rule.type === 'closedRange' && rule.from && rule.to) return !(ds >= rule.from && ds <= rule.to);
+  if(rule.type === 'lastWeekend') return isLastWeekendOfMonth(date);
+
+  return true;
+}
 
   // ------------------------------
   // buildPerServicePickers (Pikaday disableDayFn uses correct signature)
