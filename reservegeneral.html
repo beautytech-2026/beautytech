@@ -291,7 +291,9 @@
       { name: "Ondulação Extra Longo", price: "80", machine: null, durationMinutes: 45 },
       { name: "Alisamento / Progressiva Curto", price: "50", machine: null, durationMinutes: 90 },
       { name: "Alisamento / Progressiva Médio", price: "100", machine: null, durationMinutes: 90 },
-      { name: "Alisamento / Progressiva Longo", price: "150", machine: null, durationMinutes: 90 }
+      { name: "Alisamento / Progressiva Longo", price: "150", machine: null, durationMinutes: 90 },
+      { name: "HAIR TECNICAS AFRO", price: "0", machine: "afro", durationMinutes: 120 }
+
     ]
   };
 
@@ -663,7 +665,11 @@
   //   * amora: Monday closed
   //   * amora + machine HIFU12D or HELENA => only last weekend of month allowed
   // ------------------------------
-  const BRANCH_CLOSED_WEEKDAYS = { amora: [1], braga: [] }; // Monday closed for amora
+  const BRANCH_CLOSED_WEEKDAYS = { 
+  amora: [0, 1],  // Sunday + Monday closed
+  braga: [] 
+};
+
 
 function formatYMD(d){
   if(!d) return '';
@@ -686,10 +692,15 @@ function isLastWeekendOfMonth(date){
   return ds === formatYMD(lastFri) || ds === formatYMD(lastSat);
 }
 
-// NEW → هفته سوم ماه
-function isThirdWeekOfMonth(date){
-  const day = date.getDate();
-  return day >= 15 && day <= 21; // روزهای هفته سوم ماه تقریباً این بازه هستند
+// NEW → هفته در میان
+function isAlternateWeek(date) {
+  if (!(date instanceof Date)) return false;
+
+  const onejan = new Date(date.getFullYear(), 0, 1);
+  const days = Math.floor((date - onejan) / (24 * 60 * 60 * 1000));
+  const weekNumber = Math.ceil((days + onejan.getDay() + 1) / 7);
+
+  return weekNumber % 2 === 0; // even weeks allowed
 }
 
 function isDateAllowedForService(branch, svc, date){
@@ -700,20 +711,20 @@ function isDateAllowedForService(branch, svc, date){
   today.setHours(0,0,0,0);
 
   // NEW → در شعبه Braga، minDate = 7 روز
-  if(branch === 'braga'){
-    const minDate = new Date(today);
-    minDate.setDate(minDate.getDate() + 7);
-    if(date < minDate) return false;
-  }
+ 
 
   // Normalize machine/category
   const machine = (svc && svc.machine) ? String(svc.machine).toUpperCase() : '';
   const category = (svc && svc.category) ? String(svc.category).toUpperCase() : '';
 
+  // ----- RULE FOR MACHINE AFRO → ONLY SATURDAY -----
+  if(machine === 'AFRO'){
+    return date.getDay() === 6; // Saturday
+  }
+
   // ----- RULES FOR AMORA -----
   if(branch === 'amora'){
-    // Monday closed
-    if(date.getDay() === 1) return false;
+    if(date.getDay() === 1) return false; // Monday closed
 
     if(machine === 'HIFU12D' || machine === 'HELENA'){
       return isLastWeekendOfMonth(date);
@@ -722,9 +733,8 @@ function isDateAllowedForService(branch, svc, date){
 
   // ----- RULES FOR BRAGA -----
   if(branch === 'braga'){
-    // NEW → FACE_DESIGN_TECH فقط هفته سوم ماه
     if(category === 'FACE_DESIGN_TECH'){
-      return isThirdWeekOfMonth(date);
+      return isAlternateWeek(date);
     }
   }
 
