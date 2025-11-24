@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Vouchers Disponíveis</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg,#d62f91,#980370);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  transition: all 0.2s ease;
+}
+.back-button:hover {
+  background: rgba(255,255,255,0.2);
+}
+.back-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.logo img {
+  max-height: 150px;
+  height: auto;
+  width: auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+  justify-items: center;
+  width: 100%;
+}
+
+.card-link {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+  width: 100%;
+  max-width: 350px;
+  background: rgba(255,255,255,0.1);
+}
+
+.card-link:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.card-link img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.card-link:hover img {
+  transform: scale(1.05);
+}
+
+.card-link span {
+  display: block;
+  padding: 12px;
+  background: rgba(0,0,0,0.5);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.card-link:hover span {
+  background: rgba(0,0,0,0.7);
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+  }
+  .grid {
+    gap: 15px;
+  }
+  .container {
+    padding: 20px 15px;
+  }
+}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-button" title="Voltar" aria-label="Voltar">
+  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 8 8 12 12 16" />
+    <line x1="16" y1="12" x2="8" y2="12" />
+  </svg>
+</a>
+
+<div class="container">
+  <div class="logo">
+    <img src="images/icon.png" alt="Logo" />
+  </div>
+
+  <h1>Escolha sua Filial</h1>
+
+  <div class="grid">
+    <!-- Voucher Shobe Amora -->
+    <a href="voucherbrushingunhasamora.html" class="card-link">
+      <img src="images/brushingamoranatal.jpg" alt="Voucher Shobe Amora">
+      <span>Filial Amora</span>
+    </a>
+
+    <!-- Voucher Shobe Braga -->
+    <a href="vouchermassagembraga.html" class="card-link">
+      <img src="images/massagembragamnatal.jpg" alt="Voucher Shobe Braga">
+      <span>Filial Braga</span>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

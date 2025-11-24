@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title> Voucher ✨MASSAGEM SPECIAL✨ </title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+:root{ --bg1:#d62f91; --bg2:#980370; --card: rgba(255,255,255,0.06); --accent:#ff71b8; --accent-2:#a56bff; --muted: rgba(255,255,255,0.88); --muted-2: rgba(255,255,255,0.78); --input-bg: rgba(255,255,255,0.06); --radius: 12px; --font-family: "Poppins", system-ui, sans-serif;}
+*{box-sizing:border-box} html,body{height:100%} body{ margin:0; font-family: var(--font-family); min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:28px; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:#fff; font-size:16px; }
+.card{ width:100%; max-width:980px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:28px; backdrop-filter: blur(10px) saturate(1.05); box-shadow:0 18px 50px rgba(0,0,0,0.35);}
+label{display:block;margin:10px 0 8px;font-weight:700;color:#fff;font-size:14px;}
+input[type="text"], input[type="email"] { width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background: var(--input-bg); color:#fff; outline:none; transition: all .18s ease; font-size:14px; }
+input[type="text"]:focus, input[type="email"]:focus { box-shadow:0 8px 30px rgba(165,107,255,0.08); border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.08);}
+::placeholder{ color: rgba(255,255,255,0.7); font-weight:500 }
+#btnSend{ margin-top:20px; padding:12px 18px; border-radius:12px; border:none; cursor:pointer; font-weight:800; background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; box-shadow:0 12px 36px rgba(165,107,255,0.12);}
+#resultLink{ margin-top:20px; display:block; word-break: break-all; color:#fff; font-weight:700; text-decoration:underline;}
+#container{ position: relative; display:inline-block; margin-bottom:20px; }
+#mainImage{ width:350px; border-radius:10px;}
+.hidden{ display:none; }
+.radio-group{ margin-bottom:15px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+<h3 style="text-align:center; margin-bottom:20px;">Voucher ✨MASSAGEM SPECIAL✨</h3>
+<div class="radio-group">
+  <label class="radio-card">
+    <input type="radio" name="cardType" value="1" checked>
+    <span>VOUCHER NATAL</span>
+    <img src="images/massagembragamnatal.jpg" alt="Natal" class="radio-img">
+  </label>
+  <label class="radio-card">
+    <input type="radio" name="cardType" value="2">
+    <span>VOUCHER PRESENTE HOMEM</span>
+    <img src="images/massagembragahomem.jpg" alt="Homem" class="radio-img">
+  </label>
+  <label class="radio-card">
+    <input type="radio" name="cardType" value="3">
+    <span>VOUCHER PRESENTE MULHERES</span>
+    <img src="images/massagembragammulher.jpg" alt="Mulheres" class="radio-img">
+  </label>
+</div>
+
+<style>
+.radio-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.radio-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 8px;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.radio-card input[type="radio"] {
+  display: none; /* مخفی کردن دایره پیشفرض */
+}
+
+.radio-card img {
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  margin-top: 6px;
+  transition: transform 0.2s;
+}
+
+.radio-card span {
+  font-weight: 700;
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* هایلایت عکس انتخاب شده */
+.radio-card input[type="radio"]:checked + span + img {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(255,255,255,0.5);
+  border: 2px solid #ff71b8;
+}
+</style>
+
+<div id="container">
+  <img id="mainImage" src="images/massagembragamnatal.jpg" alt="imagem principal">
+</div>
+
+<label>DE:</label>
+<input type="text" id="text1" placeholder="Ex: Feliz aniversário">
+
+<label>PARA:</label>
+<input type="text" id="text2" placeholder="Ex: De: Sara">
+
+<label>Email:</label>
+<input type="email" id="email" placeholder="Ex: teste@gmail.com">
+
+<label>Código do cliente (opcional):</label>
+<input type="text" id="clientCode" placeholder="Opcional">
+
+<input type="text" id="ref" class="hidden">
+<input type="text" id="priceId" class="hidden" value="1">
+<input type="text" id="presentvoucher" class="hidden">
+
+<button id="btnSend">Salvar e enviar</button>
+<a id="resultLink" target="_blank"></a>
+</div>
+
+<script>
+  // pegar ref do URL ou localStorage
+  let refValue = new URLSearchParams(window.location.search).get("ref") || localStorage.getItem("ref") || "";
+  document.getElementById("ref").value = refValue;
+  
+  // gerar código voucher
+  function generateVoucher() {
+    return "VC-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  }
+  
+  // atualizar imagem principal e voucher de acordo com radio
+  const radios = document.getElementsByName('cardType');
+  radios.forEach(r => r.addEventListener('change', () => {
+    const img = document.getElementById('mainImage');
+    if (r.value === '1' && r.checked) {
+      img.src = "images/massagembragamnatal.jpg";
+      document.getElementById('presentvoucher').value = "images/PHOTO-2025-11-22-01-09-04 6.jpg";
+    }
+    if (r.value === '2' && r.checked) {
+      img.src = "images/massagembragahomem.jpg";
+      document.getElementById('presentvoucher').value = "images/PHOTO-2025-11-22-01-09-04 4.jpg";
+    }
+    if (r.value === '3' && r.checked) {
+      img.src = "images/massagembragammulher.jpg";
+      document.getElementById('presentvoucher').value = "images/PHOTO-2025-11-22-01-09-05 2.jpg";
+    }
+  }));
+  
+  document.getElementById("btnSend").onclick = async () => {
+    const txt1 = document.getElementById("text1").value;
+    const txt2 = document.getElementById("text2").value;
+    const email = document.getElementById("email").value;
+    const clientCode = document.getElementById("clientCode").value;
+    const ref = document.getElementById("ref").value;
+    const priceId = document.getElementById("priceId").value;
+    const voucherImgSrc = document.getElementById("presentvoucher").value;
+  
+    const voucher = generateVoucher();
+  
+    if (!txt1 || !txt2 || !email) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+  
+    // 🔥 گرفتن نام ووچر انتخاب‌شده (NATAL/HOMEM/MULHERES)
+    const selectedVoucherName =
+      document.querySelector('input[name="cardType"]:checked').nextElementSibling.textContent.trim();
+  
+    const img = document.getElementById("mainImage");
+  
+    // criar imagem principal
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    ctx.font = "48px Poppins, sans-serif";
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 4;
+    ctx.textAlign = "center";
+    ctx.strokeText(txt1, canvas.width/2, 390);
+    ctx.fillText(txt1, canvas.width/2, 390);
+    ctx.strokeText(txt2, canvas.width/1.8, 450);
+    ctx.fillText(txt2, canvas.width/1.8, 450);
+  
+    // criar imagem voucher
+    const voucherImg = new Image();
+    voucherImg.src = voucherImgSrc;
+  
+    const paymentWindow = window.open("about:blank", "_blank");
+  
+    voucherImg.onload = async () => {
+      const canvas2 = document.createElement("canvas");
+      const ctx2 = canvas2.getContext("2d");
+      canvas2.width = voucherImg.naturalWidth;
+      canvas2.height = voucherImg.naturalHeight;
+      ctx2.drawImage(voucherImg, 0, 0);
+      ctx2.font = "60px Poppins, sans-serif";
+      ctx2.fillStyle = "white";
+      ctx2.textAlign = "center";
+      ctx2.fillText(voucher, canvas2.width/1.6, 160);
+  
+      canvas.toBlob(async (blob1) => {
+        canvas2.toBlob(async (blob2) => {
+  
+          const formData = new FormData();
+  
+          // 🔥 ارسال نام ووچر انتخاب‌شده
+          formData.append("voucherName", selectedVoucherName);
+  
+          formData.append("cardImage", blob1, "card.png");
+          formData.append("voucherImage", blob2, "voucher.png");
+          formData.append("text1", txt1);
+          formData.append("text2", txt2);
+          formData.append("email", email);
+          formData.append("clientCode", clientCode);
+          formData.append("ref", ref);
+          formData.append("voucher", voucher);
+          formData.append("priceId", priceId);
+  
+          const WEBHOOK = "https://hook.eu2.make.com/eiuem13tt5ee3vfudmnyirl4g20u6w7y";
+          const response = await fetch(WEBHOOK, { method: "POST", body: formData });
+          const resultJson = await response.json();
+  
+          if(resultJson.paymentUrl){
+              paymentWindow.location.href = resultJson.paymentUrl;
+              document.getElementById("resultLink").textContent = "Pagamento iniciado...";
+          } else {
+              paymentWindow.close();
+              alert("Falha ao criar pagamento.");
+          }
+  
+        }, "image/png");
+      }, "image/png");
+    };
+  };
+  </script>
+  
+
+</body>
+</html>
